@@ -3,10 +3,10 @@ import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacit
 
 import Header from './../../components/Header';
 
-export default class UserLoginScreen extends Component {
+export default class GetPetDetails extends Component {
   
   static navigationOptions = {
-    title: 'Login',
+    title: 'Pet Town!',
     headerStyle: {
       backgroundColor: '#D8D8D8',
     },
@@ -20,32 +20,52 @@ export default class UserLoginScreen extends Component {
     return (
       <View style={styles.screenContainer}>
         <Text style={styles.welcomeText}>
-          Let's get you logged in! 
+          Let's get your Pet logged in! 
         </Text>
         <View style={styles.formContainer}>
           <TextInput
             style={styles.formTextInput}
-            placeholder="First Name"
+            placeholder="Name"
             placeholderTextColor='black'
           />
           <TextInput
             style={styles.formTextInput}
-            placeholder="Last Name"
+            placeholder="Weight"
             placeholderTextColor='black'
           />
           <TextInput
             style={styles.formTextInput}
-            placeholder="Email ID"
+            placeholder="Breed"
+            placeholderTextColor='black'
+          />
+          <TextInput
+            style={styles.formTextInput}
+            placeholder="Color"
+            placeholderTextColor='black'
+          />
+          <TextInput
+            style={styles.formTextInput}
+            placeholder="Gender"
+            placeholderTextColor='black'
+          />
+          <TextInput
+            style={styles.formTextInput}
+            placeholder="Date of Adoption"
+            placeholderTextColor='black'
+          />
+          <TextInput
+            style={styles.formTextInput}
+            placeholder="Birthday"
             placeholderTextColor='black'
           />
         </View>
         <View style={{ flex: 1 }}>
           <TouchableOpacity
             style={styles.buttonStyle}
-            onPress={() => this.props.navigation.navigate('PetDetails')}
+            onPress={() => this.props.navigation.navigate('Home')}
           >
             <Text style={styles.textButtonStyle}>
-              Login
+              Let's Get Started
             </Text>
           </TouchableOpacity>  
         </View>
@@ -66,25 +86,18 @@ const styles = StyleSheet.create({
   welcomeText: {
     color: 'black',
     fontSize: 30,
-    margin: 15
+    margin: 15,
+    textAlign: 'center'
   },
   formContainer: {
-    flex: 1,
-    // justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    // alignSelf: 'stretch',
-    // justifyContent: 'space-around',
-    width:200,
-    // height:200,
-    margin: 30
+    
   },
   formTextInput: {
-    height: 50, 
-    width: 150, 
-    borderWidth: 1, 
+    height: 30, 
+    width: 300, 
+    borderWidth: 0.1, 
     margin: 5, 
-    borderColor: 'black',
+    borderColor: 'black'
   },
   buttonStyle: {
     backgroundColor: '#5AC8B0',
@@ -94,3 +107,4 @@ const styles = StyleSheet.create({
     margin: 8
   }
 });
+
