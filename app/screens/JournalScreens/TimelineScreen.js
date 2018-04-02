@@ -28,23 +28,16 @@ export default class TimelineScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Avatar 
-            large
-            rounded
-            icon={{type: 'font-awesome', name: 'paw', color: '#5497A7'}}
-            onPress={() => console.log("Works!")}
-            activeOpacity={0.7}
-          />
-        <Text style={styles.generalText}>
-          Your time with Hobbes!
-        </Text>
+        <View style={styles.topRow}>
+          <Icon name="plus" size = {30} color="gray" style = {{margin: 10}} 
+            onPress={() => this.props.navigation.navigate('AddEvent')}/>
+          <Text style={styles.generalText}>
+            Memories with Peanut
+          </Text>
+        </View>
         <View style={styles.timelineContainer}>
           <Image style = {styles.timelinePlaceholder} source = {require('../../img/timelinePlaceholder.png')} resizeMode="contain"/>
         </View>
-        <Icon.Button name="heart" backgroundColor="#5497A7" 
-          onPress={() => this.props.navigation.navigate('AddEvent')} >
-          <Text style={{fontFamily: 'Arial', fontSize: 15, color: "white"}}>Add an Event</Text>
-        </Icon.Button>
       </View>
     );
   }
@@ -58,10 +51,15 @@ const styles = StyleSheet.create({
   },
   generalText: {
     fontFamily: 'Helvetica', 
-    fontSize: 15, 
-    fontWeight: 'bold', 
-    color: '#5497A7', 
+    fontSize: 28, 
+    color: 'gray', 
     margin: 10
+  },
+  topRow: {
+    flex : 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   timelineContainer: {
     flex: 1,
