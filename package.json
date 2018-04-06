@@ -7,11 +7,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@shoutem/ui": "^0.23.4",
+    "lodash": "^4.17.5",
     "react": "16.2.0",
     "react-native": "0.53",
     "react-native-datepicker": "^1.6.0",
     "react-native-elements": "^0.19.0",
     "react-native-stopwatch-timer": "0.0.20",
+    "react-native-gridview": "^0.1.1",
     "react-native-timeline-listview": "^0.2.3",
     "react-native-vector-icons": "^4.5.0",
     "react-navigation": "^1.5.11"
