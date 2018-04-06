@@ -82,7 +82,7 @@ export default class ActivityDetail extends Component {
             backgroundColor='#62BEC1'
             // buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 20, marginTop: 20}}
             title='Start' 
-            onPress={() => this.props.navigation.goBack()} />
+            onPress={() => this.props.navigation.navigate('ActivityPrestart')} />
       </ScrollView>
     );
   }

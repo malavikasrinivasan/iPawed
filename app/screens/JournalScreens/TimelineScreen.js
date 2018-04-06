@@ -42,7 +42,7 @@ export default class TimelineScreen extends Component {
             styles={styles.list}
             data = {[
               {time: '09:00', title: 'Hello, World!'},
-              {time: '10:45'},
+              {time: '10:45', title: 'Mondays Suck'},
               {time: '12:00'},
               {time: '14:00'},
               {time: '16:30'}
@@ -52,8 +52,8 @@ export default class TimelineScreen extends Component {
             lineColor='rgb(45,156,219)'
             timeContainerStyle={{minWidth:52, marginTop: -5}}
             timeStyle={{textAlign: 'center', backgroundColor:'#ff9797', color:'white', padding:5, borderRadius:13}}
-            titleStyle={{fontSize:20, color: 'blue'}}
-            descriptionStyle={{color:'gray'}}
+            titleStyle={{fontSize:20, color: 'pink'}}
+            descriptionStyle={{color:'blue'}}
             options={{
               style:{paddingTop:5}
             }}

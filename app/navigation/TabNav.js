@@ -11,7 +11,10 @@ import ActivityDetail from './../screens/ActivityScreens/ActivityDetail';
 import ActivityMain from './../screens/ActivityScreens/ActivityMain';
 import TimelineScreen from './../screens/JournalScreens/TimelineScreen';
 import AddEventScreen from './../screens/JournalScreens/AddEventScreen';
-
+import ActivityPrestart from './../screens/ActivityScreens/ActivityPrestart';
+import ActivityRecord from './../screens/ActivityScreens/ActivityRecord';
+import ActivitySummary from './../screens/ActivityScreens/ActivitySummary';
+import ActivityTrain from './../screens/ActivityScreens/ActivityTrain';
 
 // static navigationOptions = {
 //   header: null,
@@ -28,6 +31,10 @@ const LoginStack = StackNavigator({
 const ActivityStack = StackNavigator({
   ActivityMain: { screen: ActivityMain },
   ActivityDetail: { screen: ActivityDetail },
+  ActivityPrestart: { screen: ActivityPrestart},
+  ActivityRecord: { screen: ActivityRecord},
+  ActivitySummary: { screen: ActivitySummary},
+  ActivityTrain: { screen: ActivityTrain}, 
 });
 
 const JournalStack = StackNavigator({
