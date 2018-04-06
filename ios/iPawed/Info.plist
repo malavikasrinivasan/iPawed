@@ -64,6 +64,13 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>Century Gothic.ttf</string>
+		<string>CenturyGothic.ttf</string>
+		<string>GOTHIC.TTF</string>
+		<string>GOTHICB.TTF</string>
+		<string>GOTHICB0.TTF</string>
+		<string>GOTHICBI.TTF</string>
+		<string>GOTHICI.TTF</string>
 	</array>
 </dict>
 </plist>

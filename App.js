@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import TabNav from './app/navigation/Router'
 
+
 export default class iPawed extends Component {
   render() {
     return (

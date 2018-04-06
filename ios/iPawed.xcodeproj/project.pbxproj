@@ -48,6 +48,13 @@
 		D8D6F3B9186D450993DDFCC3 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D5C4487356C446983D59C36 /* SimpleLineIcons.ttf */; };
 		A94364A26906492C91384CEB /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AAC040A7920C4D758B91CCD8 /* Zocial.ttf */; };
 		7FB6CE0DB56342DC972D5D99 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A428E9F10DAA42639F5172A5 /* libRNVectorIcons.a */; };
+		E6E7E0E6A35140019E25805C /* Century Gothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F08874C873754FD8982E1761 /* Century Gothic.ttf */; };
+		C28212432C5442AAAC73088E /* CenturyGothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E1A5AC3817DC4888991C546D /* CenturyGothic.ttf */; };
+		9805767C3BBA438A990D17B9 /* GOTHIC.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 44DD9F8BD54D4E538575FDD6 /* GOTHIC.TTF */; };
+		0BD95362FFFF49318A148F7F /* GOTHICB.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 9B564B9549224714A5CAB16E /* GOTHICB.TTF */; };
+		1D93A41B6E5042E5B9B92E9A /* GOTHICB0.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 9DD7BF0A981C43F3B070949B /* GOTHICB0.TTF */; };
+		ECAEFFFE4465487CA5BE2FF9 /* GOTHICBI.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 9E1A5B47BFA1457EB10E3CB8 /* GOTHICBI.TTF */; };
+		01A8C6A511AF43D8A6BEC057 /* GOTHICI.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 966F94E1ECDF4DA19A48FFB6 /* GOTHICI.TTF */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -310,6 +317,13 @@
 		AAC040A7920C4D758B91CCD8 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		64CEA7DD66704798849631D3 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; name = "RNVectorIcons.xcodeproj"; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		A428E9F10DAA42639F5172A5 /* libRNVectorIcons.a */ = {isa = PBXFileReference; name = "libRNVectorIcons.a"; path = "libRNVectorIcons.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		F08874C873754FD8982E1761 /* Century Gothic.ttf */ = {isa = PBXFileReference; name = "Century Gothic.ttf"; path = "../assets/fonts/century-gothic/Century Gothic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E1A5AC3817DC4888991C546D /* CenturyGothic.ttf */ = {isa = PBXFileReference; name = "CenturyGothic.ttf"; path = "../assets/fonts/century-gothic/CenturyGothic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		44DD9F8BD54D4E538575FDD6 /* GOTHIC.TTF */ = {isa = PBXFileReference; name = "GOTHIC.TTF"; path = "../assets/fonts/century-gothic/GOTHIC.TTF"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9B564B9549224714A5CAB16E /* GOTHICB.TTF */ = {isa = PBXFileReference; name = "GOTHICB.TTF"; path = "../assets/fonts/century-gothic/GOTHICB.TTF"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9DD7BF0A981C43F3B070949B /* GOTHICB0.TTF */ = {isa = PBXFileReference; name = "GOTHICB0.TTF"; path = "../assets/fonts/century-gothic/GOTHICB0.TTF"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9E1A5B47BFA1457EB10E3CB8 /* GOTHICBI.TTF */ = {isa = PBXFileReference; name = "GOTHICBI.TTF"; path = "../assets/fonts/century-gothic/GOTHICBI.TTF"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		966F94E1ECDF4DA19A48FFB6 /* GOTHICI.TTF */ = {isa = PBXFileReference; name = "GOTHICI.TTF"; path = "../assets/fonts/century-gothic/GOTHICI.TTF"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -579,6 +593,13 @@
 				C00440F0C75A4927BB77EEA9 /* Octicons.ttf */,
 				2D5C4487356C446983D59C36 /* SimpleLineIcons.ttf */,
 				AAC040A7920C4D758B91CCD8 /* Zocial.ttf */,
+				F08874C873754FD8982E1761 /* Century Gothic.ttf */,
+				E1A5AC3817DC4888991C546D /* CenturyGothic.ttf */,
+				44DD9F8BD54D4E538575FDD6 /* GOTHIC.TTF */,
+				9B564B9549224714A5CAB16E /* GOTHICB.TTF */,
+				9DD7BF0A981C43F3B070949B /* GOTHICB0.TTF */,
+				9E1A5B47BFA1457EB10E3CB8 /* GOTHICBI.TTF */,
+				966F94E1ECDF4DA19A48FFB6 /* GOTHICI.TTF */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -985,6 +1006,13 @@
 				7BFC43726A664E07A75CF05F /* Octicons.ttf in Resources */,
 				D8D6F3B9186D450993DDFCC3 /* SimpleLineIcons.ttf in Resources */,
 				A94364A26906492C91384CEB /* Zocial.ttf in Resources */,
+				E6E7E0E6A35140019E25805C /* Century Gothic.ttf in Resources */,
+				C28212432C5442AAAC73088E /* CenturyGothic.ttf in Resources */,
+				9805767C3BBA438A990D17B9 /* GOTHIC.TTF in Resources */,
+				0BD95362FFFF49318A148F7F /* GOTHICB.TTF in Resources */,
+				1D93A41B6E5042E5B9B92E9A /* GOTHICB0.TTF in Resources */,
+				ECAEFFFE4465487CA5BE2FF9 /* GOTHICBI.TTF in Resources */,
+				01A8C6A511AF43D8A6BEC057 /* GOTHICI.TTF in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

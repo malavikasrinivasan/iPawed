@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, AppRegistry, TouchableOpacity, Image } from 're
 import Header from './../../components/Header';
 
 export default class WelcomeScreen extends Component {
-  
+
   static navigationOptions = {
     title: 'Pet Town!',
     headerStyle: {
@@ -18,12 +18,12 @@ export default class WelcomeScreen extends Component {
 
   render() {
     return (
-      <View style={styles.screenContainer}>        
+      <View style={styles.screenContainer}>
         <Text style={styles.welcomeText}>
           Welcome to Pet Town!
         </Text>
 
-        <Image 
+        <Image
         style={styles.logoStyle}
         // source={{require: }}
         source={require('./../../img/temp_logo.png')}
@@ -37,9 +37,9 @@ export default class WelcomeScreen extends Component {
           onPress={() => this.props.navigation.navigate('UserLogin')}
         >
           <Text style={styles.textButtonStyle}>
-            Let's get started!
+            {"Let's get started!"}
           </Text>
-        </TouchableOpacity>  
+        </TouchableOpacity>
       </View>
     );
   }
