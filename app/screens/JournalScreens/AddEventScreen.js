@@ -73,6 +73,33 @@ export default class AddEventScreen extends Component {
                onContentSizeChange={(event) => {
                 this.setState({ height: event.nativeEvent.contentSize.height })
         }}/> 
+        <View style={styles.dateContainer}>
+            <Text style = {{margin: 10, color: 'gray', fontSize: 14}}>Date</Text>
+            <DatePicker
+            date={this.state.eventDate}
+            mode="date"
+            placeholder="Date"
+            format="YYYY-MM-DD"
+            minDate="2010-01-01"
+            maxDate="2020-12-31"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            iconComponent={<Icon name="calendar" size = {24} color="gray" />}
+            customStyles={{
+              dateInput: {
+                borderWidth: 0
+              },
+              btnTextConfirm: {
+                color: 'gray'
+              },
+              dateText: {
+                color: 'gray'
+              }
+              
+            }}
+            onDateChange={(date) => {this.setState({eventDate: date})}}
+            />
+          </View>
         <View>
           <Text style = {{margin: 10, color: 'gray', fontSize: 14}}>Location</Text>
            <Text style = {{margin: 10, color: 'gray', fontSize: 14}}>Behavior</Text>
@@ -165,6 +192,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10
+   },
+  dateContainer: {
+    flex : 0,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
    },
   tagContainer: {
     flex : 1,
