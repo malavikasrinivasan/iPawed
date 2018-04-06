@@ -7,8 +7,8 @@ import WelcomeScreen from './../screens/LoginScreens/WelcomeScreen';
 import UserLoginScreen from './../screens/LoginScreens/UserLoginScreen';
 import GetPetDetails from './../screens/LoginScreens/GetPetDetails';
 import HomeScreen from './../screens/LoginScreens/HomeScreen';
-import Activity1 from './../screens/ActivityScreens/Activity1';
-import Activity2 from './../screens/ActivityScreens/Activity2';
+import ActivityDetail from './../screens/ActivityScreens/ActivityDetail';
+import ActivityMain from './../screens/ActivityScreens/ActivityMain';
 import TimelineScreen from './../screens/JournalScreens/TimelineScreen';
 import AddEventScreen from './../screens/JournalScreens/AddEventScreen';
 
@@ -26,8 +26,8 @@ const LoginStack = StackNavigator({
 });
 
 const ActivityStack = StackNavigator({
-  Activity1: { screen: Activity1 },
-  Activity2: { screen: Activity2 },
+  ActivityMain: { screen: ActivityMain },
+  ActivityDetail: { screen: ActivityDetail },
 });
 
 const JournalStack = StackNavigator({

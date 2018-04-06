@@ -14,7 +14,7 @@ import { Card,
 } from 'react-native-elements';
 // import { List, ListItem } from 'react-native-elements';
 
-export default  class RecActCard extends Component {
+export default  class ActCat extends Component {
   render()
   {
     return (
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
 });
 
 
-module.exports=RecActCard
+module.exports=ActCat

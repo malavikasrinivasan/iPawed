@@ -6,12 +6,14 @@ import {
   Text,
   View,
   ScrollView,
-  FlatList
+  FlatList,
+  Image
 } from 'react-native';
 import { Card, 
          ListItem, 
          Button 
 } from 'react-native-elements';
+import GridView from 'react-native-gridview';
 
 const acts = [
     {
@@ -21,19 +23,82 @@ const acts = [
     },
     {
         name: 'Playtime',
-        avatar: '../img/fetch.jpg',
-        blurb: 'Toys and play are essential before you even get your pet into the tub.'
+        avatar: '../img/fetch.jpeg',
+        blurb: 'Toys and play are essential before you even get your pet into the tub. Play with them in the bathroom and bring in their favorite toys. Basically, you\'re teaching them the bathroom is not a scary place.'
+    },
+    {
+        name: 'Water Wings',
+        avatar: '../img/bath.jpeg',
+        blurb: 'We\'re not saying you need those floaty devices that are so popular in teaching the young to swim.'
+    },
+    {
+        name: 'Bubble Bubble',
+        avatar: '../img/fetch.jpeg',
+        blurb: 'Fortunately, no toil and trouble this time. But we will the best way to make bath time fun is getting your pet high-quality shampoos, conditioners, and spritzers...'
     }
    ]
 
 export default  class RecActCard extends Component {
+    // constructor(props) {
+    //     super(props);
+    //     this.renderRow = this.renderRow.bind(this);
+    //     this.state = {data: acts};
+    // }
+
+    // // renderItem({ item: rowData }) {
+    // renderRow(rowData, sectionId, index) {
+    //     const cellViews = rowData.map((act, id) => {
+    //         return (
+    //         //   <TouchableOpacity key={id} styleName="flexible">
+    //           <Card key={id}>
+    //             <View style={{flex: 1, flexDirection:'row'}}>
+    //                 <Image
+    //                     style={{ width: 60, height: 60 }}
+    //                     source={rowData.avatar} />
+    //                 <View style={{flex: 5, justifyContent:'center', alignItems:'center'}}>
+    //                 <Text style={{color:'#62BEC1', justifyContent: 'center', alignItems: 'center', marginBottom: 5}} onPress={() => this.props.navigation.navigate('ActivityDetail')}>
+    //                     {rowData.name}
+    //                 </Text>
+    //                 </View>
+    //             </View>
+    //               <View styleName="content">
+    //                 <Subtitle numberOfLines={3}>{restaurant.name}</Subtitle>
+    //                 <View styleName="horizontal">
+    //                   <Caption styleName="collapsible" numberOfLines={2}>{restaurant.address}</Caption>
+    //                 </View>
+    //               </View>
+    //               <View style={{flexDirection: 'column'}}>
+    //                 <Text style={{fontSize: 12}}>
+    //                     {rowData.blurb}
+    //                 </Text>
+    //             </View>
+    //           </Card>
+    //         //   </TouchableOpacity>
+    //         );
+    //       });
+        
+    //       return (
+    //         <GridRow columns={2}>
+    //           {cellViews}
+    //         </GridRow>
+    //       );
+    // }
+
   render()
   {
+    // const acts = this.state.acts;
+
+    // const groupedData = GridRow.groupByRows(acts, 2, () => {return 1;});
+
     return (
       <View>
         <Text style={styles.welcome}>
           Recommended Activities for you
         </Text>
+        {/* <ListView
+            data={groupedData}
+            renderRow={this.renderRow}
+        /> */}
         {/* <Card containerStyle={{padding: 0}} >
         {
             acts.map((a, i) => {
@@ -48,40 +113,93 @@ export default  class RecActCard extends Component {
             })
         }
         </Card> */}
-        <Card
-        //   title='WALK YOUR DOG'
-          image={require('../img/walking.jpeg')}
-        //   containerStyle={{backgroundColor:'#738496'}}
-          >
-          <Button
-            // icon={{name: 'code'}}
-            backgroundColor='white'
-            // buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-            title='Walk Your Dog' 
-            onPress={() => this.props.navigation.navigate('ActivityDetail')} />
-          <Text style={{marginBottom: 10}}>
-            Click to learn more about the different steps involved in taking your dog out on a walk and perfecting it.
-          </Text>
-          {/* <Button
-            // icon={{name: 'code'}}
-            backgroundColor='#F7C68F'
-            buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-            title='START ACTIVITY' 
-            onPress={() => this.props.navigation.navigate('ActivityDetail')} /> */}
+        <Card>
+            <View style={{flex: 1, flexDirection:'row'}}>
+                <Image
+                    style={{ width: 60, height: 60 }}
+                    source={require('../img/bath.jpeg')} />
+                <View style={{flex: 5, justifyContent:'center', alignItems:'center'}}>
+                <Text style={{color:'#62BEC1', justifyContent: 'center', alignItems: 'center', marginBottom: 5}} onPress={() => this.props.navigation.navigate('ActivityDetail')}>
+                Bath Time
+                </Text>
+                </View>
+            </View>
+            <View style={{flexDirection: 'column'}}>
+                <Text style={{fontSize: 12}}>
+                    Giving your dog a bath is an essential and excellent way to understand your dogs behaviour.
+                </Text>
+            </View>
+            {/* <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={{fontSize: 12}}>
+                    The idea with React Native Elements is more about component structure than actual design.
+                </Text>
+            </View> */}
         </Card>
-        <Card
-        //   title='BATH TIME'
-          image={require('../img/bath.jpeg')}
-        //   containerStyle={{backgroundColor:'#738496'}}
-          >
-          <Button
-            // icon={{name: 'code'}}
-            backgroundColor='white'
-            // buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-            title='Bath Time' />
-          <Text style={{marginBottom: 10}}>
-            Click to learn more about the different steps involved in bathing your dog and making it fun.
-          </Text>
+        <Card>
+            <View style={{flex: 1, flexDirection:'row'}}>
+                <Image
+                    style={{ width: 60, height: 60 }}
+                    source={require('../img/fetch.jpeg')} />
+                <View style={{flex: 5, justifyContent:'center', alignItems:'center'}}>
+                <Text style={{color:'#62BEC1', justifyContent: 'center', alignItems: 'center', marginBottom: 5}} onPress={() => this.props.navigation.navigate('ActivityDetail')}>
+                Playtime
+                </Text>
+                </View>
+            </View>
+            <View style={{flexDirection: 'column'}}>
+                <Text style={{fontSize: 12}}>
+                Toys and play are essential before you even get your pet into the tub. Play with them in the bathroom and bring in their favorite toys. Basically, you\'re teaching them the bathroom is not a scary place.
+                </Text>
+            </View>
+            {/* <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={{fontSize: 12}}>
+                    The idea with React Native Elements is more about component structure than actual design.
+                </Text>
+            </View> */}
+        </Card>
+        <Card>
+            <View style={{flex: 1, flexDirection:'row'}}>
+                <Image
+                    style={{ width: 60, height: 60 }}
+                    source={require('../img/bath.jpeg')} />
+                <View style={{flex: 5, justifyContent:'center', alignItems:'center'}}>
+                <Text style={{color:'#62BEC1', justifyContent: 'center', alignItems: 'center', marginBottom: 5}} onPress={() => this.props.navigation.navigate('ActivityDetail')}>
+                Water Wings
+                </Text>
+                </View>
+            </View>
+            <View style={{flexDirection: 'column'}}>
+                <Text style={{fontSize: 12}}>
+                We're not saying you need those floaty devices that are so popular in teaching the young to swim.
+                </Text>
+            </View>
+            {/* <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={{fontSize: 12}}>
+                    The idea with React Native Elements is more about component structure than actual design.
+                </Text>
+            </View> */}
+        </Card>
+        <Card>
+            <View style={{flex: 1, flexDirection:'row'}}>
+                <Image
+                    style={{ width: 60, height: 60 }}
+                    source={require('../img/fetch.jpeg')} />
+                <View style={{flex: 5, justifyContent:'center', alignItems:'center'}}>
+                <Text style={{color:'#62BEC1', justifyContent: 'center', alignItems: 'center', marginBottom: 5}} onPress={() => this.props.navigation.navigate('ActivityDetail')}>
+                Bubble Bubble
+                </Text>
+                </View>
+            </View>
+            <View style={{flexDirection: 'column'}}>
+                <Text style={{fontSize: 12}}>
+                Fortunately, no toil and trouble this time. But we will the best way to make bath time fun is getting your pet high-quality shampoos, conditioners, and spritzers...
+                </Text>
+            </View>
+            {/* <View style={{flex: 1, flexDirection: 'column'}}>
+                <Text style={{fontSize: 12}}>
+                    The idea with React Native Elements is more about component structure than actual design.
+                </Text>
+            </View> */}
         </Card>
       </View>
     )

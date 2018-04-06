@@ -62,7 +62,7 @@ export default class HorActCards extends Component {
             return (
               <Card
                 title={null}
-                image={{ url: rowData.imageUrl }}
+                image={{ uri: rowData.imageUrl }}
                 containerStyle={{ padding: 0, width: 160}}
               >
                 <Text style={{ marginBottom: 10 }}>
