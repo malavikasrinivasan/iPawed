@@ -9,6 +9,10 @@ import GetPetDetails from './app/screens/LoginScreens/GetPetDetails';
 import HomeScreen from './app/screens/LoginScreens/HomeScreen';
 import Activity1 from './app/screens/ActivityScreens/Activity1';
 import Activity2 from './app/screens/ActivityScreens/Activity2';
+import ActivityPrestart from './app/screens/ActivityScreens/ActivityPrestart';
+import ActivityRecord from './app/screens/ActivityScreens/ActivityRecord';
+import ActivitySummary from './app/screens/ActivityScreens/ActivitySummary';
+import ActivityTrain from './app/screens/ActivityScreens/ActivityTrain';
 import TimelineScreen from './app/screens/JournalScreens/TimelineScreen';
 import AddEventScreen from './app/screens/JournalScreens/AddEventScreen';
 
@@ -20,8 +24,12 @@ const LoginStack = StackNavigator({
 });
 
 const ActivityStack = StackNavigator({
+  ActivityPrestart: { screen: ActivityPrestart},
+  ActivityRecord: { screen: ActivityRecord},
+  ActivitySummary: { screen: ActivitySummary},
+  ActivityTrain: { screen: ActivityTrain},
   Activity1: { screen: Activity1 },
-  Activity2: { screen: Activity2 },
+  Activity2: { screen: Activity2 }
 });
 
 const JournalStack = StackNavigator({
