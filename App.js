@@ -5,8 +5,8 @@ import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
 import Header from './app/components/Header';
 import WelcomeScreen from './app/screens/LoginScreens/WelcomeScreen';
 import UserLoginScreen from './app/screens/LoginScreens/UserLoginScreen';
-import Activity1 from './app/screens/ActivityScreens/Activity1';
-import Activity2 from './app/screens/ActivityScreens/Activity2';
+import ActivityMain from './app/screens/ActivityScreens/ActivityMain';
+import ActivityDetail from './app/screens/ActivityScreens/ActivityDetail';
 import TimelineScreen from './app/screens/JournalScreens/TimelineScreen';
 import AddEventScreen from './app/screens/JournalScreens/AddEventScreen';
 
@@ -16,8 +16,8 @@ const LoginStack = StackNavigator({
 });
 
 const ActivityStack = StackNavigator({
-  Activity1: { screen: Activity1 },
-  Activity2: { screen: Activity2 },
+  ActivityMain: { screen: ActivityMain },
+  ActivityDetail: { screen: ActivityDetail },
 });
 
 const JournalStack = StackNavigator({
