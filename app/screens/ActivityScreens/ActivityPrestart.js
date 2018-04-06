@@ -6,7 +6,7 @@ import {AppRegistry,
         ListView,
         TouchableOpacity,
         Image} from 'react-native';
-import ActivityTrain from './ActivityTrain'
+import ActivityDetail from './ActivityDetail'
 import ActivityRecord from './ActivityRecord'
 
 export default class ActivityPrestart extends Component {
@@ -34,7 +34,7 @@ export default class ActivityPrestart extends Component {
 
         <TouchableOpacity style={styles.startbutton} onPress={this._onRightButtonPress}>
           <Text style={styles.buttontext}> </Text>
-          <Text style={styles.buttontext}>START</Text>
+          <Text style={styles.buttontext}>NEXT</Text>
           <Text style={styles.buttontext}> </Text>
         </TouchableOpacity>
 
@@ -46,7 +46,7 @@ export default class ActivityPrestart extends Component {
     );
   }
   _onPress() {
-    this.props.navigation.navigate('ActivityTrain');
+    this.props.navigation.navigate('ActivityDetail');
   }
 
   _onRightButtonPress() {
