@@ -11,6 +11,7 @@ import Timeline from 'react-native-timeline-listview'
 
 export default class TimelineScreen extends Component {
 
+
   static navigationOptions = {
     title: 'Timeline',
      tabBarIcon: ({tintColor}) => (
@@ -25,6 +26,7 @@ export default class TimelineScreen extends Component {
     },
   };
 
+
   render() {
     return (
       <View style={styles.container}>
@@ -36,7 +38,26 @@ export default class TimelineScreen extends Component {
           </Text>
         </View>
         <View style={styles.timelineContainer}>
-          <Image style = {styles.timelinePlaceholder} source = {require('../../img/timelinePlaceholder.png')} resizeMode="contain"/>
+          <Timeline
+            styles={styles.list}
+            data = {[
+              {time: '09:00', title: 'Hello, World!'},
+              {time: '10:45'},
+              {time: '12:00'},
+              {time: '14:00'},
+              {time: '16:30'}
+            ]}
+            circleSize={20}
+            circleColor='rgb(45,156,219)'
+            lineColor='rgb(45,156,219)'
+            timeContainerStyle={{minWidth:52, marginTop: -5}}
+            timeStyle={{textAlign: 'center', backgroundColor:'#ff9797', color:'white', padding:5, borderRadius:13}}
+            titleStyle={{fontSize:20, color: 'blue'}}
+            descriptionStyle={{color:'gray'}}
+            options={{
+              style:{paddingTop:5}
+            }}
+          />
         </View>
       </View>
     );
@@ -63,13 +84,13 @@ const styles = StyleSheet.create({
   },
   timelineContainer: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  timelinePlaceholder: {
+  list: {
     flex: 1,
-    alignSelf: 'stretch'
-  }
+    marginTop:20,
+  },
 });
 
 AppRegistry.registerComponent('TimelineScreen', () => TimelineScreen);
