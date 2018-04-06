@@ -5,12 +5,13 @@ import {AppRegistry,
         StyleSheet,
         TouchableOpacity} from 'react-native';
 import {Stopwatch} from 'react-native-stopwatch-timer';
-
+import TimelineScreen from '../JournalScreens/TimelineScreen'
 
 export default class ActivitySummary extends Component {
   constructor(props){
       super(props);
       this._onLeftButtonPress = this._onLeftButtonPress.bind(this);
+      this._onSubmitButtonPress = this._onSubmitButtonPress.bind(this);
       this.duration = props.duration;
       this.currentTime = props.currentTime;
   }
@@ -57,7 +58,7 @@ export default class ActivitySummary extends Component {
 
 
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
-          <TouchableOpacity style={styles.submitbutton} onPress={this._onRightButtonPress}>
+          <TouchableOpacity style={styles.submitbutton} onPress={this._onSubmitButtonPress}>
             <Text style={styles.buttontext}> </Text>
             <Text style={styles.buttontext}>SAVE</Text>
             <Text style={styles.buttontext}> </Text>
@@ -68,6 +69,10 @@ export default class ActivitySummary extends Component {
 
   _onLeftButtonPress() {
     this.props.navigator.pop();
+  }
+
+  _onSubmitButtonPress() {
+    this.props.navigation.navigate('Timeline');
   }
 }
 

@@ -14,7 +14,6 @@ import AddEventScreen from './../screens/JournalScreens/AddEventScreen';
 import ActivityPrestart from './../screens/ActivityScreens/ActivityPrestart';
 import ActivityRecord from './../screens/ActivityScreens/ActivityRecord';
 import ActivitySummary from './../screens/ActivityScreens/ActivitySummary';
-import ActivityTrain from './../screens/ActivityScreens/ActivityTrain';
 
 // static navigationOptions = {
 //   header: null,
@@ -34,7 +33,6 @@ const ActivityStack = StackNavigator({
   ActivityPrestart: { screen: ActivityPrestart},
   ActivityRecord: { screen: ActivityRecord},
   ActivitySummary: { screen: ActivitySummary},
-  ActivityTrain: { screen: ActivityTrain}, 
 });
 
 const JournalStack = StackNavigator({
@@ -61,5 +59,3 @@ export default TabNavigator(
     header: null
   }
 );
-
-
