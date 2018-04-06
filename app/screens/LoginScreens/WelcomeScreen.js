@@ -1,38 +1,80 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, TouchableOpacity, Image } from 'react-native';
 
 import Header from './../../components/Header';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class WelcomeScreen extends Component {
   
   static navigationOptions = {
-    title: 'Home',
-    tabBarIcon: ({tintColor}) => (
-        <Icon name="ios-home" size={24} color={tintColor} />
-      ),
+    title: 'Pet Town!',
     headerStyle: {
-      backgroundColor: '#5497A7',
+      backgroundColor: '#D8D8D8',
     },
-    headerTintColor: 'white',
+    headerTintColor: 'black',
     headerTitleStyle: {
-      fontWeight: 'bold',
+      fontWeight: 'normal',
     },
   };
 
   render() {
     return (
-      <View>
-        <Text>
-          Welcome to PetApp! 
+      <View style={styles.screenContainer}>        
+        <Text style={styles.welcomeText}>
+          Welcome to Pet Town!
         </Text>
-        <Button
-          title="Login"
-          onPress={() => this.props.navigation.navigate('UserLogin')}
+
+        <Image 
+        style={styles.logoStyle}
+        // source={{require: }}
+        source={require('./../../img/temp_logo.png')}
         />
+
+        <Text style={styles.descriptionText}>
+          We want to help you create a forever relationship with your pet.
+        </Text>
+        <TouchableOpacity
+          style={styles.buttonStyle}
+          onPress={() => this.props.navigation.navigate('UserLogin')}
+        >
+          <Text style={styles.textButtonStyle}>
+            Let's get started!
+          </Text>
+        </TouchableOpacity>  
       </View>
     );
   }
 }
 
-AppRegistry.registerComponent('WelcomeScreen', () => WelcomeScreen);
+const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    alignSelf: 'stretch',
+    justifyContent: 'space-around'
+  },
+  logoStyle: {
+    width:150,
+    height:150
+  },
+  welcomeText: {
+    color: 'black',
+    fontSize: 30,
+    fontWeight: 'bold',
+    // fontFamily: 'Century Gothic'
+  },
+  descriptionText: {
+    color: 'black',
+    fontSize: 20,
+    marginHorizontal: 30,
+    textAlign: 'center'
+  },
+  buttonStyle: {
+    backgroundColor: '#5AC8B0',
+    borderRadius: 7
+  },
+  textButtonStyle: {
+    margin: 8
+  }
+});
