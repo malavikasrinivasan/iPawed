@@ -16,15 +16,17 @@ export default class TimelineScreen extends Component {
      tabBarIcon: ({tintColor}) => (
         <Icon name="heart" size={24} color={tintColor} />
       ),
+      headerTintColor: '#5AC8B0',
       headerBackTitle: 'back',
       headerBackTitleStyle: {
         fontFamily: 'Century Gothic'
       },
       headerTitleStyle: {
         fontFamily: 'SignPainter',
-        fontSize: 28
+        fontSize: 28,
+        color: 'black'
       },
-  };
+    };
 
   constructor(){
     super();
