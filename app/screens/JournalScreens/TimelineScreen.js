@@ -16,7 +16,10 @@ export default class TimelineScreen extends Component {
      tabBarIcon: ({tintColor}) => (
         <Icon name="heart" size={24} color={tintColor} />
       ),
-      headerTintColor: 'black',
+      headerBackTitle: 'back',
+      headerBackTitleStyle: {
+        fontFamily: 'Century Gothic'
+      },
       headerTitleStyle: {
         fontFamily: 'SignPainter',
         fontSize: 28
@@ -92,7 +95,7 @@ export default class TimelineScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.topRow}>
-          <Icon name="plus-square" size = {30} color="black" style = {{margin: 10}}
+          <Icon name="plus" size = {30} color="black" style = {{margin: 10}}
             onPress={() => this.props.navigation.navigate('AddEvent')}/>
           <Text style={styles.generalText}>
             Memories with Peanut

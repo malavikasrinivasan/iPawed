@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, TextInput, DatePickerIOS, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, TextInput, DatePickerIOS, TouchableOpacity, Image } from 'react-native';
 import { Avatar, SocialIcon, Button } from 'react-native-elements';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
-
+import ImagePicker from 'react-native-image-crop-picker';
 import Header from './../../components/Header';
 
 export default class AddEventScreen extends Component {
@@ -14,7 +13,10 @@ export default class AddEventScreen extends Component {
      tabBarIcon: ({tintColor}) => (
         <Icon name="heart" size={24} color={tintColor} />
       ),
-      headerTintColor: 'black',
+      headerBackTitle: 'back',
+      headerBackTitleStyle: {
+        fontFamily: 'Century Gothic'
+      },
       headerTitleStyle: {
         fontFamily: 'SignPainter',
         fontSize: 28
@@ -22,7 +24,7 @@ export default class AddEventScreen extends Component {
   };
 
   state = {
-    eventTitle : '',
+    eventTitle : 'Event Title',
     description : '',
     eventDate : new Date()
   }
@@ -34,34 +36,69 @@ export default class AddEventScreen extends Component {
     this.setState({description : text})
   }
 
+  _onCamPress() {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 300,
+      cropping: true
+    }).then(image => {
+      console.log(image);
+    });
+  }
+
+  _onLibPress() {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true
+    }).then(image => {
+      console.log(image);
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <View style = {styles.uploadContainer}>
-          <Avatar containerStyle = {styles.avatarStyle}
-            large
-            rounded
-            icon={{type: 'ionicon', name: 'ios-camera'}}
-            onPress={() => console.log("Works!")}
-            activeOpacity={0.7}
-          />
-          <Avatar containerStyle = {styles.avatarStyle}
-            large
-            rounded
-            icon={{type: 'ionicon', name: 'ios-images'}}
-            onPress={() => console.log("Works!")}
-            activeOpacity={0.7}
-          />
+        <Text style={styles.welcomeText}>
+          {this.state.eventTitle}
+        </Text>
+
+        <View style={styles.box}>
+          <View style={{margin:10}}>
+            <Text style={styles.subheader}>
+              {"Add Peanut's media!\n"}
+            </Text>
+            <View style = {styles.uploadContainer}>
+              <TouchableOpacity
+                onPress={this._onCamPress}
+                style={{flex:0.5}}>
+                <View style={{justifyContent:'center', alignItems:'center'}}>
+                  <Image
+                    source={require("../../icon/camera.png")}
+                    style={{height: 25, width: 25, justifyContent: 'center'}}/>
+                </View>
+                <Text style={[styles.label, {fontSize: 10, textAlign: 'center'}]}>
+                  {"Take photo"}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={this._onLibPress}
+                style={{flex:0.5}}>
+                <View style={{justifyContent:'center', alignItems:'center'}}>
+                  <Icon
+                    name='plus'
+                    size={24}
+                    color={"black"}
+                    style={{justifyContent:'center'}}/>
+                </View>
+                <Text style={[styles.label, {fontSize: 10, textAlign: 'center'}]}>
+                  {"Upload from library"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-        <View style={styles.commentbox}>
-           <TextInput
-             multiline = {true}
-             numberOfLines = {4}
-             style = {styles.commenttext}
-             placeholder="Caption"
-             placeholderTextColor="grey"
-           />
-         </View>
 
         <View style={styles.dateContainer}>
             <Text style={styles.label}>Date</Text>
@@ -97,17 +134,7 @@ export default class AddEventScreen extends Component {
             />
           </View>
 
-        <Text style = {styles.label}>Location</Text>
-
-        <View style={[styles.commentbox, {height: 100}]}>
-           <TextInput
-             multiline = {true}
-             numberOfLines = {4}
-             style = {styles.commenttext}
-             placeholder="Notes"
-             placeholderTextColor="grey"
-           />
-         </View>
+        <View style={{borderColor: '#E0E0E0', borderWidth: 1, alignSelf:'stretch', marginBottom:10, backgroundColor:'#E0E0E0'}}/>
 
         <View>
           <Text style={styles.subheader}>Behavior tags:</Text>
@@ -139,7 +166,17 @@ export default class AddEventScreen extends Component {
           </View>
          </View>
 
-        <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
+         <View style={styles.box}>
+           <View style={styles.commentbox}>
+              <TextInput
+                multiline = {true}
+                numberOfLines = {4}
+                style = {styles.commenttext}
+                placeholder="Notes"
+                placeholderTextColor="grey"
+              />
+          </View>
+        </View>
 
         <View style={styles.submitContainer}>
         <TouchableOpacity
@@ -166,15 +203,21 @@ export default class AddEventScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
+    justifyContent: 'space-around',
     backgroundColor: 'white'
+  },
+  welcomeText: {
+    color: 'black',
+    fontSize: 30,
+    fontWeight: 'bold',
+    fontFamily: 'SignPainter',
+    textAlign: 'center',
+    margin: 20
   },
   generalText: {
     fontFamily: 'Century Gothic',
     fontSize: 28,
-    color: 'black',
-    margin: 10
+    color: 'black'
   },
   subheader: {
     color: 'black',
@@ -183,34 +226,21 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     textAlign: 'center'
   },
-  caption: {
-      margin: 10,
-      height: 30,
-      borderColor: 'gray',
-      borderBottomWidth: 1,
-      color: '#5497A7',
-   },
   label: {
     margin: 10,
     color: 'black',
     fontSize: 14,
     fontFamily:'Century Gothic'
   },
-  description: {
-      margin: 10,
-      height: 100,
-      borderColor: 'gray',
-      borderBottomWidth: 1,
-      color: '#5497A7',
-   },
-   uploadContainer: {
+  box: {
+    alignItems: 'stretch',
+    backgroundColor: '#F6F6F6',
+    borderColor: '#E0E0E0',
+    borderWidth: 1.5
+  },
+  uploadContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
-    margin: 10
-   },
-   avatarStyle: {
-    margin: 0
    },
    submitContainer: {
     flexDirection: 'row',
@@ -294,12 +324,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic'
   },
   commentbox: {
-    backgroundColor: '#F0F0F0',
-    height: 50,
+    height: 70,
     alignSelf: 'stretch',
-    margin: 10,
-    borderColor: 'lightgrey',
-    borderWidth: 0.5
+    margin: 8,
+    marginTop: 2
   },
   commenttext: {
     color: 'black',

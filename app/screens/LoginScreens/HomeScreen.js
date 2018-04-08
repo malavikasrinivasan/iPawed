@@ -10,7 +10,7 @@ export default class GetPetDetails extends Component {
         <Icon name="home" size={24} color={tintColor}/>
       ),
     title: 'Home',
-    headerTintColor: 'black',
+    headerLeft: null,
     headerTitleStyle: {
       fontFamily: 'SignPainter',
       fontSize: 28

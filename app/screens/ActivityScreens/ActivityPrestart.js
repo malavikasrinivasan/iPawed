@@ -17,7 +17,10 @@ export default class ActivityPrestart extends Component {
         <Icon name="paw" size={24} color={tintColor}/>
       ),
     title: 'Activities',
-    headerTintColor: 'black',
+    headerBackTitle: 'back',
+    headerBackTitleStyle: {
+      fontFamily: 'Century Gothic'
+    },
     headerTitleStyle: {
       fontFamily: 'SignPainter',
       fontSize: 28

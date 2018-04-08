@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, AppRegistry, TouchableOpacity, Image } from 'react-native';
-
 import Header from './../../components/Header';
 
 export default class WelcomeScreen extends Component {
 
   static navigationOptions = {
     title: 'Pet Town',
-    headerStyle: {
+    headerBackTitle: 'back',
+    headerBackTitleStyle: {
+      fontFamily: 'Century Gothic'
     },
-    headerTintColor: 'black',
     headerTitleStyle: {
       fontFamily: 'SignPainter',
       fontSize: 28

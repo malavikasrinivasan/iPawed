@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import Header from './../../components/Header';
 
@@ -7,20 +8,33 @@ export default class GetPetDetails extends Component {
 
   static navigationOptions = {
     title: 'Pet Town',
-    headerStyle: {
+    headerBackTitle: 'back',
+    headerBackTitleStyle: {
+      fontFamily: 'Century Gothic'
     },
-    headerTintColor: 'black',
     headerTitleStyle: {
       fontFamily: 'SignPainter',
       fontSize: 28
     },
   };
 
+  _onAddPress() {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true
+    }).then(image => {
+      console.log(image);
+    });
+  }
+
   render() {
     return (
       <View style={styles.screenContainer}>
 
-        <TouchableOpacity style={styles.addimg}>
+        <TouchableOpacity
+          style={styles.addimg}
+          onPress={this._onAddPress}>
           <Text style={styles.addbuttontext}>{"Upload your pet's\nphoto!"}</Text>
           <Text style={styles.plustext}>+</Text>
         </TouchableOpacity>
