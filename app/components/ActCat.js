@@ -8,9 +8,9 @@ import {
   ScrollView,
   FlatList
 } from 'react-native';
-import { Card, 
-         ListItem, 
-         Button 
+import { Card,
+         ListItem,
+         Button
 } from 'react-native-elements';
 // import { List, ListItem } from 'react-native-elements';
 
@@ -19,31 +19,27 @@ export default  class ActCat extends Component {
   {
     return (
       <View>
-        <Text style={styles.welcome}>Categories</Text>
+        <Text style={styles.sectionTitle}>Categories:</Text>
         <Card
           title='OUTDOOR'
-          image={require('../img/dogpark.jpeg')}
-        //   containerStyle={{backgroundColor:'#738496'}}
-          >
+          image={require('../img/dogpark.jpeg')}>
           <Button
             backgroundColor='white'
             buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-            title='VIEW ACTIVITIES' />
-          <Text style={{marginBottom: 10}}>
+            title='VIEW ACTIVITIES'/>
+          <Text style={styles.instructions}>
             Click to learn more about the different steps involved in taking your dog out on a walk and perfecting it.
           </Text>
         </Card>
+
         <Card
           title='HOLIDAY'
-          image={require('../img/holiday.jpeg')}
-        //   containerStyle={{backgroundColor:'#738496'}}
-          >
+          image={require('../img/holiday.jpeg')}>
           <Button
-            // icon={{name: 'code'}}
             backgroundColor='white'
             buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
             title='VIEW ACTIVITIES' />
-          <Text style={{marginBottom: 10}}>
+          <Text style={styles.instructions}>
             Click to learn more about the different steps involved in playing fetch your dog and perfecting it.
           </Text>
         </Card>
@@ -60,18 +56,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
+  sectionTitle: {
     fontSize: 15,
     textAlign: 'center',
-    marginBottom: 0,
-    color: '#62BEC1'
+    fontFamily: 'Century Gothic',
+    color: '#5AC8B0',
+    marginBottom: -7,
+    marginTop: 20,
+    fontWeight: 'bold'
   },
   instructions: {
-    fontSize: 24,
-    textAlign: 'center',
+    fontSize: 12,
+    textAlign: 'left',
     color: '#333333',
     marginBottom: 5,
-    fontWeight: 'bold'
+    fontFamily: 'Century Gothic',
   },
 });
 

@@ -10,9 +10,10 @@ import {
   ImageBackground,
   FlatList,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
   Animated
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class CollapsibleCard extends Component {
     anime = {
@@ -26,8 +27,10 @@ class CollapsibleCard extends Component {
 
         this._initContentHeight = this._initContentHeight.bind(this);
         this.toggle = this.toggle.bind(this);
-
         this.anime.expanded = props.expanded;
+        this.state = {
+          icon: 'chevron-right'
+        };
     }
 
     _initContentHeight(evt) {
@@ -50,11 +53,13 @@ class CollapsibleCard extends Component {
     render() {
         return (
             <View>
-                <View>
-                    <TouchableHighlight underlayColor="transparent" onPress={this.toggle}>
-                        <Text>{this.props.title}</Text>
-                    </TouchableHighlight>
+              <TouchableOpacity onPress={this.toggle}>
+                <View style={{flexDirection:'row', justifyContent:'flex-start'}}>
+                  <Icon name={this.state.icon} size={18} style={styles.actStepMoreIcon} />
+                  <Text style={styles.titleStyle}>{this.props.title}</Text>
                 </View>
+              </TouchableOpacity>
+
 
                 <Animated.View style={{ height: this.anime.height }} onLayout={this._initContentHeight}>
                     {this.props.children}
@@ -63,5 +68,21 @@ class CollapsibleCard extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+  titleStyle: {
+    fontSize: 18,
+    margin: 10,
+    color: '#5AC8B0',
+    fontFamily: "Century Gothic"
+  },
+  actStepMoreIcon: {
+    color:'grey',
+    margin: 10,
+    marginTop: 12,
+    marginRight: 0,
+    fontWeight:'bold',
+  },
+});
 
 module.exports=CollapsibleCard;

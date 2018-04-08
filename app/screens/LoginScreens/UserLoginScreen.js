@@ -1,53 +1,64 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, Image } from 'react-native';
 
 import Header from './../../components/Header';
 
 export default class UserLoginScreen extends Component {
-  
+
   static navigationOptions = {
-    title: 'Login',
+    title: 'Pet Town',
     headerStyle: {
-      backgroundColor: '#D8D8D8',
     },
     headerTintColor: 'black',
     headerTitleStyle: {
-      fontWeight: 'normal',
+      fontFamily: 'SignPainter',
+      fontSize: 28
     },
   };
 
   render() {
     return (
       <View style={styles.screenContainer}>
-        <Text style={styles.welcomeText}>
-          Let's get you logged in! 
-        </Text>
-        <View style={styles.formContainer}>
-          <TextInput
-            style={styles.formTextInput}
-            placeholder="First Name"
-            placeholderTextColor='black'
-          />
-          <TextInput
-            style={styles.formTextInput}
-            placeholder="Last Name"
-            placeholderTextColor='black'
-          />
-          <TextInput
-            style={styles.formTextInput}
-            placeholder="Email ID"
-            placeholderTextColor='black'
-          />
+        <Image
+        style={styles.logoStyle}
+        source={require('./../../img/temp_logo.png')}
+        />
+
+        <View>
+          <Text style={styles.descriptionText}>
+            {"Please enter your email address\nand create a password:\n"}
+          </Text>
+          <View style={styles.formContainer}>
+            <TextInput
+              style={styles.formTextInput}
+              placeholder="Name"
+              placeholderTextColor='grey'
+            />
+            <View style={{borderColor: 'lightgrey', borderWidth: 1, alignSelf:'stretch'}}/>
+            <TextInput
+              style={styles.formTextInput}
+              placeholder="E-mail address"
+              placeholderTextColor='grey'
+              keyboardType='email-address'
+            />
+            <View style={{borderColor: 'lightgrey', borderWidth: 1, alignSelf:'stretch'}}/>
+            <TextInput
+              style={styles.formTextInput}
+              placeholder="Password"
+              placeholderTextColor='grey'
+              secureTextEntry={true}
+            />
+          </View>
         </View>
-        <View style={{ flex: 1 }}>
+
+        <View>
           <TouchableOpacity
             style={styles.buttonStyle}
-            onPress={() => this.props.navigation.navigate('PetDetails')}
-          >
+            onPress={() => this.props.navigation.navigate('PetDetails')}>
             <Text style={styles.textButtonStyle}>
               Login
             </Text>
-          </TouchableOpacity>  
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -63,34 +74,45 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'space-around'
   },
-  welcomeText: {
+  logoStyle: {
+    width:150,
+    height:150
+  },
+  descriptionText: {
     color: 'black',
-    fontSize: 30,
-    margin: 15
+    fontSize: 14,
+    marginHorizontal: 30,
+    textAlign: 'center',
+    fontFamily: 'Century Gothic'
   },
   formContainer: {
-    flex: 1,
-    // justifyContent: 'center',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
-    // alignSelf: 'stretch',
-    // justifyContent: 'space-around',
-    width:200,
-    // height:200,
-    margin: 30
+    borderWidth: 1.5,
+    borderColor: 'lightgrey',
+    backgroundColor: '#F0F0F0',
+    borderRadius: 7,
   },
   formTextInput: {
-    height: 50, 
-    width: 150, 
-    borderWidth: 1, 
-    margin: 5, 
-    borderColor: 'black',
+    height: 40,
+    width: 200,
+    fontSize: 14,
+    fontFamily: 'Century Gothic'
   },
   buttonStyle: {
+    width: 130,
     backgroundColor: '#5AC8B0',
-    borderRadius: 7
+    borderRadius: 7,
+    shadowOffset:{height: 2},
+    shadowColor: 'grey',
+    shadowOpacity: 1.0,
+    shadowRadius: 2
   },
   textButtonStyle: {
-    margin: 8
+    margin: 8,
+    textAlign: 'center',
+    fontSize: 13,
+    color: 'white',
+    fontFamily: 'Century Gothic'
   }
 });
