@@ -6,14 +6,27 @@ import {AppRegistry,
         ListView,
         TouchableOpacity,
         Image} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ActivityDetail from './ActivityDetail'
 import ActivityRecord from './ActivityRecord'
 
 export default class ActivityPrestart extends Component {
+
+  static navigationOptions = {
+    tabBarIcon: ({tintColor}) => (
+        <Icon name="paw" size={24} color={tintColor}/>
+      ),
+    title: 'Activities',
+    headerTintColor: 'black',
+    headerTitleStyle: {
+      fontFamily: 'SignPainter',
+      fontSize: 28
+    },
+  };
+
   constructor(props){
       super(props);
       this._onPress = this._onPress.bind(this);
-      this._onRightButtonPress = this._onRightButtonPress.bind(this);
       this._onLeftButtonPress = this._onLeftButtonPress.bind(this);
   }
 
@@ -32,10 +45,12 @@ export default class ActivityPrestart extends Component {
           <Text style={styles.textlink}>Review training here.</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.startbutton} onPress={this._onRightButtonPress}>
-          <Text style={styles.buttontext}> </Text>
-          <Text style={styles.buttontext}>NEXT</Text>
-          <Text style={styles.buttontext}> </Text>
+        <TouchableOpacity
+          style={styles.buttonStyle}
+          onPress={() => this.props.navigation.navigate('ActivityRecord')}>
+          <Text style={styles.textButtonStyle}>
+            {"Next"}
+          </Text>
         </TouchableOpacity>
 
         <Text style={[styles.subheader, {fontSize:18, textAlign:'center'}]}>
@@ -47,10 +62,6 @@ export default class ActivityPrestart extends Component {
   }
   _onPress() {
     this.props.navigation.navigate('ActivityDetail');
-  }
-
-  _onRightButtonPress() {
-    this.props.navigation.navigate('ActivityRecord');
   }
 
   _onLeftButtonPress() {
@@ -68,13 +79,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   header: {
-    color: '#163250',
+    color: 'black',
     fontFamily: 'Century Gothic',
     fontSize: 24,
     textAlign: 'center'
   },
   subheader: {
-    color: '#163250',
+    color: 'black',
     fontFamily: 'Century Gothic',
     fontSize: 12,
     margin: 15,
@@ -86,28 +97,28 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   textlink: {
-    color: '#163250',
+    color: 'black',
     fontFamily: 'Century Gothic',
     fontSize: 14,
     textAlign: 'center'
   },
-  startbutton: {
-     width: 60,
-     height: 60,
-     alignSelf: 'center',
-     backgroundColor: '#5AC8B0',
-     borderRadius: 100,
-     shadowOffset:{height: 3},
-     shadowColor: 'grey',
-     shadowOpacity: 1.0
+  buttonStyle: {
+    width: 130,
+    backgroundColor: '#5AC8B0',
+    borderRadius: 7,
+    shadowOffset:{height: 2},
+    shadowColor: 'grey',
+    shadowOpacity: 1.0,
+    shadowRadius: 2,
+    alignSelf: 'center',
+    margin: 10
   },
-  buttontext: {
+  textButtonStyle: {
+    margin: 8,
     textAlign: 'center',
-    fontFamily: 'Century Gothic',
+    fontSize: 13,
     color: 'white',
-    flexDirection: 'column',
-    flex: 1,
-    fontSize: 16
+    fontFamily: 'Century Gothic'
   }
 });
 

@@ -10,6 +10,7 @@ import {
   Image,
   TextInput
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {Stopwatch} from 'react-native-stopwatch-timer';
 import ActivitySummary from './ActivitySummary'
 
@@ -26,14 +27,26 @@ class CommentInput extends Component {
 }
 
 export default class ActivityRecord extends Component{
+
+  static navigationOptions = {
+    tabBarIcon: ({tintColor}) => (
+        <Icon name="paw" size={24} color={tintColor}/>
+      ),
+    title: 'Activities',
+    headerTintColor: 'black',
+    headerTitleStyle: {
+      fontFamily: 'SignPainter',
+      fontSize: 28
+    },
+  };
+
   constructor(props){
     super(props);
     this._onFinish = this._onFinish.bind(this);
     this._onLeftButtonPress = this._onLeftButtonPress.bind(this);
     this.state = {
       stopwatchStart: false,
-      stopwatchReset: false,
-      text: 'Notes:'
+      stopwatchReset: false
     };
     this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
@@ -98,12 +111,12 @@ export default class ActivityRecord extends Component{
             </TouchableOpacity>
 
             <View style={styles.commentbox}>
-               <CommentInput
+               <TextInput
                  multiline = {true}
                  numberOfLines = {4}
                  style = {styles.commenttext}
-                 onChangeText={(text) => this.setState({text})}
-                 value={this.state.text}
+                 placeholder="Notes:"
+                 placeholderTextColor="grey"
                />
              </View>
 
@@ -112,7 +125,7 @@ export default class ActivityRecord extends Component{
 
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
           <View>
-            <Text style={styles.subheader}>Select pet behaviors:</Text>
+            <Text style={styles.subheader}>Behavior tags:</Text>
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                <TouchableOpacity onPress={this.behavior1} style={{margin:10}}>
                  <View style={[styles.behavior, {backgroundColor:'#D3B69B'}]}/>
@@ -145,7 +158,7 @@ export default class ActivityRecord extends Component{
 
 
           <View>
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
               <TouchableOpacity style={styles.startbutton} onPress={this.toggleStopwatch}>
                 <Text style={styles.startbuttontext}> </Text>
                 <Text style={styles.startbuttontext}>{!this.state.stopwatchStart ? "START" : "STOP"}</Text>
@@ -185,20 +198,20 @@ const styles = StyleSheet.create({
     borderWidth: 0.5
   },
   commenttext: {
-    color: '#163250',
+    color: 'black',
     fontSize: 12,
     margin: 4,
     fontFamily: 'Century Gothic'
   },
   header: {
-    color: '#163250',
+    color: 'black',
     fontSize: 18,
     fontFamily: 'Century Gothic',
     textAlign: 'center',
     fontWeight: 'bold'
   },
   subheader: {
-    color: '#163250',
+    color: 'black',
     fontSize: 15,
     fontFamily: 'Century Gothic',
     paddingBottom: 5,
@@ -228,7 +241,7 @@ const styles = StyleSheet.create({
   },
   startbuttontext: {
     textAlign: 'center',
-    color: '#163250',
+    color: 'black',
     flexDirection: 'column',
     flex: 1,
     fontSize: 16,
@@ -254,13 +267,13 @@ const styles = StyleSheet.create({
   },
   addbuttontext: {
     textAlign: 'center',
-    color: '#163250',
+    color: 'black',
     fontSize: 16,
     fontFamily: 'Century Gothic',
   },
   plustext: {
     textAlign: 'center',
-    color: '#163250',
+    color: 'black',
     fontSize: 25,
     fontFamily: 'Century Gothic',
   },
@@ -268,14 +281,14 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     alignSelf: 'center',
-    borderColor: '#163250',
+    borderColor: 'black',
     borderRadius: 100,
     borderWidth: 1,
     margin: 5,
     opacity: 0.8
   },
   tagtext: {
-    color: '#163250',
+    color: 'black',
     fontSize: 11,
     fontFamily: 'Century Gothic',
     textAlign: 'center',
@@ -295,7 +308,7 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     alignSelf: 'center',
-    borderColor: '#163250',
+    borderColor: 'black',
     borderRadius: 100,
     borderWidth: 1,
     margin: 5,
@@ -309,7 +322,7 @@ const options = {
   text: {
     fontSize: 50,
     fontFamily: 'Century Gothic',
-    color: '#163250',
+    color: 'black',
     textAlign: 'center'
   }
 };

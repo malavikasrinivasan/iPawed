@@ -4,14 +4,27 @@ import {AppRegistry,
         View,
         StyleSheet,
         TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {Stopwatch} from 'react-native-stopwatch-timer';
-import TimelineScreen from '../JournalScreens/TimelineScreen'
+import TimelineScreen from '../JournalScreens/TimelineScreen';
 
 export default class ActivitySummary extends Component {
+
+  static navigationOptions = {
+    tabBarIcon: ({tintColor}) => (
+        <Icon name="paw" size={24} color={tintColor}/>
+      ),
+    title: 'Activities',
+    headerTintColor: 'black',
+    headerTitleStyle: {
+      fontFamily: 'SignPainter',
+      fontSize: 28
+    },
+  };
+
   constructor(props){
       super(props);
       this._onLeftButtonPress = this._onLeftButtonPress.bind(this);
-      this._onSubmitButtonPress = this._onSubmitButtonPress.bind(this);
       this.duration = props.duration;
       this.currentTime = props.currentTime;
   }
@@ -58,21 +71,29 @@ export default class ActivitySummary extends Component {
 
 
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
-          <TouchableOpacity style={styles.submitbutton} onPress={this._onSubmitButtonPress}>
-            <Text style={styles.buttontext}> </Text>
-            <Text style={styles.buttontext}>SAVE</Text>
-            <Text style={styles.buttontext}> </Text>
+          <View style={styles.submitContainer}>
+          <TouchableOpacity
+            style={styles.deletebutton}
+            onPress={() => this.props.navigation.navigate('Timeline')}>
+            <Text style={styles.deletebuttontext}> </Text>
+            <Text style={styles.deletebuttontext}>DELETE</Text>
+            <Text style={styles.deletebuttontext}> </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.savebutton}
+            onPress={() => this.props.navigation.navigate('Timeline')}>
+            <Text style={styles.savebuttontext}> </Text>
+            <Text style={styles.savebuttontext}>SAVE</Text>
+            <Text style={styles.savebuttontext}> </Text>
+          </TouchableOpacity>
+          </View>
         </View>
       );
     }
 
   _onLeftButtonPress() {
     this.props.navigator.pop();
-  }
-
-  _onSubmitButtonPress() {
-    this.props.navigation.navigate('Timeline');
   }
 }
 
@@ -88,14 +109,14 @@ export default class ActivitySummary extends Component {
       justifyContent: 'space-around'
     },
     header: {
-      color: '#163250',
+      color: 'black',
       fontSize: 18,
       fontFamily: 'Century Gothic',
       textAlign: 'center',
       fontWeight: 'bold'
     },
     subheader: {
-      color: '#163250',
+      color: 'black',
       fontSize: 15,
       fontFamily: 'Century Gothic',
       paddingBottom: 5,
@@ -115,36 +136,62 @@ export default class ActivitySummary extends Component {
       width: 50,
       height: 50,
       alignSelf: 'center',
-      borderColor: '#163250',
+      borderColor: 'black',
       borderRadius: 100,
       borderWidth: 1,
       margin: 5,
       opacity: 0.8
     },
     tagtext: {
-      color: '#163250',
+      color: 'black',
       fontSize: 11,
       fontFamily: 'Century Gothic',
       textAlign: 'center',
       fontStyle: 'italic'
     },
-    submitbutton: {
+    submitContainer: {
+     flexDirection: 'row',
+     justifyContent: 'space-around',
+     alignItems: 'center',
+     margin: 10
+    },
+    deletebutton: {
+       width: 60,
+       height: 60,
+       alignSelf: 'center',
+       backgroundColor: 'white',
+       borderRadius: 100,
+       margin: 2,
+       shadowOffset:{height: 3},
+       shadowColor: 'grey',
+       shadowOpacity: 1.0
+    },
+    savebutton: {
       width: 60,
       height: 60,
       alignSelf: 'center',
       backgroundColor: '#5AC8B0',
       borderRadius: 100,
+      margin: 5,
       shadowOffset:{height: 3},
       shadowColor: 'grey',
       shadowOpacity: 1.0
     },
-    buttontext: {
+    deletebuttontext: {
+      textAlign: 'center',
+      color: 'black',
+      flexDirection: 'column',
+      flex: 1,
+      fontSize: 16,
+      fontFamily: 'Century Gothic'
+    },
+    savebuttontext: {
       textAlign: 'center',
       color: 'white',
       flexDirection: 'column',
       flex: 1,
       fontSize: 16,
-      fontFamily: 'Century Gothic',
+      fontFamily: 'Century Gothic'
     }
   })
 
@@ -152,7 +199,7 @@ export default class ActivitySummary extends Component {
     text: {
       fontSize: 50,
       fontFamily: 'Century Gothic',
-      color: '#163250',
+      color: 'black',
       textAlign: 'center'
     }
   };

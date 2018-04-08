@@ -51,8 +51,8 @@ export default TabNavigator(
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     tabBarOptions: {
-      activeTintColor: '#5497A7',
-      inactiveTintColor: 'gray',
+      activeTintColor: '#3A8676',
+      inactiveTintColor: '#CACACA',
     },
     animationEnabled: false,
     swipeEnabled: false,

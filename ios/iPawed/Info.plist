@@ -71,6 +71,19 @@
 		<string>GOTHICB0.TTF</string>
 		<string>GOTHICBI.TTF</string>
 		<string>GOTHICI.TTF</string>
+		<string>SignPainter HouseScript Regular.ttf</string>
+		<string>rubicon-icon-font.ttf</string>
+		<string>Rubik-Black.ttf</string>
+		<string>Rubik-BlackItalic.ttf</string>
+		<string>Rubik-Bold.ttf</string>
+		<string>Rubik-BoldItalic.ttf</string>
+		<string>Rubik-Italic.ttf</string>
+		<string>Rubik-Light.ttf</string>
+		<string>Rubik-LightItalic.ttf</string>
+		<string>Rubik-Medium.ttf</string>
+		<string>Rubik-MediumItalic.ttf</string>
+		<string>Rubik-Regular.ttf</string>
+		<string>SignPainter-HouseScript.ttf</string>
 	</array>
 </dict>
 </plist>
