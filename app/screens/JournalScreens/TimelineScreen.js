@@ -95,7 +95,7 @@ export default class TimelineScreen extends Component {
           <Icon name="plus-square" size = {30} color="black" style = {{margin: 10}}
             onPress={() => this.props.navigation.navigate('AddEvent')}/>
           <Text style={styles.generalText}>
-            Memories with Peanut
+            Memories with Peanut!
           </Text>
         </View>
         <View style={styles.timelineContainer}>
