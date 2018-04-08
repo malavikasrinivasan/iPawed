@@ -51,8 +51,11 @@ export default TabNavigator(
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
     tabBarOptions: {
-      activeTintColor: '#3A8676',
+      activeTintColor: '#449684',
       inactiveTintColor: '#CACACA',
+      labelStyle: {
+        fontFamily: 'Century Gothic'
+      }
     },
     animationEnabled: false,
     swipeEnabled: false,
