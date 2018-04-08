@@ -7,9 +7,10 @@ export default class UserLoginScreen extends Component {
 
   static navigationOptions = {
     title: 'Pet Town',
-    headerStyle: {
+    headerBackTitle: 'back',
+    headerBackTitleStyle: {
+      fontFamily: 'Century Gothic'
     },
-    headerTintColor: 'black',
     headerTitleStyle: {
       fontFamily: 'SignPainter',
       fontSize: 28

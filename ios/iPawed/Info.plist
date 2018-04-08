@@ -39,7 +39,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -51,6 +51,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Storing photos of your pet for your personal enjoyment!</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Taking photos of your pet for your personal enjoyment!</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

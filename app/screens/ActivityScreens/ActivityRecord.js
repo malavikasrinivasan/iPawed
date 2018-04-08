@@ -11,6 +11,7 @@ import {
   TextInput
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ImagePicker from 'react-native-image-crop-picker';
 import {Stopwatch} from 'react-native-stopwatch-timer';
 import ActivitySummary from './ActivitySummary'
 
@@ -33,7 +34,10 @@ export default class ActivityRecord extends Component{
         <Icon name="paw" size={24} color={tintColor}/>
       ),
     title: 'Activities',
-    headerTintColor: 'black',
+    headerBackTitle: 'back',
+    headerBackTitleStyle: {
+      fontFamily: 'Century Gothic'
+    },
     headerTitleStyle: {
       fontFamily: 'SignPainter',
       fontSize: 28
@@ -44,6 +48,7 @@ export default class ActivityRecord extends Component{
     super(props);
     this._onFinish = this._onFinish.bind(this);
     this._onLeftButtonPress = this._onLeftButtonPress.bind(this);
+    this._onAddPress = this._onAddPress.bind(this);
     this.state = {
       stopwatchStart: false,
       stopwatchReset: false
@@ -66,6 +71,16 @@ export default class ActivityRecord extends Component{
 
   _onLeftButtonPress() {
     this.props.navigator.pop();
+  }
+
+  _onAddPress() {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true
+    }).then(image => {
+      console.log(image);
+    });
   }
 
   _onFinish() {
@@ -105,7 +120,9 @@ export default class ActivityRecord extends Component{
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
           <View style={{flexDirection:'row', paddingTop:10, paddingBottom:10}}>
-            <TouchableOpacity style={styles.addimg}>
+            <TouchableOpacity
+              style={styles.addimg}
+              onPress={this._onAddPress}>
               <Text style={styles.addbuttontext}>{'add photo'}</Text>
               <Text style={styles.plustext}>+</Text>
             </TouchableOpacity>
