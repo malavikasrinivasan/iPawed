@@ -11,6 +11,7 @@ import ActivityDetail from './../screens/ActivityScreens/ActivityDetail';
 import ActivityMain from './../screens/ActivityScreens/ActivityMain';
 import TimelineScreen from './../screens/JournalScreens/TimelineScreen';
 import AddEventScreen from './../screens/JournalScreens/AddEventScreen';
+import ViewEventScreen from './../screens/JournalScreens/ViewEventScreen';
 import ActivityPrestart from './../screens/ActivityScreens/ActivityPrestart';
 import ActivityRecord from './../screens/ActivityScreens/ActivityRecord';
 import ActivitySummary from './../screens/ActivityScreens/ActivitySummary';
@@ -38,6 +39,7 @@ const ActivityStack = StackNavigator({
 const JournalStack = StackNavigator({
   Timeline: { screen: TimelineScreen },
   AddEvent: { screen: AddEventScreen },
+  ViewEvent: { screen: ViewEventScreen},
   initialRouteName: 'Timeline'
 });
 
