@@ -66,7 +66,8 @@ export default class TimelineScreen extends Component {
   }
 
     onEventPress(data){
-      this.setState({selected: data})
+      this.setState({selected: data});
+      this.props.navigation.navigate('ViewEvent');
     }
 
     renderDetail(rowData, sectionID, rowID) {
