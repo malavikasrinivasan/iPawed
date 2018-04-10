@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-
+import DatePicker from 'react-native-datepicker';
 import Header from './../../components/Header';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import * as firebase from 'firebase';
 
 export default class GetPetDetails extends Component {
 
@@ -20,6 +23,16 @@ export default class GetPetDetails extends Component {
     },
   };
 
+  state = {
+    petName : '',
+    petBreed : '',
+    petColor: '',
+    petWeight: '',
+    petGender: '',
+    petAdoptionDate : null,
+    petBirthDay : null
+  }
+
   _onAddPress() {
     ImagePicker.openPicker({
       width: 300,
@@ -27,6 +40,35 @@ export default class GetPetDetails extends Component {
       cropping: true
     }).then(image => {
       console.log(image);
+    });
+  }
+
+  // componentDidMount(){
+  //   const firebaseConfig = {
+  //     apiKey: "AIzaSyALmeSOsC45vPnU3UmqEAzIhs_WgVX6NY8",
+  //     authDomain: "ipawedmims18.firebaseapp.com",
+  //     databaseURL: "https://ipawedmims18.firebaseio.com",
+  //     projectId: "ipawedmims18",
+  //     storageBucket: "ipawedmims18.appspot.com",
+  //     messagingSenderId: "828598628543"
+  //   }
+  //   firebase.initializeApp(firebaseConfig);
+  // }
+
+  uploadPetProfile() {
+    firebase.database().ref('petdetails').set({
+      petName : this.state.petName,
+      petBreed : this.state.petBreed,
+      petColor: this.state.petColor,
+      petWeight: this.state.petWeight,
+      petGender: this.state.petGender,
+      petAdoptionDate : this.state.petAdoptionDate,
+      petBirthDay : this.state.petBirthDay      
+    }).then(() => {      
+      alert("Inserted");
+      this.props.navigation.navigate('Home')
+    }).catch((error) => {
+      alert(error)
     });
   }
 
@@ -49,7 +91,11 @@ export default class GetPetDetails extends Component {
               editable={false}/>
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="name"
-              placeholderTextColor='lightgrey'/>
+              placeholderTextColor='lightgrey'
+              onChangeText={petName => this.setState({ petName })}
+              value={this.state.petName}
+              />
+
           </View>
 
           <View style={styles.formTextInput}>
@@ -59,7 +105,10 @@ export default class GetPetDetails extends Component {
               editable={false}/>
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="breed"
-              placeholderTextColor='lightgrey'/>
+              placeholderTextColor='lightgrey'
+              onChangeText={petBreed => this.setState({ petBreed })}
+              value={this.state.petBreed}
+              />
           </View>
 
           <View style={styles.formTextInput}>
@@ -69,7 +118,10 @@ export default class GetPetDetails extends Component {
               editable={false}/>
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="color"
-              placeholderTextColor='lightgrey'/>
+              placeholderTextColor='lightgrey'
+              onChangeText={petColor => this.setState({ petColor })}
+              value={this.state.petColor}
+              />
           </View>
 
           <View style={styles.formTextInput}>
@@ -79,7 +131,10 @@ export default class GetPetDetails extends Component {
               editable={false}/>
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="weight (lbs)"
-              placeholderTextColor='lightgrey'/>
+              placeholderTextColor='lightgrey'
+              onChangeText={petWeight => this.setState({ petWeight })}
+              value={this.state.petWeight}
+              />
           </View>
 
           <View style={styles.formTextInput}>
@@ -89,17 +144,55 @@ export default class GetPetDetails extends Component {
               editable={false}/>
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="male/female"
-              placeholderTextColor='lightgrey'/>
+              placeholderTextColor='lightgrey'
+              onChangeText={petGender => this.setState({ petGender })}
+              value={this.state.petGender}
+              />
           </View>
 
           <View style={styles.formTextInput}>
             <TextInput style={{fontFamily: "Century Gothic", flex:0.5}}
-              placeholder="Adoption Date: "
+              placeholder={"Adoption Date: "}
               placeholderTextColor='black'
               editable={false}/>
-            <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
-              placeholder="mm/dd/yyyy"
-              placeholderTextColor='lightgrey'/>
+            <DatePicker
+              date={this.state.petAdoptionDate}
+              mode="date"
+              placeholder="yyyy-mm-dd"
+              format="YYYY-MM-DD"              
+              minDate="2010-01-01"
+              maxDate="2020-12-31"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              style={{
+                flex:0.5
+              }}
+              showIcon={false}
+              iconComponent={<Icon name="calendar" size = {24} color="gray" />}
+              customStyles={{
+                dateInput: {
+                  borderWidth: 0
+                },
+                btnTextConfirm: {
+                  color: 'black',
+                  fontFamily: 'Century Gothic'
+                },
+                btnTextCancel: {
+                  color: 'black',
+                  fontFamily: 'Century Gothic'
+                },
+                dateText: {
+                  color: 'black',
+                  fontFamily: 'Century Gothic'
+                },
+                placeholderText: {
+                  fontFamily: "Century Gothic", 
+                  fontWeight:'bold',     
+                  color: 'lightgrey'
+                }
+              }}
+              onDateChange={(date) => {this.setState({petAdoptionDate: date})}}
+            />
           </View>
 
           <View style={{height: 35, width: 300}}>
@@ -108,9 +201,46 @@ export default class GetPetDetails extends Component {
                 placeholder="Birthday: "
                 placeholderTextColor='black'
                 editable={false}/>
-              <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
-                placeholder="mm/dd/yyyy"
-                placeholderTextColor='lightgrey'/>
+              
+              <DatePicker
+                date={this.state.petBirthDay}
+                mode="date"
+                placeholder="yyyy-mm-dd"
+                format="YYYY-MM-DD"              
+                minDate="2010-01-01"
+                maxDate="2020-12-31"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                style={{
+                  flex:0.5
+                }}
+                showIcon={false}
+                iconComponent={<Icon name="calendar" size = {24} color="gray" />}
+                customStyles={{
+                  dateInput: {
+                    borderWidth: 0
+                  },
+                  btnTextConfirm: {
+                    color: 'black',
+                    fontFamily: 'Century Gothic'
+                  },
+                  btnTextCancel: {
+                    color: 'black',
+                    fontFamily: 'Century Gothic'
+                  },
+                  dateText: {
+                    color: 'black',
+                    fontFamily: 'Century Gothic'
+                  },
+                  placeholderText: {
+                    fontFamily: "Century Gothic", 
+                    fontWeight:'bold',     
+                    color: 'lightgrey'
+                  }
+                }}
+                onDateChange={(date) => {this.setState({petBirthDay: date})}}
+              />
+
             </View>
             <Text style={{fontSize:10, fontFamily:"Century Gothic"}}>
               {"(if you're not sure, guess)"}
@@ -119,7 +249,7 @@ export default class GetPetDetails extends Component {
         </View>
         <TouchableOpacity
           style={styles.buttonStyle}
-          onPress={() => this.props.navigation.navigate('Home')}>
+          onPress={ () => this.uploadPetProfile() }>
           <Text style={styles.textButtonStyle}>
             Create profile
           </Text>
