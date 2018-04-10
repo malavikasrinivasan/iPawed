@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 import ImagePicker from 'react-native-image-crop-picker';
 import Header from './../../components/Header';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default class AddEventScreen extends Component {
 
@@ -62,13 +63,19 @@ export default class AddEventScreen extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcomeText}>
-          {this.state.eventTitle}
+          Record a memory!
         </Text>
+        <TextInput
+          multiline = {false}
+          style = {styles.commenttext}
+          placeholder="Title"
+          placeholderTextColor="grey"
+        />
 
         <View style={styles.box}>
           <View style={{margin:10}}>
             <Text style={styles.subheader}>
-              {"Add Peanut's media!\n"}
+              {"Media\n"}
             </Text>
             <View style = {styles.uploadContainer}>
               <TouchableOpacity
@@ -134,7 +141,55 @@ export default class AddEventScreen extends Component {
             }}
             onDateChange={(date) => {this.setState({eventDate: date})}}
             />
-          </View>
+        </View>
+
+        <View style={styles.dateContainer}>
+          <Text style={styles.label}>Location</Text>
+          <GooglePlacesAutocomplete
+            placeholder='Search'
+            minLength={2} // minimum length of text to search
+            autoFocus={false}
+            returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+            listViewDisplayed='auto'    // true/false/undefined
+            fetchDetails={true}
+            renderDescription={row => row.description} // custom description render
+            onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+              console.log(data, details);
+            }}
+            
+            getDefaultValue={() => ''}
+            
+            query={{
+              // available options: https://developers.google.com/places/web-service/autocomplete
+              key: 'AIzaSyCYo6KjI8l0Dk_nx-P4w3T_UOUKFyygMXc',
+              language: 'en', // language of the results
+              types: '(cities)' // default: 'geocode'
+            }}
+            
+            styles={{
+              textInputContainer: {
+                width: '100%',
+                backgroundColor: 'rgba(0,0,0,0)',
+                borderTopWidth: 0,
+                borderBottomWidth:0
+              },
+              description: {
+                fontWeight: 'bold'
+              },
+              textInput: {
+                color: 'black',
+                fontSize: 14,
+                fontFamily:'Century Gothic'
+              },
+              predefinedPlacesDescription: {
+                color: '#1faadb'
+              }
+            }}
+            
+            currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
+          />
+
+        </View>
 
         <View style={{borderColor: '#E0E0E0', borderWidth: 1, alignSelf:'stretch', marginBottom:10, backgroundColor:'#E0E0E0'}}/>
 
@@ -214,7 +269,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'SignPainter',
     textAlign: 'center',
-    margin: 20
+    margin: 10
   },
   generalText: {
     fontFamily: 'Century Gothic',
