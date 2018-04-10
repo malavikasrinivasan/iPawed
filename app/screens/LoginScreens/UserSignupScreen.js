@@ -14,17 +14,17 @@ export default class UserLoginScreen extends Component {
     error: '',
   }
 
-  componentDidMount(){
-    const firebaseConfig = {
-      apiKey: "AIzaSyALmeSOsC45vPnU3UmqEAzIhs_WgVX6NY8",
-      authDomain: "ipawedmims18.firebaseapp.com",
-      databaseURL: "https://ipawedmims18.firebaseio.com",
-      projectId: "ipawedmims18",
-      storageBucket: "ipawedmims18.appspot.com",
-      messagingSenderId: "828598628543"
-    }
-    firebase.initializeApp(firebaseConfig);
-  }
+  // componentDidMount(){
+  //   const firebaseConfig = {
+  //     apiKey: "AIzaSyALmeSOsC45vPnU3UmqEAzIhs_WgVX6NY8",
+  //     authDomain: "ipawedmims18.firebaseapp.com",
+  //     databaseURL: "https://ipawedmims18.firebaseio.com",
+  //     projectId: "ipawedmims18",
+  //     storageBucket: "ipawedmims18.appspot.com",
+  //     messagingSenderId: "828598628543"
+  //   }
+  //   firebase.initializeApp(firebaseConfig);
+  // }
 
 
   onPressSignIn() {
@@ -34,7 +34,7 @@ export default class UserLoginScreen extends Component {
 
     const { email, password } = this.state;
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((user) => {this.setState({
       authenticating: false,
       user,
@@ -50,7 +50,6 @@ export default class UserLoginScreen extends Component {
         authenticating: false,
       });
     });
-
   }
 
   static navigationOptions = {
@@ -67,8 +66,9 @@ export default class UserLoginScreen extends Component {
     },
   };
 
+
+
   render() {
-    
     if (this.state.authenticating) {
       return (
         <View style={styles.form}>
@@ -77,7 +77,7 @@ export default class UserLoginScreen extends Component {
       )
     }
 
-    return (
+    return(
       <View style={styles.screenContainer}>
         <Image
         style={styles.logoStyle}
@@ -86,10 +86,14 @@ export default class UserLoginScreen extends Component {
 
         <View>
           <Text style={styles.descriptionText}>
-            {"Let's get you signed in!\n"}
+            {"Please enter your email address\nand create a password:\n"}
           </Text>
           <View style={styles.formContainer}>
-            
+            <TextInput
+              style={styles.formTextInput}
+              placeholder="Name"
+              placeholderTextColor='grey'
+            />
             <View style={{borderColor: 'lightgrey', borderWidth: 1, alignSelf:'stretch'}}/>
             <TextInput
               style={styles.formTextInput}
@@ -113,10 +117,10 @@ export default class UserLoginScreen extends Component {
 
         <View>
           <TouchableOpacity
-            style={styles.buttonStyle}
+            style={styles.buttonStyle}        
             onPress={ () => this.onPressSignIn() }>
             <Text style={styles.textButtonStyle}>
-              Login
+              Signup
             </Text>
           </TouchableOpacity>
         </View>
@@ -124,18 +128,20 @@ export default class UserLoginScreen extends Component {
         <View>
           <Text style={styles.descriptionText}>
             <Text > 
-              {"New User? Sign up "}
+              {"Existing User? Log in "}
             </Text>
             <Text 
             style = {{ color: 'blue', textDecorationLine: 'underline'}}
-            onPress = {() => this.props.navigation.navigate('UserSignup')}
+            onPress = {() => this.props.navigation.navigate('UserLogin')}
             >
              {"here"}
             </Text>
           </Text>
         </View>
+
       </View>
-    );
+
+      )
   }
 }
 

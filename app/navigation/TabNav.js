@@ -16,16 +16,12 @@ import ActivityPrestart from './../screens/ActivityScreens/ActivityPrestart';
 import ActivityRecord from './../screens/ActivityScreens/ActivityRecord';
 import ActivitySummary from './../screens/ActivityScreens/ActivitySummary';
 
-// static navigationOptions = {
-//   header: null,
-// };
-
 
 const LoginStack = StackNavigator({
-  // Welcome: { screen: WelcomeScreen },
-  // UserLogin: { screen: UserLoginScreen },
-  // PetDetails: { screen: GetPetDetails },
-  Home: { screen: HomeScreen },
+  Home: { screen: HomeScreen }
+}, 
+{
+  initialRouteName: 'Home',
 });
 
 const ActivityStack = StackNavigator({
