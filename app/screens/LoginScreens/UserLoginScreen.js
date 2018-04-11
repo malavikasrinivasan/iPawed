@@ -68,7 +68,7 @@ export default class UserLoginScreen extends Component {
   };
 
   render() {
-    
+
     if (this.state.authenticating) {
       return (
         <View style={styles.form}>
@@ -89,7 +89,7 @@ export default class UserLoginScreen extends Component {
             {"Let's get you signed in!\n"}
           </Text>
           <View style={styles.formContainer}>
-            
+
             <View style={{borderColor: 'lightgrey', borderWidth: 1, alignSelf:'stretch'}}/>
             <TextInput
               style={styles.formTextInput}
@@ -123,12 +123,26 @@ export default class UserLoginScreen extends Component {
 
         <View>
           <Text style={styles.descriptionText}>
-            <Text > 
+            <Text >
               {"New User? Sign up "}
             </Text>
-            <Text 
+            <Text
             style = {{ color: 'blue', textDecorationLine: 'underline'}}
             onPress = {() => this.props.navigation.navigate('UserSignup')}
+            >
+             {"here"}
+            </Text>
+          </Text>
+        </View>
+
+        <View>
+          <Text style={styles.descriptionText}>
+            <Text >
+              {"Developer? Skip "}
+            </Text>
+            <Text
+            style = {{ color: 'blue', textDecorationLine: 'underline'}}
+            onPress = {() => this.props.navigation.navigate('Home')}
             >
              {"here"}
             </Text>

@@ -26,10 +26,45 @@ export default class AddEventScreen extends Component {
       },
     };
 
-  state = {
-    eventTitle : 'Event Title',
-    description : '',
-    eventDate : new Date()
+  constructor(props){
+    super(props);
+    this.state = {
+      eventTitle : 'Event Title',
+      description : '',
+      eventDate : new Date(),
+      behavior1: false,
+      behavior2: false,
+      behavior3: false,
+      behavior4: false,
+      behavior5: false,
+    };
+    this.toggleB1 = this.toggleB1.bind(this);
+    this.toggleB2 = this.toggleB2.bind(this);
+    this.toggleB3 = this.toggleB3.bind(this);
+    this.toggleB4 = this.toggleB4.bind(this);
+    this.toggleB5 = this.toggleB5.bind(this);
+    this._onCamPress = this._onCamPress.bind(this);
+    this._onLibPress = this._onLibPress.bind(this);
+  }
+
+  toggleB1() {
+    this.setState({behavior1: !this.state.behavior1});
+  }
+
+  toggleB2() {
+    this.setState({behavior2: !this.state.behavior2});
+  }
+
+  toggleB3() {
+    this.setState({behavior3: !this.state.behavior3});
+  }
+
+  toggleB4() {
+    this.setState({behavior4: !this.state.behavior4});
+  }
+
+  toggleB5() {
+    this.setState({behavior5: !this.state.behavior5});
   }
 
   handleTitle = (text) => {
@@ -78,33 +113,31 @@ export default class AddEventScreen extends Component {
               {"Media\n"}
             </Text>
             <View style = {styles.uploadContainer}>
-              <TouchableOpacity
-                onPress={this._onCamPress}
-                style={{flex:0.5}}>
-                <View style={{justifyContent:'center', alignItems:'center'}}>
-                  <Image
-                    source={require("../../icon/camera.png")}
-                    style={{height: 25, width: 25, justifyContent: 'center'}}/>
-                </View>
+              <View style={{flex:0.5}}>
+                <TouchableOpacity onPress={this._onCamPress}>
+                  <View style={{justifyContent:'center', alignItems:'center'}}>
+                    <Image
+                      source={require("../../icon/camera.png")}
+                      style={{height: 25, width: 25, justifyContent: 'center'}}/>
+                  </View>
+                </TouchableOpacity>
                 <Text style={[styles.label, {fontSize: 10, textAlign: 'center'}]}>
                   {"Take photo"}
                 </Text>
-              </TouchableOpacity>
+              </View>
 
-              <TouchableOpacity
-                onPress={this._onLibPress}
-                style={{flex:0.5}}>
-                <View style={{justifyContent:'center', alignItems:'center'}}>
-                  <Icon
-                    name='plus'
-                    size={24}
-                    color={"black"}
-                    style={{justifyContent:'center'}}/>
-                </View>
+              <View style={{flex:0.5}}>
+                <TouchableOpacity onPress={this._onLibPress}>
+                  <View style={{justifyContent:'center', alignItems:'center'}}>
+                    <Image
+                      source={require("../../icon/plus.png")}
+                      style={{height: 25, width: 25, justifyContent: 'center'}}/>
+                  </View>
+                </TouchableOpacity>
                 <Text style={[styles.label, {fontSize: 10, textAlign: 'center'}]}>
                   {"Upload from library"}
                 </Text>
-              </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -156,16 +189,16 @@ export default class AddEventScreen extends Component {
             onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
               console.log(data, details);
             }}
-            
+
             getDefaultValue={() => ''}
-            
+
             query={{
               // available options: https://developers.google.com/places/web-service/autocomplete
               key: 'AIzaSyCYo6KjI8l0Dk_nx-P4w3T_UOUKFyygMXc',
               language: 'en', // language of the results
               types: '(cities)' // default: 'geocode'
             }}
-            
+
             styles={{
               textInputContainer: {
                 width: '100%',
@@ -185,7 +218,7 @@ export default class AddEventScreen extends Component {
                 color: '#1faadb'
               }
             }}
-            
+
             currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
           />
 
@@ -196,30 +229,40 @@ export default class AddEventScreen extends Component {
         <View>
           <Text style={styles.subheader}>Behavior tags:</Text>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-             <TouchableOpacity onPress={this.behavior1} style={{margin:10}}>
-               <View style={[styles.behavior, {backgroundColor:'#D3B69B'}]}/>
-               <Text style={styles.tagtext}>Calm</Text>
+            <View style={{margin:10}}>
+             <TouchableOpacity onPress={this.toggleB1}>
+               <View style={[styles.behavior, {backgroundColor:'#D3B69B'}, this.state.behavior1 && styles.bSelect]}/>
              </TouchableOpacity>
+             <Text style={styles.tagtext}>Calm</Text>
+            </View>
 
-             <TouchableOpacity onPress={this.behavior2} style={{margin:10}}>
-               <View style={[styles.behavior, {backgroundColor:'#163250'}]}/>
-               <Text style={styles.tagtext}>Fearful</Text>
+            <View style={{margin:10}}>
+             <TouchableOpacity onPress={this.toggleB2}>
+               <View style={[styles.behavior, {backgroundColor:'#163250'}, this.state.behavior2 && styles.bSelect]}/>
              </TouchableOpacity>
+             <Text style={styles.tagtext}>Fearful</Text>
+            </View>
 
-             <TouchableOpacity onPress={this.behavior3} style={{margin:10}}>
-               <View style={[styles.behavior, {backgroundColor:'#F7C68F'}]}/>
-               <Text style={styles.tagtext}>Happy</Text>
+            <View style={{margin:10}}>
+             <TouchableOpacity onPress={this.toggleB3}>
+               <View style={[styles.behavior, {backgroundColor:'#F7C68F'}, this.state.behavior3 && styles.bSelect]}/>
              </TouchableOpacity>
+             <Text style={styles.tagtext}>Happy</Text>
+            </View>
 
-             <TouchableOpacity onPress={this.behavior4} style={{margin:10}}>
-               <View style={[styles.behavior, {backgroundColor:'#CC2539'}]}/>
-               <Text style={styles.tagtext}>Joyful</Text>
+            <View style={{margin:10}}>
+             <TouchableOpacity onPress={this.toggleB4}>
+               <View style={[styles.behavior, {backgroundColor:'#CC2539'}, this.state.behavior4 && styles.bSelect]}/>
              </TouchableOpacity>
+             <Text style={styles.tagtext}>Joyful</Text>
+            </View>
 
-             <TouchableOpacity onPress={this.behavior5} style={{margin:10}}>
-               <View style={[styles.behavior, {backgroundColor:'#F9D64B'}]}/>
-               <Text style={styles.tagtext}>Mellow</Text>
+            <View style={{margin:10}}>
+             <TouchableOpacity onPress={this.toggleB5}>
+               <View style={[styles.behavior, {backgroundColor:'#F9D64B'}, this.state.behavior5 && styles.bSelect]}/>
              </TouchableOpacity>
+             <Text style={styles.tagtext}>Mellow</Text>
+            </View>
           </View>
          </View>
 
@@ -369,8 +412,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderColor: 'black',
     borderRadius: 100,
-    borderWidth: 1,
+    borderWidth: 0,
     margin: 5,
+    opacity: 0.3
+  },
+  bSelect: {
+    borderWidth: 1,
     opacity: 0.8
   },
   tagtext: {

@@ -53,10 +53,20 @@ export default class ActivityRecord extends Component{
     this._onAddPress = this._onAddPress.bind(this);
     this.state = {
       stopwatchStart: false,
-      stopwatchReset: false
+      stopwatchReset: false,
+      behavior1: false,
+      behavior2: false,
+      behavior3: false,
+      behavior4: false,
+      behavior5: false,
     };
     this.toggleStopwatch = this.toggleStopwatch.bind(this);
     this.resetStopwatch = this.resetStopwatch.bind(this);
+    this.toggleB1 = this.toggleB1.bind(this);
+    this.toggleB2 = this.toggleB2.bind(this);
+    this.toggleB3 = this.toggleB3.bind(this);
+    this.toggleB4 = this.toggleB4.bind(this);
+    this.toggleB5 = this.toggleB5.bind(this);
   }
 
   toggleStopwatch() {
@@ -69,6 +79,26 @@ export default class ActivityRecord extends Component{
 
   getFormattedTime(time) {
       this.currentTime = time;
+  }
+
+  toggleB1() {
+    this.setState({behavior1: !this.state.behavior1});
+  }
+
+  toggleB2() {
+    this.setState({behavior2: !this.state.behavior2});
+  }
+
+  toggleB3() {
+    this.setState({behavior3: !this.state.behavior3});
+  }
+
+  toggleB4() {
+    this.setState({behavior4: !this.state.behavior4});
+  }
+
+  toggleB5() {
+    this.setState({behavior5: !this.state.behavior5});
   }
 
   _onLeftButtonPress() {
@@ -146,30 +176,40 @@ export default class ActivityRecord extends Component{
           <View>
             <Text style={styles.subheader}>Behavior tags:</Text>
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-               <TouchableOpacity onPress={this.behavior1} style={{margin:10}}>
-                 <View style={[styles.behavior, {backgroundColor:'#D3B69B'}]}/>
-                 <Text style={styles.tagtext}>Calm</Text>
+              <View style={{margin:10}}>
+               <TouchableOpacity onPress={this.toggleB1}>
+                 <View style={[styles.behavior, {backgroundColor:'#D3B69B'}, this.state.behavior1 && styles.bSelect]}/>
                </TouchableOpacity>
+               <Text style={styles.tagtext}>Calm</Text>
+              </View>
 
-               <TouchableOpacity onPress={this.behavior2} style={{margin:10}}>
-                 <View style={[styles.behavior, {backgroundColor:'#163250'}]}/>
-                 <Text style={styles.tagtext}>Fearful</Text>
+              <View style={{margin:10}}>
+               <TouchableOpacity onPress={this.toggleB2}>
+                 <View style={[styles.behavior, {backgroundColor:'#163250'}, this.state.behavior2 && styles.bSelect]}/>
                </TouchableOpacity>
+               <Text style={styles.tagtext}>Fearful</Text>
+              </View>
 
-               <TouchableOpacity onPress={this.behavior3} style={{margin:10}}>
-                 <View style={[styles.behavior, {backgroundColor:'#F7C68F'}]}/>
-                 <Text style={styles.tagtext}>Happy</Text>
+              <View style={{margin:10}}>
+               <TouchableOpacity onPress={this.toggleB3}>
+                 <View style={[styles.behavior, {backgroundColor:'#F7C68F'}, this.state.behavior3 && styles.bSelect]}/>
                </TouchableOpacity>
+               <Text style={styles.tagtext}>Happy</Text>
+              </View>
 
-               <TouchableOpacity onPress={this.behavior4} style={{margin:10}}>
-                 <View style={[styles.behavior, {backgroundColor:'#CC2539'}]}/>
-                 <Text style={styles.tagtext}>Joyful</Text>
+              <View style={{margin:10}}>
+               <TouchableOpacity onPress={this.toggleB4}>
+                 <View style={[styles.behavior, {backgroundColor:'#CC2539'}, this.state.behavior4 && styles.bSelect]}/>
                </TouchableOpacity>
+               <Text style={styles.tagtext}>Joyful</Text>
+              </View>
 
-               <TouchableOpacity onPress={this.behavior5} style={{margin:10}}>
-                 <View style={[styles.behavior, {backgroundColor:'#F9D64B'}]}/>
-                 <Text style={styles.tagtext}>Mellow</Text>
+              <View style={{margin:10}}>
+               <TouchableOpacity onPress={this.toggleB5}>
+                 <View style={[styles.behavior, {backgroundColor:'#F9D64B'}, this.state.behavior5 && styles.bSelect]}/>
                </TouchableOpacity>
+               <Text style={styles.tagtext}>Mellow</Text>
+              </View>
             </View>
            </View>
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
@@ -302,8 +342,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderColor: 'black',
     borderRadius: 100,
-    borderWidth: 1,
+    borderWidth: 0,
     margin: 5,
+    opacity: 0.3
+  },
+  bSelect: {
+    borderWidth: 1,
     opacity: 0.8
   },
   tagtext: {
