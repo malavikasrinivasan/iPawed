@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, Button, Image, TouchableOpacity } from 'react-native';
 
 import Header from './../../components/Header';
 import { Avatar } from 'react-native-elements';
@@ -98,8 +98,16 @@ export default class TimelineScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.topRow}>
-          <Icon name="plus" size = {30} color="black" style = {{margin: 10}}
-            onPress={() => this.props.navigation.navigate('AddEvent')}/>
+
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('AddEvent')}>
+            <View style={{justifyContent:'center', alignItems:'center'}}>
+              <Image
+                source={require("../../icon/plus.png")}
+                style={{height:25, width:25, justifyContent:'center', margin:13}}/>
+            </View>
+          </TouchableOpacity>
+
           <Text style={styles.generalText}>
             Memories with Peanut!
           </Text>
