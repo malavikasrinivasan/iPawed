@@ -89,8 +89,6 @@ export default class UserLoginScreen extends Component {
             {"Let's get you signed in!\n"}
           </Text>
           <View style={styles.formContainer}>
-
-            <View style={{borderColor: 'lightgrey', borderWidth: 1, alignSelf:'stretch'}}/>
             <TextInput
               style={styles.formTextInput}
               placeholder="E-mail address"

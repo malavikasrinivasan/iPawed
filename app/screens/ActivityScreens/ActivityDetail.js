@@ -26,7 +26,8 @@ import CollapsibleCard from '../../components/CollapsibleCard';
 
 const steps = [
   {step: 'How to:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 1},
-  // {step: 'Set up:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 2},
+  {step: 'Set up:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 2},
+  {step: 'Video:', stepDet: <VideoEmbed/>, stepNumber: 3}
 ]
 
 export default class ActivityDetail extends Component {
@@ -71,8 +72,7 @@ export default class ActivityDetail extends Component {
                 source={require('../../img/bath.jpeg')} />
 
               <Text style={[styles.descriptionText, {flex: 0.7, margin: 10, marginLeft: 5}]}>
-                {"Giving your dog a bath is an essential and excellent way to understand your dog's behaviour.\n\nBut remember even if they are babies, you can’t just toss them straight into the bathwater\
-                (as apposed to throwing the baby out with the bathwater). You need a strategy, or a plan, or something to help you get those fluffy bundles of joy ready for a lifetime of enjoying a splash in the tub."}
+                {"Giving your dog a bath is an essential and excellent way to understand your dog's behaviour."}
               </Text>
         </View>
 
@@ -80,7 +80,7 @@ export default class ActivityDetail extends Component {
           dataSource={this.state.stepsDataSource}
           renderRow={(actStep) => {return this._renderActStepRow(actStep) }} />
 
-        <VideoEmbed/>
+
 
         <TouchableOpacity
           style={styles.buttonStyle}
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     margin: 10,
-    color: '#5AC8B0',
+    color: 'black',
     fontFamily: "Century Gothic"
  },
  descriptionContainer: {
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
    flexDirection: 'row'
  },
  descriptionText: {
-   fontSize: 10,
+   fontSize: 12,
    textAlign: 'left',
    color: '#333333',
    fontFamily: 'Century Gothic',

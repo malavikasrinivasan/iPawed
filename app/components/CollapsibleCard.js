@@ -43,11 +43,16 @@ class CollapsibleCard extends Component {
     _getMinValue() { return 0 };
 
     toggle() {
+        this.anime.expanded = !this.anime.expanded;
         Animated.timing(this.anime.height, {
-            toValue: this.anime.expanded ? this._getMinValue() : this._getMaxValue(),
+            toValue: this.anime.expanded ? this._getMaxValue() : this._getMinValue(),
             duration: 300,
         }).start();
-        this.anime.expanded = !this.anime.expanded;
+        if (this.anime.expanded) {
+          this.setState({icon: 'chevron-down'})
+        } else {
+          this.setState({icon: 'chevron-right'})
+        };
     }
 
     render() {
@@ -71,17 +76,17 @@ class CollapsibleCard extends Component {
 
 const styles = StyleSheet.create({
   titleStyle: {
-    fontSize: 18,
+    fontSize: 16,
     margin: 10,
-    color: '#5AC8B0',
+    color: 'black',
     fontFamily: "Century Gothic"
   },
   actStepMoreIcon: {
-    color:'grey',
+    color:'#5AC8B0',
     margin: 10,
-    marginTop: 12,
+    marginTop: 13,
     marginRight: 0,
-    fontWeight:'bold',
+    flex: 0.06
   },
 });
 

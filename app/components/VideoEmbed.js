@@ -6,7 +6,7 @@ export default class VideoEmbed extends Component {
     render() {
         return (
 
-            <View style={{ height: 300 }}>
+            <View style={{ height: 200, width: 320}}>
                 <WebView
                         style={ styles.WebViewContainer }
                         javaScriptEnabled={true}
@@ -22,11 +22,11 @@ export default class VideoEmbed extends Component {
   const styles = StyleSheet.create({
 
     WebViewContainer: {
-    
+
         marginTop: (Platform.OS == 'ios') ? 20 : 0,
-    
+
       }
-      
+
     });
 
     module.exports=VideoEmbed
