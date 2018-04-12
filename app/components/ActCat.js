@@ -60,10 +60,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
     fontFamily: 'Century Gothic',
-    color: '#5AC8B0',
-    marginBottom: -7,
-    marginTop: 20,
-    fontWeight: 'bold'
+    color: 'black',
+    margin: 10,
+    marginTop: 30,
+    marginBottom: 0,
   },
   instructions: {
     fontSize: 12,
