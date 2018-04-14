@@ -10,7 +10,7 @@ import * as firebase from 'firebase';
 export default class GetPetDetails extends Component {
 
   static navigationOptions = {
-    title: 'Pet Town',
+    title: 'Peternal',
     headerTintColor: '#5AC8B0',
     headerBackTitle: 'back',
     headerBackTitleStyle: {
@@ -63,8 +63,8 @@ export default class GetPetDetails extends Component {
       petWeight: this.state.petWeight,
       petGender: this.state.petGender,
       petAdoptionDate : this.state.petAdoptionDate,
-      petBirthDay : this.state.petBirthDay      
-    }).then(() => {      
+      petBirthDay : this.state.petBirthDay
+    }).then(() => {
       alert("Inserted");
       this.props.navigation.navigate('Home')
     }).catch((error) => {
@@ -159,7 +159,7 @@ export default class GetPetDetails extends Component {
               date={this.state.petAdoptionDate}
               mode="date"
               placeholder="yyyy-mm-dd"
-              format="YYYY-MM-DD"              
+              format="YYYY-MM-DD"
               minDate="2010-01-01"
               maxDate="2020-12-31"
               confirmBtnText="Confirm"
@@ -186,8 +186,8 @@ export default class GetPetDetails extends Component {
                   fontFamily: 'Century Gothic'
                 },
                 placeholderText: {
-                  fontFamily: "Century Gothic", 
-                  fontWeight:'bold',     
+                  fontFamily: "Century Gothic",
+                  fontWeight:'bold',
                   color: 'lightgrey'
                 }
               }}
@@ -201,12 +201,12 @@ export default class GetPetDetails extends Component {
                 placeholder="Birthday: "
                 placeholderTextColor='black'
                 editable={false}/>
-              
+
               <DatePicker
                 date={this.state.petBirthDay}
                 mode="date"
                 placeholder="yyyy-mm-dd"
-                format="YYYY-MM-DD"              
+                format="YYYY-MM-DD"
                 minDate="2010-01-01"
                 maxDate="2020-12-31"
                 confirmBtnText="Confirm"
@@ -233,8 +233,8 @@ export default class GetPetDetails extends Component {
                     fontFamily: 'Century Gothic'
                   },
                   placeholderText: {
-                    fontFamily: "Century Gothic", 
-                    fontWeight:'bold',     
+                    fontFamily: "Century Gothic",
+                    fontWeight:'bold',
                     color: 'lightgrey'
                   }
                 }}

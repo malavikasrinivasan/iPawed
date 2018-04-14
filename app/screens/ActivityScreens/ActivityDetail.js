@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
    fontFamily: 'Century Gothic',
  },
  ActStepRow: {
-  //  flexDirection: 'row',
    justifyContent: 'center',
    alignItems: 'center',
    height: 50,

@@ -158,37 +158,49 @@ export default class ActivityMain extends Component {
         </Text>
 
         <View>
-        <View style={{flexDirection:'row'}}>
+        <View style={{flexDirection:'row', justifyContent: 'center'}}>
           <TouchableOpacity
-            style={{flex:0.5, justifyContent: 'flex-start', alignItems:'center'}}>
-            <Image source={require('../../icon/intro.png')} style={{width:120, height:120}}/>
-            <Text style={styles.catTitle}>
-              {"Home"}
-            </Text>
+            style={{ justifyContent: 'center', alignItems:'center', margin: 10}}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Image source={require('../../img/wood.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
+              <View style={styles.catInnerCirc}/>
+              <Text style={styles.catTitle}>
+                {"Home"}
+              </Text>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{flex:0.5, justifyContent: 'flex-start', alignItems:'center'}}>
-            <Image source={require('../../icon/play.png')} style={{width:120, height:120}}/>
-            <Text style={styles.catTitle}>
-              {"Play"}
-            </Text>
+            style={{ justifyContent: 'center', alignItems:'center', margin: 10}}>
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Image source={require('../../img/grass.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
+              <View style={styles.catInnerCirc}/>
+              <Text style={styles.catTitle}>
+                {"Play"}
+              </Text>
+            </View>
           </TouchableOpacity>
         </View>
 
-          <View style={{flexDirection:'row'}}>
+          <View style={{flexDirection:'row', justifyContent: 'center', paddingTop: -10}}>
             <TouchableOpacity
-              style={{flex:0.5, justifyContent: 'flex-start', alignItems:'center'}}>
-              <Image source={require('../../icon/lazy.png')} style={{width:120, height:120}}/>
-              <Text style={styles.catTitle}>
-                {"Lazy"}
-              </Text>
+              style={{ justifyContent: 'center', alignItems:'center', margin: 10}}>
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Image source={require('../../img/fur.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
+                <View style={styles.catInnerCirc}/>
+                <Text style={styles.catTitle}>
+                  {"Care"}
+                </Text>
+              </View>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{flex:0.5, justifyContent: 'flex-start', alignItems:'center'}}>
-              <Image source={require('../../icon/routine.png')} style={{width:120, height:120}}/>
-              <Text style={styles.catTitle}>
-                {"Routine"}
-              </Text>
+              style={{ justifyContent: 'center', alignItems:'center', margin: 10}}>
+              <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Image source={require('../../img/blanket.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
+                <View style={styles.catInnerCirc}/>
+                <Text style={styles.catTitle}>
+                  {"Lazy"}
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -246,9 +258,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     opacity: 1,
     padding: 5,
-    paddingTop: -5,
     paddingBottom: 10,
-    fontStyle:'italic'
+    fontStyle:'italic',
+    position: 'absolute'
+  },
+  catInnerCirc: {
+    width:70,
+    height:70,
+    borderRadius: 35,
+    position:'absolute',
+    backgroundColor:'white'
   },
   activityTitle: {
     textAlign: 'center',

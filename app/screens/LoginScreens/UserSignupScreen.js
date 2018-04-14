@@ -53,7 +53,7 @@ export default class UserLoginScreen extends Component {
   }
 
   static navigationOptions = {
-    title: 'Pet Town',
+    title: 'Peternal',
     headerTintColor: '#5AC8B0',
     headerBackTitle: 'back',
     headerBackTitleStyle: {
@@ -117,7 +117,7 @@ export default class UserLoginScreen extends Component {
 
         <View>
           <TouchableOpacity
-            style={styles.buttonStyle}        
+            style={styles.buttonStyle}
             onPress={ () => this.onPressSignIn() }>
             <Text style={styles.textButtonStyle}>
               Signup
@@ -127,10 +127,10 @@ export default class UserLoginScreen extends Component {
 
         <View>
           <Text style={styles.descriptionText}>
-            <Text > 
+            <Text >
               {"Existing User? Log in "}
             </Text>
-            <Text 
+            <Text
             style = {{ color: 'blue', textDecorationLine: 'underline'}}
             onPress = {() => this.props.navigation.navigate('UserLogin')}
             >

@@ -5,7 +5,7 @@ import Header from './../../components/Header';
 export default class WelcomeScreen extends Component {
 
   static navigationOptions = {
-    title: 'Pet Town',
+    title: 'Peternal',
     headerTintColor: '#5AC8B0',
     headerBackTitle: 'back',
     headerBackTitleStyle: {
@@ -22,7 +22,7 @@ export default class WelcomeScreen extends Component {
     return (
       <View style={styles.screenContainer}>
         <Text style={styles.welcomeText}>
-          Welcome to Pet Town!
+          Welcome to Peternal!
         </Text>
 
         <Image
