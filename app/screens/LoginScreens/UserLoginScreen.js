@@ -54,7 +54,7 @@ export default class UserLoginScreen extends Component {
   }
 
   static navigationOptions = {
-    title: 'Pet Town',
+    title: 'Peternal',
     headerTintColor: '#5AC8B0',
     headerBackTitle: 'back',
     headerBackTitleStyle: {

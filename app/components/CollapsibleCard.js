@@ -58,13 +58,12 @@ class CollapsibleCard extends Component {
     render() {
         return (
             <View>
-              <TouchableOpacity onPress={this.toggle}>
-                <View style={{flexDirection:'row', justifyContent:'flex-start'}}>
+              <View style={{backgroundColor:'white'}}>
+                <TouchableOpacity onPress={this.toggle} style={{flexDirection:'row', justifyContent:'flex-start'}}>
                   <Icon name={this.state.icon} size={18} style={styles.actStepMoreIcon} />
                   <Text style={styles.titleStyle}>{this.props.title}</Text>
-                </View>
-              </TouchableOpacity>
-
+                </TouchableOpacity>
+              </View>
 
                 <Animated.View style={{ height: this.anime.height }} onLayout={this._initContentHeight}>
                     {this.props.children}
