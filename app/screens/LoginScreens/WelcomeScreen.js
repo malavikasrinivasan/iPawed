@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, AppRegistry, TouchableOpacity, Image } from 'react-native';
 import Header from './../../components/Header';
 
+console.disableYellowBox = true;
+
 export default class WelcomeScreen extends Component {
 
   static navigationOptions = {

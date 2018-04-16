@@ -12,19 +12,22 @@ export default class UserLoginScreen extends Component {
     authenticating: false,
     user: null,
     error: '',
+    name: ''
   }
 
-  // componentDidMount(){
-  //   const firebaseConfig = {
-  //     apiKey: "AIzaSyALmeSOsC45vPnU3UmqEAzIhs_WgVX6NY8",
-  //     authDomain: "ipawedmims18.firebaseapp.com",
-  //     databaseURL: "https://ipawedmims18.firebaseio.com",
-  //     projectId: "ipawedmims18",
-  //     storageBucket: "ipawedmims18.appspot.com",
-  //     messagingSenderId: "828598628543"
-  //   }
-  //   firebase.initializeApp(firebaseConfig);
-  // }
+  componentDidMount(){
+    const firebaseConfig = {
+      apiKey: "AIzaSyALmeSOsC45vPnU3UmqEAzIhs_WgVX6NY8",
+      authDomain: "ipawedmims18.firebaseapp.com",
+      databaseURL: "https://ipawedmims18.firebaseio.com",
+      projectId: "ipawedmims18",
+      storageBucket: "ipawedmims18.appspot.com",
+      messagingSenderId: "828598628543"
+    }
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+  }
 
 
   onPressSignIn() {
@@ -32,15 +35,27 @@ export default class UserLoginScreen extends Component {
       authenticating: true,
     });
 
-    const { email, password } = this.state;
+    const { email, password, name } = this.state;
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((user) => {this.setState({
-      authenticating: false,
-      user,
-      error: '',
+    .then((user) => {
+      user.updateProfile({
+        displayName: name
+      });
+      user.sendEmailVerification();
+      this.setState({
+        authenticating: false,
+        user,
+        error: '',
     })
-    this.props.navigation.navigate('PetDetails');
+    firebase.database().ref('userDetails/' + user.uid).set({
+      userID: user.uid,
+      userName: name
+    });
+    this.props.navigation.navigate('PetDetails', {
+      userID: user.uid,
+      userName: name
+    });
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -51,6 +66,7 @@ export default class UserLoginScreen extends Component {
       });
     });
   }
+
 
   static navigationOptions = {
     title: 'Peternal',
@@ -93,6 +109,8 @@ export default class UserLoginScreen extends Component {
               style={styles.formTextInput}
               placeholder="Name"
               placeholderTextColor='grey'
+              onChangeText={name => this.setState({ name })}
+              value={this.state.name}
             />
             <View style={{borderColor: 'lightgrey', borderWidth: 1, alignSelf:'stretch'}}/>
             <TextInput

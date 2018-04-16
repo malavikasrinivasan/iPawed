@@ -24,6 +24,8 @@ export default class GetPetDetails extends Component {
   };
 
   state = {
+    userID:'',
+    userName:'',
     petName : '',
     petBreed : '',
     petColor: '',
@@ -31,6 +33,17 @@ export default class GetPetDetails extends Component {
     petGender: '',
     petAdoptionDate : null,
     petBirthDay : null
+  }
+
+  componentDidMount(){
+      const { params } = this.props.navigation.state;
+      const userID = params ? params.userID : null;
+      const userName = params ? params.userName : null;
+      this.setState({
+          userID: params.userID,
+          userName: params.userName
+      });
+      console.log(userID, userName)
   }
 
   _onAddPress() {
@@ -43,20 +56,8 @@ export default class GetPetDetails extends Component {
     });
   }
 
-  // componentDidMount(){
-  //   const firebaseConfig = {
-  //     apiKey: "AIzaSyALmeSOsC45vPnU3UmqEAzIhs_WgVX6NY8",
-  //     authDomain: "ipawedmims18.firebaseapp.com",
-  //     databaseURL: "https://ipawedmims18.firebaseio.com",
-  //     projectId: "ipawedmims18",
-  //     storageBucket: "ipawedmims18.appspot.com",
-  //     messagingSenderId: "828598628543"
-  //   }
-  //   firebase.initializeApp(firebaseConfig);
-  // }
-
   uploadPetProfile() {
-    firebase.database().ref('petdetails').set({
+    firebase.database().ref('userDetails/'+ this.state.userID + '/petDetails').set({
       petName : this.state.petName,
       petBreed : this.state.petBreed,
       petColor: this.state.petColor,
@@ -65,14 +66,18 @@ export default class GetPetDetails extends Component {
       petAdoptionDate : this.state.petAdoptionDate,
       petBirthDay : this.state.petBirthDay
     }).then(() => {
-      alert("Inserted");
-      this.props.navigation.navigate('Home')
+      // alert("Inserted");
+      this.props.navigation.navigate('Home', {
+      userID: this.state.userID,
+      userName: this.state.userName
+    });
     }).catch((error) => {
       alert(error)
     });
   }
 
   render() {
+
     return (
       <View style={styles.screenContainer}>
 
