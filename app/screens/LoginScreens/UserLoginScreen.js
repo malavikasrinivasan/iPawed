@@ -23,7 +23,40 @@ export default class UserLoginScreen extends Component {
       storageBucket: "ipawedmims18.appspot.com",
       messagingSenderId: "828598628543"
     }
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+  }
+
+
+  onPressDeveloperSignIn() {
+    this.setState({
+      authenticating: true,
+    });
+
+    const email = 'admin@ipawed.com';
+    const password = 'abc1234';
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((user) => {this.setState({
+      authenticating: false,
+      user,
+      error: '',
+    })
+    this.props.navigation.navigate('Home', {
+      userID: user.uid,
+      userName: user.displayName
+    });
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      alert(errorMessage);
+      this.setState({
+        authenticating: false,
+      });
+    });
+
   }
 
 
@@ -40,7 +73,10 @@ export default class UserLoginScreen extends Component {
       user,
       error: '',
     })
-    this.props.navigation.navigate('PetDetails');
+    this.props.navigation.navigate('Home', {
+      userID: user.uid,
+      userName: user.displayName
+    });
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -140,7 +176,7 @@ export default class UserLoginScreen extends Component {
             </Text>
             <Text
             style = {{ color: 'blue', textDecorationLine: 'underline'}}
-            onPress = {() => this.props.navigation.navigate('Home')}
+            onPress = {() => this.onPressDeveloperSignIn()}
             >
              {"here"}
             </Text>
