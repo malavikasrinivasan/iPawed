@@ -80,11 +80,11 @@ export default class ActivityDetail extends Component {
               </Text>
         </View>
         
-        <CollapsibleCard style={styles.ActStepRow} title="How to:">
+        <CollapsibleCard style={styles.ActStepRow} title="How to:" expanded={false}>
           <Text style={styles.stepDesc}>{params.item.steps}</Text>
         </CollapsibleCard>
 
-        <CollapsibleCard style={styles.ActStepRow} title="Video:">
+        <CollapsibleCard style={styles.ActStepRow} title="Video:" expanded={false}>
           <Text style={styles.stepDesc}>
             <VideoEmbed uri = {params.item.video} />
           </Text>

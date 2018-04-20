@@ -10,7 +10,8 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
-  ListView
+  ListView,
+  ActivityIndicator
 } from 'react-native';
 import { Card,
   ListItem,
@@ -79,44 +80,49 @@ getRef() {
 
 componentDidMount() {
 
-  const userID = firebase.auth().currentUser.uid;
-  // console.log(user)
-  // const userID = user ? user.uid : null;
-  // console.log(userID)
+  const user = firebase.auth().currentUser;
+  console.log("user",user)
+  const userID = user ? user.uid : null;
+  console.log("uid",userID)
 
   if(userID) {
     this.setState({
-      userID: userID});
+      userID: userID,
+      // recommendedActivities: user.recommendedActivities
+    });
   
-    this.getUserRecommendedActivities(userID)
+    // this.getUserRecommendedActivities(userID)
+    // this.setState({
+    //           dataSource: this.state.dataSource.cloneWithRows(this.state.recommendedActivities)
+    //       });
   }
 
   // console.log("Getting Firebase items");
 
-  // this.getRef().child('userDetails/').on('value', (snap) => {
-  //     console.log('snap', snap);
+  firebase.database().ref('userDetails/' + userID + '/' + 'recommendedActivities' + '/').on('value', (snap) => {
+      console.log('snap', snap);
 
-  //     var items = [];
-  //     snap.forEach((child) => {
-  //         items.push({
-  //           title: child.val().title,
-  //           category: child.val().category,
-  //           desc: child.val().desc,
-  //           steps: child.val().steps,
-  //           video: child.val().video,
-  //         imageurl: child.val().imageurl});
-  //     });
+      var items = [];
+      snap.forEach((child) => {
+          items.push({
+            title: child.val().title,
+            category: child.val().category,
+            desc: child.val().desc,
+            steps: child.val().steps,
+            video: child.val().video,
+          imageurl: child.val().imageURL});
+      });
 
-  //     console.log('items', items);
+      console.log('items', items);
 
-  //     this.setState({
-  //         dataSource: this.state.dataSource.cloneWithRows(items)
-  //     });
-  // });
+      this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(items)
+      });
+  });
 }
 
   render() {
-    // console.log(this.state.recommendedActivities)
+
     return (
       <ScrollView style={{flex: 1, backgroundColor: '#F8F8F8'}}>
 
@@ -132,17 +138,17 @@ componentDidMount() {
           {"Recommended for you:"}
         </Text>
 
-        {/* <ScrollView horizontal={true}>
+        <ScrollView horizontal={true}>
             <ListView
+                horizontal={true}
                 // style={styles.listView}
-                dataSource={this.state.recommendedActivities}
+                dataSource={this.state.dataSource}
                 renderRow={this._renderItem.bind(this)}
             />
-      </ScrollView> */}
+      </ScrollView>
 
-        <ScrollView horizontal={true}>
-            {/* <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}> */}
-            <TouchableOpacity style={{flex:0.25}}  onPress={() => console.log(this.state.userID)}>
+        {/* <ScrollView horizontal={true}>
+            <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
               <Card containerStyle={styles.cardStyle}>
                     <ImageBackground
                         style={styles.thumbnail}
@@ -184,7 +190,7 @@ componentDidMount() {
                     </Text>
               </Card>
             </TouchableOpacity>
-      </ScrollView>
+      </ScrollView> */}
 
 
       <Text style={styles.sectionTitle}>
@@ -309,7 +315,7 @@ componentDidMount() {
     };
 
     return (
-      <ActivityCard navigation={this.props.navigation} item={this.state.recommendedActivities} />
+      <ActivityCard navigation={this.props.navigation} item={item} />
     );
   }
 }

@@ -82,7 +82,7 @@ export default class GetPetDetails extends Component {
         <ActivityIndicator size='large' />
         );
     }
-    console.log(this.state.userDetails)
+    // console.log(this.state.userDetails)
     return (
       <View style={styles.screenContainer}>
         <Text style={styles.welcomeText}>
