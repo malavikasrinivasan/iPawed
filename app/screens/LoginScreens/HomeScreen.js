@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, ActivityIndicator, Image, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Header from './../../components/Header';
 import * as firebase from 'firebase';
+import RNFetchBlob from 'react-native-fetch-blob'
+import ImagePicker from 'react-native-image-crop-picker';
 
-
-export default class GetPetDetails extends Component {
+export default class GetPetDetails extends Component {  
 
   static navigationOptions = {
     tabBarIcon: ({tintColor}) => (
@@ -19,11 +20,15 @@ export default class GetPetDetails extends Component {
     },
   };
 
+  
+
   state = {
     userID:'',
     userName:'',
-    userDetails: null
+    userDetails: null,
+    imageUrl: null,
   }
+
 
 
   getUserData(userID){
@@ -38,6 +43,53 @@ export default class GetPetDetails extends Component {
       alert("Error")
     })
     
+  }
+
+
+  uploadImage(){
+    
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob
+
+    let uploadBlob = null
+    const imageRef = firebase.storage().ref('images').child("test.jpg")
+    let mime = 'image/jpeg'
+
+
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true
+    }).then(imageObj => {
+      console.log(imageObj);
+      const uri = imageObj.sourceURL
+      const image = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
+      // console.log(uri)
+      // console.log(image)
+      fs.readFile(image, 'base64')
+      .then((data) => {
+        return Blob.build(data, { type: `${mime};BASE64` })
+      })
+      .then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType: mime })
+      })
+      .then(() => {
+        uploadBlob.close()
+        return imageRef.getDownloadURL()
+      })
+      .then((url) => {
+        console.log(url);
+        this.setState({
+          imageUrl: url
+        })        
+      })
+      .catch((error) => {
+        console.log(error);
+      }) 
+    });
   }
 
   componentDidMount(){
@@ -88,6 +140,26 @@ export default class GetPetDetails extends Component {
         <Text style={styles.welcomeText}>
           Welcome {this.state.userName}
         </Text>
+        <View>
+          <TouchableOpacity
+            onPress={() => this.uploadImage()}>
+            <View style={{justifyContent:'center', alignItems:'center'}}>
+              <Image
+                source={require("../../icon/plus.png")}
+                style={{height:25, width:25, justifyContent:'center', margin:13}}/>
+            </View>
+          </TouchableOpacity>
+
+          <Text >
+            Memories with Peanut!
+          </Text>
+        </View>
+        {this.state.imageUrl ? 
+        <Image
+          style={{width: 250, height: 250}}
+          source={{uri: this.state.imageUrl}}
+        /> : null
+        }
       </View>
     );
   }
