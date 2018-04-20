@@ -24,11 +24,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import VideoEmbed from '../../components/VideoEmbed';
 import CollapsibleCard from '../../components/CollapsibleCard';
 
-const steps = [
-  {step: 'How to:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 1},
-  {step: 'Set up:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 2},
-  {step: 'Video:', stepDet: <VideoEmbed/>, stepNumber: 3}
-]
+// const steps = [
+//   {step: 'How to:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 1},
+//   {step: 'Set up:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 2},
+//   {step: 'Video:', stepDet: <VideoEmbed/>, stepNumber: 3}
+// ]
 
 export default class ActivityDetail extends Component {
 
@@ -49,38 +49,63 @@ export default class ActivityDetail extends Component {
     },
   };
 
-  constructor(props) {
-    super(props)
-    var ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 != r2})
-    this.state = {
-      stepsDataSource: ds.cloneWithRows(steps)
-    }
-  }
+  // constructor(props) {
+  //   super(props)
+  //   var ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 != r2})
+  //   this.state = {
+  //     stepsDataSource: ds.cloneWithRows(steps)
+  //   }
+  // }
 
   render() {
+    const {params} = this.props.navigation.state;
+    // stepsArr = [params.item.steps]
+    
+    console.log(params.item.steps)
     return (
       <ScrollView
         style={{backgroundColor: 'white'}}
         contentContainerStyle={{justifyContent: 'space-around'}}>
         <Text style={styles.welcome}>
-          Bath Time
+          {params.item.title}
         </Text>
 
         <View style={styles.descriptionContainer}>
             <Image
                 style={{ width: 80, height: 80, flex: 0.3, margin: 10, marginRight: 5}}
-                source={require('../../img/bath.jpeg')} />
+                source={{uri: params.item.imageurl}} />
 
               <Text style={[styles.descriptionText, {flex: 0.7, margin: 10, marginLeft: 5}]}>
-                {"Giving your dog a bath is an essential and excellent way to understand your dog's behaviour."}
+                {params.item.desc}
               </Text>
         </View>
+        
+        <CollapsibleCard style={styles.ActStepRow} title="How to:">
+          <Text style={styles.stepDesc}>{params.item.steps}</Text>
+        </CollapsibleCard>
 
-        <ListView
+        <CollapsibleCard style={styles.ActStepRow} title="Video:">
+          <Text style={styles.stepDesc}>
+            <VideoEmbed uri = {params.item.video} />
+          </Text>
+        </CollapsibleCard>
+
+        {/* {stepsArr.map((prop, key) => {
+          return (
+            <CollapsibleCard style={styles.ActStepRow}  key={key} title={key}>
+            <Text style={styles.stepDesc}>{prop[0]}
+            </Text>
+            </CollapsibleCard>
+          );
+        })} */}
+
+        {/* <CollapsibleCard style={styles.ActStepRow} title={actStep.step}>
+
+        </CollapsibleCard> */}
+
+        {/* <ListView
           dataSource={this.state.stepsDataSource}
-          renderRow={(actStep) => {return this._renderActStepRow(actStep) }} />
-
-
+          renderRow={(actStep) => {return this._renderActStepRow(actStep) }} /> */}
 
         <TouchableOpacity
           style={styles.buttonStyle}

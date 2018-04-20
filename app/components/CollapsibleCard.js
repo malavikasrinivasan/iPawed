@@ -57,7 +57,7 @@ class CollapsibleCard extends Component {
 
     render() {
         return (
-            <View>
+            <View >
               <View style={{backgroundColor:'white'}}>
                 <TouchableOpacity onPress={this.toggle} style={{flexDirection:'row', justifyContent:'flex-start'}}>
                   <Icon name={this.state.icon} size={18} style={styles.actStepMoreIcon} />
