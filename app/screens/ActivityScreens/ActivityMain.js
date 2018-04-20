@@ -9,12 +9,15 @@ import {
   ImageBackground,
   FlatList,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ListView,
+  ActivityIndicator
 } from 'react-native';
 import { Card,
   ListItem,
   Button
 } from 'react-native-elements';
+import * as firebase from 'firebase';
 
 import Header from './../../components/Header';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,6 +25,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import RecActCard from '../../components/RecActCard';
 import HorActCards from '../../components/HorActCards';
 import ActCat from '../../components/ActCat';
+import ActivityCard from '../../components/ActivityCard';
 
 export default class ActivityMain extends Component {
 
@@ -42,7 +46,83 @@ export default class ActivityMain extends Component {
     },
   };
 
+  state = {
+    userID:'',
+    recommendedActivities: null
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+        dataSource: new ListView.DataSource({
+            rowHasChanged: (row1, row2) => row1 !== row2
+        })
+    }
+}
+
+getUserRecommendedActivities(userID){
+  firebase.database().ref('userDetails/' + userID + '/' + 'recommendedActivities' + '/').once('value')
+  .then((snapshot) => {
+    this.setState({
+      recommendedActivities: snapshot.val()
+    });
+    // console.log(recommendedActivities)
+  })
+  .catch((error) => {
+    alert("Error")
+  })
+  
+}
+
+getRef() {
+  return firebase.database().ref();
+}
+
+componentDidMount() {
+
+  const user = firebase.auth().currentUser;
+  console.log("user",user)
+  const userID = user ? user.uid : null;
+  console.log("uid",userID)
+
+  if(userID) {
+    this.setState({
+      userID: userID,
+      // recommendedActivities: user.recommendedActivities
+    });
+  
+    // this.getUserRecommendedActivities(userID)
+    // this.setState({
+    //           dataSource: this.state.dataSource.cloneWithRows(this.state.recommendedActivities)
+    //       });
+  }
+
+  // console.log("Getting Firebase items");
+
+  firebase.database().ref('userDetails/' + userID + '/' + 'recommendedActivities' + '/').on('value', (snap) => {
+      console.log('snap', snap);
+
+      var items = [];
+      snap.forEach((child) => {
+          items.push({
+            title: child.val().title,
+            category: child.val().category,
+            desc: child.val().desc,
+            steps: child.val().steps,
+            video: child.val().video,
+          imageurl: child.val().imageURL});
+      });
+
+      console.log('items', items);
+
+      this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(items)
+      });
+  });
+}
+
   render() {
+
     return (
       <ScrollView style={{flex: 1, backgroundColor: '#F8F8F8'}}>
 
@@ -59,6 +139,15 @@ export default class ActivityMain extends Component {
         </Text>
 
         <ScrollView horizontal={true}>
+            <ListView
+                horizontal={true}
+                // style={styles.listView}
+                dataSource={this.state.dataSource}
+                renderRow={this._renderItem.bind(this)}
+            />
+      </ScrollView>
+
+        {/* <ScrollView horizontal={true}>
             <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
               <Card containerStyle={styles.cardStyle}>
                     <ImageBackground
@@ -101,7 +190,7 @@ export default class ActivityMain extends Component {
                     </Text>
               </Card>
             </TouchableOpacity>
-      </ScrollView>
+      </ScrollView> */}
 
 
       <Text style={styles.sectionTitle}>
@@ -208,6 +297,25 @@ export default class ActivityMain extends Component {
 
 
     </ScrollView>
+    );
+  }
+
+  _renderItem(item) {
+
+    const onPress = () => {
+      AlertIOS.prompt(
+        'Complete',
+        null,
+        [
+          {text: 'Complete', onPress: (text) => this.itemsRef.child(item._key).remove()},
+          {text: 'Cancel', onPress: (text) => console.log('Cancel')}
+        ],
+        'default'
+      );
+    };
+
+    return (
+      <ActivityCard navigation={this.props.navigation} item={item} />
     );
   }
 }
