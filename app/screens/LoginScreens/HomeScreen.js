@@ -61,17 +61,14 @@ export default class GetPetDetails extends Component {
     ImagePicker.openPicker({
       width: 300,
       height: 300,
-      cropping: true
+      cropping: true,
+      includeBase64: true,
+      compressImageQuality: 0.2
     }).then(imageObj => {
       console.log(imageObj);
-      const uri = imageObj.sourceURL
-      const image = Platform.OS === 'ios' ? uri.replace('file://', '') : uri
-      // console.log(uri)
-      // console.log(image)
-      fs.readFile(image, 'base64')
-      .then((data) => {
-        return Blob.build(data, { type: `${mime};BASE64` })
-      })
+      const data = imageObj.data
+
+      Blob.build(data, { type: `${mime};BASE64` })
       .then((blob) => {
         uploadBlob = blob
         return imageRef.put(blob, { contentType: mime })
