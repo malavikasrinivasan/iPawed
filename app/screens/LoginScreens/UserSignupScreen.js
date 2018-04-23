@@ -31,6 +31,20 @@ export default class UserLoginScreen extends Component {
 
 
   onPressSignIn() {
+    if (this.state.email == ''){
+      alert("Please enter a valid Email ID")
+      return
+    }
+    
+    if (this.state.name == ''){
+      alert("Please enter your Name")
+      return
+    }
+
+    if (this.state.password == ''){
+      alert("Please enter a valid Password")
+      return
+    }
     this.setState({
       authenticating: true,
     });
@@ -109,6 +123,7 @@ export default class UserLoginScreen extends Component {
               style={styles.formTextInput}
               placeholder="Name"
               placeholderTextColor='grey'
+              autoCorrect='false'
               onChangeText={name => this.setState({ name })}
               value={this.state.name}
             />
@@ -118,6 +133,8 @@ export default class UserLoginScreen extends Component {
               placeholder="E-mail address"
               placeholderTextColor='grey'
               keyboardType='email-address'
+              autoCapitalize='none'
+              autoCorrect='false'
               onChangeText={email => this.setState({ email })}
               value={this.state.email}
             />
