@@ -17,7 +17,6 @@ import AboutScreen from './../screens/LoginScreens/AboutScreen';
 
 const RootStack = StackNavigator(
   {
-    Welcome: { screen: WelcomeScreen },
   	UserLogin: { screen: UserLoginScreen },
     UserSignup: { screen: UserSignupScreen },
   	PetDetails: { screen: GetPetDetails },
@@ -30,7 +29,7 @@ const RootStack = StackNavigator(
     AboutScreen: { screen: AboutScreen}
   },
   {
-    initialRouteName: 'Welcome',
+    initialRouteName: 'UserLogin',
   }
 );
 

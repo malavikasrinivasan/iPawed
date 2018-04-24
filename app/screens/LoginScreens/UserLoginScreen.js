@@ -124,6 +124,10 @@ export default class UserLoginScreen extends Component {
 
     return (
       <View style={styles.screenContainer}>
+        <Text style={styles.welcomeText}>
+          Welcome to Peternal!
+        </Text>
+
         <Image
         style={styles.logoStyle}
         source={require('./../../img/temp_logo.png')}
@@ -178,9 +182,7 @@ export default class UserLoginScreen extends Component {
              {"here"}
             </Text>
           </Text>
-        </View>
 
-        <View>
           <Text style={styles.descriptionText}>
             <Text >
               {"Developer? Skip "}
@@ -207,9 +209,15 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'space-around'
   },
+  welcomeText: {
+    color: 'black',
+    fontSize: 30,
+    fontWeight: 'bold',
+    fontFamily: 'SignPainter'
+  },
   logoStyle: {
-    width:150,
-    height:150
+    width:200,
+    height:200
   },
   descriptionText: {
     color: 'black',
@@ -219,6 +227,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Century Gothic'
   },
   formContainer: {
+    width:250,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,
