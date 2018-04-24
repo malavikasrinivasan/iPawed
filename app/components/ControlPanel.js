@@ -18,14 +18,26 @@ export default class ControlPanel extends Component {
   render() {
     return (
       <ScrollView style={styles.menu}>
+        <TouchableOpacity>
+          <Text style={styles.links}>Update profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.links}>Reset Password</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.links}>Notification Settings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.links}>Privacy Policy</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.links}>Help & Contact Us</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('AboutScreen')}>
           <Text style={styles.links}>About</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={styles.links}>Policy</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.links}>Contact Us</Text>
+          <Text style={styles.links}>Log Out</Text>
         </TouchableOpacity>
       </ScrollView>
     )
@@ -38,7 +50,7 @@ const styles = StyleSheet.create({
   },
   links: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 16,
     margin: 15,
     textAlign: 'left',
     fontFamily: "Century Gothic"

@@ -36,6 +36,10 @@ export default class AboutScreen extends Component {
       <View style={styles.screenContainer}>
         <Text style={styles.header}>About</Text>
 
+        <Text style={styles.subheader}>
+          {"UC Berkeley School of Information\nMIMS Final Project, 2018"}
+        </Text>
+
         <View style={{flexDirection:'row', alignContent: 'space-between', justifyContent: 'center'}}>
           <View style={{justifyContent: 'center', flex:0.5}}>
             <Image
@@ -108,10 +112,6 @@ export default class AboutScreen extends Component {
           </View>
         </View>
 
-        <Text style={styles.subheader}>
-          {"UC Berkeley School of Information\nMIMS Final Project, 2018"}
-        </Text>
-
         <Text style={styles.names}>
           {"Advisor: Steve Weber"}
         </Text>
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   names: {
     fontFamily: 'Century Gothic',
     fontSize: 14,
-    textAlign: 'center'
+    alignContent: 'flex-start'
   }
 });
 

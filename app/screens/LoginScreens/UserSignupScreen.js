@@ -35,7 +35,7 @@ export default class UserLoginScreen extends Component {
       alert("Please enter a valid Email ID")
       return
     }
-    
+
     if (this.state.name == ''){
       alert("Please enter your Name")
       return
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Century Gothic'
   },
   formContainer: {
+    width:250,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1.5,

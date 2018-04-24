@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import DatePicker from 'react-native-datepicker';
 import Header from './../../components/Header';
@@ -23,16 +23,48 @@ export default class GetPetDetails extends Component {
     },
   };
 
-  state = {
-    userID:'',
-    userName:'',
-    petName : '',
-    petBreed : '',
-    petColor: '',
-    petWeight: '',
-    petGender: '',
-    petAdoptionDate : null,
-    petBirthDay : null
+  constructor(props){
+    super(props);
+    this.state = {
+      userID:'',
+      userName:'',
+      petName : '',
+      petBreed : '',
+      petWeight: '',
+      petGender: '',
+      petAdoptionDate : null,
+      petBirthDay : null,
+      color1: false,
+      color2: false,
+      color3: false,
+      color4: false,
+      color5: false
+    };
+    this.toggleC1 = this.toggleC1.bind(this);
+    this.toggleC2 = this.toggleC2.bind(this);
+    this.toggleC3 = this.toggleC3.bind(this);
+    this.toggleC4 = this.toggleC4.bind(this);
+    this.toggleC5 = this.toggleC5.bind(this);
+  }
+
+  toggleC1() {
+    this.setState({color1: !this.state.color1});
+  }
+
+  toggleC2() {
+    this.setState({color2: !this.state.color2});
+  }
+
+  toggleC3() {
+    this.setState({color3: !this.state.color3});
+  }
+
+  toggleC4() {
+    this.setState({color4: !this.state.color4});
+  }
+
+  toggleC5() {
+    this.setState({color5: !this.state.color5});
   }
 
   componentDidMount(){
@@ -59,13 +91,17 @@ export default class GetPetDetails extends Component {
   uploadPetProfile() {
     console.log(this.state.petAdoptionDate == null)
     console.log(this.state.petBirthDay == null)
-    if (this.state.petName == '' 
+    if (this.state.petName == ''
       || this.state.petBreed == ''
-      || this.state.petColor == ''
       || this.state.petWeight == ''
       || this.state.petGender == ''
       || this.state.petAdoptionDate == null
       || this.state.petBirthDay == null
+      ||  (!this.state.color1
+        && !this.state.color2
+        && !this.state.color3
+        && !this.state.color4
+        && !this.state.color5)
     ){
       alert("All fields are mandatory")
       return
@@ -76,7 +112,11 @@ export default class GetPetDetails extends Component {
     firebase.database().ref('userDetails/'+ this.state.userID + '/petDetails').set({
       petName : this.state.petName,
       petBreed : this.state.petBreed,
-      petColor: this.state.petColor,
+      color1: this.state.color1,
+      color2: this.state.color2,
+      color3: this.state.color3,
+      color4: this.state.color4,
+      color5: this.state.color5,
       petWeight: this.state.petWeight,
       petGender: this.state.petGender,
       petAdoptionDate : this.state.petAdoptionDate,
@@ -138,12 +178,29 @@ export default class GetPetDetails extends Component {
               placeholder="Color: "
               placeholderTextColor='black'
               editable={false}/>
-            <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
-              placeholder="color"
-              placeholderTextColor='lightgrey'
-              onChangeText={petColor => this.setState({ petColor })}
-              value={this.state.petColor}
-              />
+            <View style={{justifyContent:'center', flex:0.5}}>
+              <View style={{flexDirection: 'row', justifyContent: 'center', justifyContent:'space-between'}}>
+                 <TouchableOpacity onPress={this.toggleC1}>
+                   <View style={[styles.colorTags, {backgroundColor:'black'}, this.state.color1 && styles.cSelect]}/>
+                 </TouchableOpacity>
+
+                 <TouchableOpacity onPress={this.toggleC2}>
+                   <View style={[styles.colorTags, {backgroundColor:'brown'}, this.state.color2 && styles.cSelect]}/>
+                 </TouchableOpacity>
+
+                 <TouchableOpacity onPress={this.toggleC3}>
+                   <View style={[styles.colorTags, {backgroundColor:'beige'}, this.state.color3 && styles.cSelect]}/>
+                 </TouchableOpacity>
+
+                 <TouchableOpacity onPress={this.toggleC4}>
+                   <View style={[styles.colorTags, {backgroundColor:'grey'}, this.state.color4 && styles.cSelect]}/>
+                 </TouchableOpacity>
+
+                 <TouchableOpacity onPress={this.toggleC5}>
+                   <View style={[styles.colorTags, {backgroundColor:'tan'}, this.state.color5 && styles.cSelect]}/>
+                 </TouchableOpacity>
+              </View>
+            </View>
           </View>
 
           <View style={styles.formTextInput}>
@@ -176,7 +233,7 @@ export default class GetPetDetails extends Component {
           </View>
 
           <View style={styles.formTextInput}>
-            <TextInput style={{fontFamily: "Century Gothic", flex:0.5}}
+            <TextInput style={{fontFamily: "Century Gothic", flex:0.40}}
               placeholder={"Adoption Date: "}
               placeholderTextColor='black'
               editable={false}/>
@@ -190,7 +247,8 @@ export default class GetPetDetails extends Component {
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
               style={{
-                flex:0.5
+                flex:0.5,
+                alignContent:'flex-start'
               }}
               showIcon={false}
               iconComponent={<Icon name="calendar" size = {24} color="gray" />}
@@ -220,13 +278,17 @@ export default class GetPetDetails extends Component {
             />
           </View>
 
-          <View style={{height: 35, width: 300}}>
-            <View style={{flexDirection: 'row'}}>
-              <TextInput style={{fontFamily: "Century Gothic", flex:0.5}}
-                placeholder="Birthday: "
-                placeholderTextColor='black'
-                editable={false}/>
+            <View style={styles.formTextInput}>
+              <View style={{flex:0.41}}>
+                <Text style={{fontFamily: "Century Gothic", color:'black'}}>
+                  {"Birthday: "}
+                </Text>
+                <Text style={{fontSize:10, fontFamily:"Century Gothic"}}>
+                  {"(if you're not sure, guess)"}
+                </Text>
+              </View>
 
+              <View style={{flex:0.5, alignContent:'flex-start'}}>
               <DatePicker
                 date={this.state.petBirthDay}
                 mode="date"
@@ -236,11 +298,7 @@ export default class GetPetDetails extends Component {
                 maxDate="2020-12-31"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
-                style={{
-                  flex:0.5
-                }}
                 showIcon={false}
-                iconComponent={<Icon name="calendar" size = {24} color="gray" />}
                 customStyles={{
                   dateInput: {
                     borderWidth: 0
@@ -265,11 +323,7 @@ export default class GetPetDetails extends Component {
                 }}
                 onDateChange={(date) => {this.setState({petBirthDay: date})}}
               />
-
             </View>
-            <Text style={{fontSize:10, fontFamily:"Century Gothic"}}>
-              {"(if you're not sure, guess)"}
-            </Text>
           </View>
         </View>
         <TouchableOpacity
@@ -347,5 +401,25 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 40,
     fontFamily: 'Century Gothic',
-  }
+  },
+  colorTags: {
+    width: 20,
+    height: 20,
+    alignSelf: 'center',
+    borderColor: 'black',
+    borderRadius: 10,
+    borderWidth: 0,
+    opacity: 0.3
+  },
+  cSelect: {
+    borderWidth: 1,
+    opacity: 0.8
+  },
+  tagtext: {
+    color: 'black',
+    fontSize: 11,
+    fontFamily: 'Century Gothic',
+    textAlign: 'center',
+    fontStyle: 'italic'
+  },
 });
