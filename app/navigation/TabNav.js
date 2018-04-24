@@ -36,7 +36,6 @@ const JournalStack = StackNavigator({
   Timeline: { screen: TimelineScreen },
   AddEvent: { screen: AddEventScreen },
   ViewEvent: { screen: ViewEventScreen},
-  initialRouteName: 'Timeline'
 });
 
 export default TabNavigator(

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, AppRegistry, Button, Image, TouchableOpacity } from 'react-native';
 
 import Header from './../../components/Header';
 import { Avatar } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker';
 import Timeline from 'react-native-timeline-listview'
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
+import * as firebase from 'firebase';
 
 
 export default class TimelineScreen extends Component {
@@ -38,6 +39,7 @@ export default class TimelineScreen extends Component {
       }
     };
 
+    
   constructor(){
     super();
     this.onEventPress = this.onEventPress.bind(this)
@@ -45,25 +47,31 @@ export default class TimelineScreen extends Component {
 
     this.data = [
       {
-        time: 'January 4, 2018',
+        time: 'Jan 04, 2018',
         title: 'Adoption Day!',
         description: 'Adopted Peanut!!!',
         imageUrl: 'https://i.pinimg.com/736x/dd/a4/3b/dda43bf31a3e21896a423f19fbebdf70--german-shepherd-pups-shepherd-dogs.jpg'
       },
       {
-        time: 'January 6, 2018',
+        time: 'Jan 06, 2018',
         title: 'First walk',
         description: 'Went on our first walk, Peanut did great',
         imageUrl: 'https://i1.wp.com/doglers.com/wp-content/uploads/2015/01/Cute-german-shepherd-Puppy-Playing.jpg'
       },
       {
-        time: 'January 9, 2018',
+        time: 'Jan 09, 2018',
         title: 'Vet visit',
         description: 'Peanut got all his shots today, looking healthy!',
         imageUrl: 'https://thehappypooch.com/wp-content/uploads/2016/03/sleeping-dog.jpg'
       },
       {
-        time: 'January 13, 2018',
+        time: 'Jan 13, 2018',
+        title: 'Hike',
+        description: 'Went hiking on the trails behind our house, Peanut got into a fight with another dog :(',
+        imageUrl: 'https://i.pinimg.com/originals/fe/76/e2/fe76e2bdd2dc58485114a9ee11f910e4.jpg'
+      },
+      {
+        time: 'Jan 13, 2018',
         title: 'Hike',
         description: 'Went hiking on the trails behind our house, Peanut got into a fight with another dog :(',
         imageUrl: 'https://i.pinimg.com/originals/fe/76/e2/fe76e2bdd2dc58485114a9ee11f910e4.jpg'
@@ -71,9 +79,19 @@ export default class TimelineScreen extends Component {
     ];
 
     this.state = {
+      userID : '',
       selected: null,
       menuOpen: false
     };
+
+    console.log(this.data);
+  }
+
+  componentDidMount(){ 
+
+    const firebaseUserID = firebase.auth().currentUser.uid;
+    this.setState({userID: firebaseUserID});
+    console.log("Hi");
   }
 
   toggleControlPanel = () => {
@@ -86,18 +104,17 @@ export default class TimelineScreen extends Component {
       this.props.navigation.navigate('ViewEvent');
     }
 
-    renderDetail(rowData, sectionID, rowID) {
-    let title = <Text style={[styles.title]}>{rowData.title}</Text>
-    var desc = (
-            <View style={styles.descriptionContainer}>
-              <Text style={[styles.textDescription]}>{rowData.description}</Text>
-            </View>
-          )
+  renderDetail(rowData, sectionID, rowID) {
+    let title = null
+    var desc = null
     if(rowData.description && rowData.imageUrl)
       desc = (
-        <View style={styles.descriptionContainer}>
-          <Image source={{uri: rowData.imageUrl}} style={styles.image}/>
-          <Text style={[styles.textDescription]}>{rowData.description}</Text>
+        <View style={{backgroundColor: '#5AC8B0', borderRadius: 10}}>
+          <Text style={[styles.title]}>{rowData.title}</Text>
+          <View style={styles.descriptionContainer}>
+            <Image source={{uri: rowData.imageUrl}} style={styles.image}/>
+            <Text style={[styles.textDescription]}>{rowData.description}</Text>
+          </View>
         </View>
       )
 
@@ -107,7 +124,7 @@ export default class TimelineScreen extends Component {
         {desc}
       </View>
       )
-    }
+  }
 
     componentDidMount(){
       this.props.navigation.setParams({
@@ -134,26 +151,24 @@ export default class TimelineScreen extends Component {
         >
       <View style={styles.container}>
         <View style={styles.topRow}>
-
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('AddEvent')}>
-            <View style={{justifyContent:'center', alignItems:'center'}}>
-              <Image
-                source={require("../../icon/plus.png")}
-                style={{height:25, width:25, justifyContent:'center', margin:13}}/>
-            </View>
-          </TouchableOpacity>
-
           <Text style={styles.generalText}>
             Memories with Peanut!
           </Text>
         </View>
-        <View style={styles.timelineContainer}>
+        <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('AddEvent', {userID: this.state.userID})}>
+            <View style={{justifyContent:'center', alignItems:'center'}}>
+              <Icon
+                name="ios-add-circle" size = {40} color = "#5AC8B0"
+                style={{justifyContent:'center'}}/>
+            </View>
+        </TouchableOpacity>
+        <ScrollView style={styles.timelineContainer}>
           <Timeline
             data = {this.data}
             circleSize={12}
-            circleColor='#5AC8B0'
-            lineColor='grey'
+            circleColor='black'
+            lineColor='gray'
             lineWidth={1}
             timeContainerStyle={{minWidth:0, marginTop: -5}}
             timeStyle={styles.time}
@@ -162,11 +177,13 @@ export default class TimelineScreen extends Component {
             options={{
               style:{paddingTop:5}
             }}
+            innerCircle={'dot'}
             columnFormat='two-column'
             onEventPress={this.onEventPress}
             renderDetail={this.renderDetail}
+            // showTime = {false}
         />
-      </View>
+      </ScrollView>
     </View>
     </Drawer>
     );
@@ -180,24 +197,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   time: {
-    fontSize:14,
+    fontSize:12,
     textAlign: 'right',
-    backgroundColor:'white',
-    color:'black',
+    backgroundColor:'black',
+    color:'white',
     fontFamily:'Century Gothic',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    borderWidth: 6,
+    borderRadius: 1
   },
   title: {
     fontSize: 12,
     color: 'black',
     fontWeight: 'bold',
-    fontFamily:'Century Gothic'
+    fontFamily:'Century Gothic',
+    marginLeft: 10
   },
   descriptionContainer:{
     flexDirection: 'row',
-    paddingRight: 50
+    // borderBottomColor: 'black',
+    // borderBottomWidth: 1,
+    backgroundColor: '#5AC8B0',
+    borderRadius: 10,
   },
   textDescription: {
+    flex: 1, 
+    flexWrap: 'wrap',
     fontSize: 10,
     color:'black',
     fontFamily:'Century Gothic',
@@ -215,12 +240,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   timelineContainer: {
-    flex: 1,
+    flex: 0,
     margin: 10
   },
   list: {
     flex: 1,
-    marginTop:20,
+    margin:20,
   },
   image: {
     width: 50,
@@ -230,4 +255,4 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('TimelineScreen', () => TimelineScreen);
+

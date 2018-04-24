@@ -43,7 +43,6 @@ export default class GetPetDetails extends Component {
           userID: params.userID,
           userName: params.userName
       });
-      console.log(userID, userName)
   }
 
   _onAddPress() {
