@@ -13,6 +13,7 @@ import WelcomeScreen from './../screens/LoginScreens/WelcomeScreen';
 import UserLoginScreen from './../screens/LoginScreens/UserLoginScreen';
 import UserSignupScreen from './../screens/LoginScreens/UserSignupScreen';
 import GetPetDetails from './../screens/LoginScreens/GetPetDetails';
+import AboutScreen from './../screens/LoginScreens/AboutScreen';
 
 const RootStack = StackNavigator(
   {
@@ -20,12 +21,13 @@ const RootStack = StackNavigator(
   	UserLogin: { screen: UserLoginScreen },
     UserSignup: { screen: UserSignupScreen },
   	PetDetails: { screen: GetPetDetails },
-  	TabNav: { 
+  	TabNav: {
   	  screen: TabNav,
   	  navigationOptions: {
 	    header: null
-	  }
-  	}
+  	  }
+    },
+    AboutScreen: { screen: AboutScreen}
   },
   {
     initialRouteName: 'Welcome',

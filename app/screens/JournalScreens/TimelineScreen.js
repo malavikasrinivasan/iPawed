@@ -6,26 +6,36 @@ import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 import Timeline from 'react-native-timeline-listview'
-
+import Drawer from 'react-native-drawer';
+import ControlPanel from './../../components/ControlPanel';
 
 
 export default class TimelineScreen extends Component {
 
-  static navigationOptions = {
-    title: 'Timeline',
-     tabBarIcon: ({tintColor}) => (
-        <Icon name="heart" size={24} color={tintColor} />
-      ),
-      headerTintColor: '#5AC8B0',
-      headerBackTitle: 'back',
-      headerBackTitleStyle: {
-        fontFamily: 'Century Gothic'
-      },
-      headerTitleStyle: {
-        fontFamily: 'SignPainter',
-        fontSize: 28,
-        color: 'black'
-      },
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+    return {
+      title: 'Timeline',
+       tabBarIcon: ({tintColor}) => (
+          <Icon name="heart" size={24} color={tintColor} />
+        ),
+        headerTintColor: '#5AC8B0',
+        headerBackTitle: 'back',
+        headerBackTitleStyle: {
+          fontFamily: 'Century Gothic'
+        },
+        headerTitleStyle: {
+          fontFamily: 'SignPainter',
+          fontSize: 28,
+          color: 'black'
+        },
+        headerRight:
+          <TouchableOpacity onPress={() => params.handleMenuToggle()}>
+          <Image
+            source={require("../../icon/menu.png")}
+            style={{height:16, width:20, justifyContent:'center', margin:13}}/>
+          </TouchableOpacity>
+      }
     };
 
   constructor(){
@@ -61,8 +71,14 @@ export default class TimelineScreen extends Component {
     ];
 
     this.state = {
-      selected: null
+      selected: null,
+      menuOpen: false
     };
+  }
+
+  toggleControlPanel = () => {
+    this.state.menuOpen ? this._drawer.close() : this._drawer.open();
+    this.setState({menuOpen: !this.state.menuOpen});
   }
 
     onEventPress(data){
@@ -93,9 +109,29 @@ export default class TimelineScreen extends Component {
       )
     }
 
+    componentDidMount(){
+      this.props.navigation.setParams({
+        handleMenuToggle: this.toggleControlPanel,
+      });
+    }
 
   render() {
     return (
+      <Drawer
+        ref={(ref) => this._drawer = ref}
+        type="overlay"
+        side='right'
+        content={<ControlPanel navigation={this.props.navigation}/>}
+        captureGestures={true}
+        acceptTap={true}
+        tapToClose={true}
+        openDrawerOffset={0.3} // 20% gap on the right side of drawer
+        panCloseMask={0.3}
+        negotiatePan={true}
+        tweenHandler={(ratio) => ({
+          main: { opacity:(2-ratio)/2 }
+        })}
+        >
       <View style={styles.container}>
         <View style={styles.topRow}>
 
@@ -132,6 +168,7 @@ export default class TimelineScreen extends Component {
         />
       </View>
     </View>
+    </Drawer>
     );
   }
 }
