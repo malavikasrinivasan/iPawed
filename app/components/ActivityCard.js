@@ -18,9 +18,11 @@ export default class ActivityCard extends Component {
                     <ImageBackground
                         style={styles.thumbnail}
                         source={{uri: item.imageurl}}/>
-                    <Text style={styles.activityTitle}>
-                      {item.title}
-                    </Text>
+                    <View style={{justifyContent:'flex-end', flex:0.2}}>
+                      <Text style={styles.activityTitle}>
+                        {item.title}
+                      </Text>
+                    </View>
               </Card>
             </TouchableOpacity>
 			);
@@ -54,8 +56,8 @@ const styles = StyleSheet.create({
       marginBottom: 0,
     },
     cardStyle: {
-      height: 120,
-      width: 120,
+      height: 135,
+      width: 135,
       margin: 10,
       marginLeft: 5,
       marginRight: 5,
@@ -90,13 +92,12 @@ const styles = StyleSheet.create({
       fontFamily: 'Century Gothic',
       fontSize: 15,
       opacity: 1,
-      marginTop: -28.5,
       padding: 5,
       backgroundColor:'rgba(255,255,255,0.8)',
     },
     thumbnail: {
-      width: 120,
-      height: 120,
+      width: 135,
+      height: 135,
       justifyContent:'flex-start',
       alignItems:'stretch',
       marginTop:-16,

@@ -1,53 +1,67 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, ActivityIndicator, Image, Platform } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, ActivityIndicator, Image, Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Header from './../../components/Header';
 import * as firebase from 'firebase';
 import RNFetchBlob from 'react-native-fetch-blob'
 import ImagePicker from 'react-native-image-crop-picker';
+import Drawer from 'react-native-drawer';
+import ControlPanel from './../../components/ControlPanel';
 
-export default class GetPetDetails extends Component {  
+export default class GetPetDetails extends Component {
 
-  static navigationOptions = {
-    tabBarIcon: ({tintColor}) => (
-        <Icon name="home" size={24} color={tintColor}/>
-      ),
-    title: 'Home',
-    headerLeft: null,
-    headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28
-    },
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+    return {
+      tabBarIcon: ({tintColor}) => (
+          <Icon name="home" size={24} color={tintColor}/>
+        ),
+      title: 'Home',
+      headerBackTitle: 'back',
+      headerLeft: null,
+      headerTitleStyle: {
+        fontFamily: 'SignPainter',
+        fontSize: 28
+      },
+      headerRight:
+        <TouchableOpacity onPress={() => params.handleMenuToggle()}>
+        <Image
+          source={require("../../icon/menu.png")}
+          style={{height:16, width:20, justifyContent:'center', margin:13}}/>
+        </TouchableOpacity>
+    }
   };
-
-  
 
   state = {
     userID:'',
     userName:'',
     userDetails: null,
     imageUrl: null,
+    menuOpen: false
   }
 
-
+  toggleControlPanel = () => {
+    this.state.menuOpen ? this._drawer.close() : this._drawer.open();
+    this.setState({menuOpen: !this.state.menuOpen});
+  }
 
   getUserData(userID){
     firebase.database().ref('userDetails/' + userID + '/').once('value')
     .then((snapshot) => {
       this.setState({
-        userDetails: snapshot.val()  
+        userDetails: snapshot.val()
       });
       // console.log(snapshot.val())
     })
     .catch((error) => {
       alert("Error")
     })
-    
+
   }
 
 
   uploadImage(){
-    
+
     const Blob = RNFetchBlob.polyfill.Blob
     const fs = RNFetchBlob.fs
     window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
@@ -84,15 +98,18 @@ export default class GetPetDetails extends Component {
         console.log(url);
         this.setState({
           imageUrl: url
-        })        
+        })
       })
       .catch((error) => {
         console.log(error);
-      }) 
+      })
     });
   }
 
   componentDidMount(){
+    this.props.navigation.setParams({
+      handleMenuToggle: this.toggleControlPanel,
+    });
     const firebaseConfig = {
       apiKey: "AIzaSyALmeSOsC45vPnU3UmqEAzIhs_WgVX6NY8",
       authDomain: "ipawedmims18.firebaseapp.com",
@@ -103,7 +120,7 @@ export default class GetPetDetails extends Component {
     }
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
-    }   
+    }
 
     const { params } = this.props.navigation.state;
     const userID = params ? params.userID : null;
@@ -115,19 +132,10 @@ export default class GetPetDetails extends Component {
       });
       this.getUserData(userID)
     }
-    
+
   }
 
   render() {
-
-    // if (!this.props.navigation.state.params) {
-    //   return null;
-    // }
-
-    // const { params } = this.props.navigation.state;
-    // const userID = params ? params.userID : null;
-    // const userName = params ? params.userName : null;
-    // console.log(userID, userName)
 
     if (!this.state.userDetails) {
       return (
@@ -136,10 +144,26 @@ export default class GetPetDetails extends Component {
     }
     // console.log(this.state.userDetails)
     return (
+    <Drawer
+      ref={(ref) => this._drawer = ref}
+      type="overlay"
+      side='right'
+      content={<ControlPanel navigation={this.props.navigation}/>}
+      captureGestures={true}
+      acceptTap={true}
+      tapToClose={true}
+      openDrawerOffset={0.3} // 20% gap on the right side of drawer
+      panCloseMask={0.3}
+      negotiatePan={true}
+      tweenHandler={(ratio) => ({
+        main: { opacity:(2-ratio)/2 }
+      })}
+      >
       <View style={styles.screenContainer}>
         <Text style={styles.welcomeText}>
           Welcome {this.state.userName}
         </Text>
+
         <View>
           <TouchableOpacity
             onPress={() => this.uploadImage()}>
@@ -150,17 +174,18 @@ export default class GetPetDetails extends Component {
             </View>
           </TouchableOpacity>
 
-          <Text >
+          <Text style={{fontFamily:'Century Gothic'}}>
             Memories with Peanut!
           </Text>
         </View>
-        {this.state.imageUrl ? 
+        {this.state.imageUrl ?
         <Image
           style={{width: 250, height: 250}}
           source={{uri: this.state.imageUrl}}
         /> : null
         }
       </View>
+      </Drawer>
     );
   }
 }
