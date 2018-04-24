@@ -6,6 +6,9 @@ import DatePicker from 'react-native-datepicker';
 import ImagePicker from 'react-native-image-crop-picker';
 import Header from './../../components/Header';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Input } from 'react-native-elements';
+
+import * as firebase from 'firebase';
 
 export default class AddEventScreen extends Component {
 
@@ -23,14 +26,17 @@ export default class AddEventScreen extends Component {
         fontFamily: 'SignPainter',
         fontSize: 28,
         color: 'black'
-      },
+      }
     };
 
   constructor(props){
     super(props);
+
     this.state = {
-      eventTitle : 'Event Title',
-      description : '',
+      userID : '',
+      eventTitle : '',
+      eventNotes : '',
+      eventLocation : '',
       eventDate : new Date(),
       behavior1: false,
       behavior2: false,
@@ -67,12 +73,14 @@ export default class AddEventScreen extends Component {
     this.setState({behavior5: !this.state.behavior5});
   }
 
-  handleTitle = (text) => {
-    this.setState({eventTitle : text})
+  componentDidMount(){
+    const { params } = this.props.navigation.state;
+    this.setState({
+        userID: params.userID
+    });
+
   }
-  handleDescription = (text) => {
-    this.setState({description : text})
-  }
+
 
   _onCamPress() {
     ImagePicker.openCamera({
@@ -94,6 +102,35 @@ export default class AddEventScreen extends Component {
     });
   }
 
+
+
+
+  uploadMemory = () => {
+
+    firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails').once("value").then(
+      (snapshot) => 
+        { 
+            var memoryCount = snapshot.numChildren();
+            var memoryID = this.state.userID+"-"+(memoryCount+1);
+            console.log(memoryID);
+
+            firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
+              eventTitle : this.state.eventTitle,
+              eventDate : this.state.eventDate,
+              eventLocation: this.state.eventLocation,
+              eventNotes: this.state.eventNotes,
+            });
+
+  
+        }
+      )
+    this.props.navigation.navigate('Timeline');
+
+  }
+
+
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -105,6 +142,8 @@ export default class AddEventScreen extends Component {
           style = {styles.commenttext}
           placeholder="Title"
           placeholderTextColor="grey"
+          onChangeText={eventTitle => this.setState({ eventTitle })}
+          value={this.state.eventTitle}
         />
 
         <View style={styles.box}>
@@ -199,6 +238,9 @@ export default class AddEventScreen extends Component {
               types: '(cities)' // default: 'geocode'
             }}
 
+            onChangeText={eventLocation => this.setState({ eventLocation })}
+            value={this.state.eventLocation}
+
             styles={{
               textInputContainer: {
                 width: '100%',
@@ -274,6 +316,8 @@ export default class AddEventScreen extends Component {
                 style = {styles.commenttext}
                 placeholder="Notes"
                 placeholderTextColor="grey"
+                onChangeText={eventNotes => this.setState({ eventNotes })}
+                value={this.state.eventNotes}
               />
           </View>
         </View>
@@ -281,7 +325,7 @@ export default class AddEventScreen extends Component {
         <View style={styles.submitContainer}>
         <TouchableOpacity
           style={styles.deletebutton}
-          onPress={() => this.props.navigation.navigate('Timeline')}>
+          onPress={() => this.props.navigation.goBack()}>
           <Text style={styles.deletebuttontext}> </Text>
           <Text style={styles.deletebuttontext}>DELETE</Text>
           <Text style={styles.deletebuttontext}> </Text>
@@ -289,7 +333,7 @@ export default class AddEventScreen extends Component {
 
         <TouchableOpacity
           style={styles.savebutton}
-          onPress={() => this.props.navigation.navigate('Timeline')}>
+          onPress={this.uploadMemory}>
           <Text style={styles.savebuttontext}> </Text>
           <Text style={styles.savebuttontext}>SAVE</Text>
           <Text style={styles.savebuttontext}> </Text>
