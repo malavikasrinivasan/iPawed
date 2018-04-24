@@ -15,11 +15,11 @@ import ViewEventScreen from './../screens/JournalScreens/ViewEventScreen';
 import ActivityPrestart from './../screens/ActivityScreens/ActivityPrestart';
 import ActivityRecord from './../screens/ActivityScreens/ActivityRecord';
 import ActivitySummary from './../screens/ActivityScreens/ActivitySummary';
-
+import AboutScreen from './../screens/LoginScreens/AboutScreen';
 
 const LoginStack = StackNavigator({
-  Home: { screen: HomeScreen }
-}, 
+  Home: { screen: HomeScreen },
+},
 {
   initialRouteName: 'Home',
 });
@@ -42,7 +42,7 @@ export default TabNavigator(
   {
     Login: { screen: LoginStack },
     Activity: { screen: ActivityStack },
-    Journal: { screen:  JournalStack   }
+    Journal: { screen: JournalStack },
   },
   {
     tabBarComponent: TabBarBottom,

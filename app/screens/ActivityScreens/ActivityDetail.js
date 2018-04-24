@@ -23,64 +23,130 @@ import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import VideoEmbed from '../../components/VideoEmbed';
 import CollapsibleCard from '../../components/CollapsibleCard';
+import Drawer from 'react-native-drawer';
+import ControlPanel from './../../components/ControlPanel';
 
-const steps = [
-  {step: 'How to:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 1},
-  {step: 'Set up:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 2},
-  {step: 'Video:', stepDet: <VideoEmbed/>, stepNumber: 3}
-]
+// const steps = [
+//   {step: 'How to:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 1},
+//   {step: 'Set up:', stepDet: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et', stepNumber: 2},
+//   {step: 'Video:', stepDet: <VideoEmbed/>, stepNumber: 3}
+// ]
 
 export default class ActivityDetail extends Component {
 
-  static navigationOptions = {
-    tabBarIcon: ({tintColor}) => (
-        <Icon name="paw" size={24} color={tintColor}/>
-      ),
-    title: 'Activities',
-    headerTintColor: '#5AC8B0',
-    headerBackTitle: 'back',
-    headerBackTitleStyle: {
-      fontFamily: 'Century Gothic'
-    },
-    headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
-    },
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+    return {
+      tabBarIcon: ({tintColor}) => (
+          <Icon name="paw" size={24} color={tintColor}/>
+        ),
+      title: 'Activities',
+      headerTintColor: '#5AC8B0',
+      headerBackTitle: 'back',
+      headerBackTitleStyle: {
+        fontFamily: 'Century Gothic'
+      },
+      headerTitleStyle: {
+        fontFamily: 'SignPainter',
+        fontSize: 28,
+        color: 'black'
+      },
+      headerRight:
+        <TouchableOpacity onPress={() => params.handleMenuToggle()}>
+        <Image
+          source={require("../../icon/menu.png")}
+          style={{height:16, width:20, justifyContent:'center', margin:13}}/>
+        </TouchableOpacity>
+    }
   };
 
-  constructor(props) {
-    super(props)
-    var ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 != r2})
-    this.state = {
-      stepsDataSource: ds.cloneWithRows(steps)
-    }
+  state = {
+    menuOpen: false
+  }
+
+  toggleControlPanel = () => {
+    this.state.menuOpen ? this._drawer.close() : this._drawer.open();
+    this.setState({menuOpen: !this.state.menuOpen});
+  }
+
+  // constructor(props) {
+  //   super(props)
+  //   var ds = new ListView.DataSource({rowHasChanged: (r1,r2) => r1 != r2})
+  //   this.state = {
+  //     stepsDataSource: ds.cloneWithRows(steps)
+  //   }
+  // }
+
+  componentDidMount(){
+    this.props.navigation.setParams({
+      handleMenuToggle: this.toggleControlPanel,
+    });
   }
 
   render() {
+    const {params} = this.props.navigation.state;
+    // stepsArr = [params.item.steps]
+
+    console.log(params.item.steps)
     return (
+      <Drawer
+        ref={(ref) => this._drawer = ref}
+        type="overlay"
+        side='right'
+        content={<ControlPanel navigation={this.props.navigation}/>}
+        captureGestures={true}
+        acceptTap={true}
+        tapToClose={true}
+        openDrawerOffset={0.3} // 20% gap on the right side of drawer
+        panCloseMask={0.3}
+        negotiatePan={true}
+        tweenHandler={(ratio) => ({
+          main: { opacity:(2-ratio)/2 }
+        })}
+        >
       <ScrollView
         style={{backgroundColor: 'white'}}
         contentContainerStyle={{justifyContent: 'space-around'}}>
         <Text style={styles.welcome}>
-          Bath Time
+          {params.item.title}
         </Text>
 
         <View style={styles.descriptionContainer}>
             <Image
                 style={{ width: 80, height: 80, flex: 0.3, margin: 10, marginRight: 5}}
-                source={require('../../img/bath.jpeg')} />
+                source={{uri: params.item.imageurl}} />
 
               <Text style={[styles.descriptionText, {flex: 0.7, margin: 10, marginLeft: 5}]}>
-                {"Giving your dog a bath is an essential and excellent way to understand your dog's behaviour."}
+                {params.item.desc}
               </Text>
         </View>
 
-        <ListView
+        <CollapsibleCard style={styles.ActStepRow} title="How to:" expanded={false}>
+          <Text style={styles.stepDesc}>{params.item.steps}</Text>
+        </CollapsibleCard>
+
+        <CollapsibleCard style={styles.ActStepRow} title="Video:" expanded={false}>
+          <Text style={styles.stepDesc}>
+            <VideoEmbed uri = {params.item.video} />
+          </Text>
+        </CollapsibleCard>
+
+        {/* {stepsArr.map((prop, key) => {
+          return (
+            <CollapsibleCard style={styles.ActStepRow}  key={key} title={key}>
+            <Text style={styles.stepDesc}>{prop[0]}
+            </Text>
+            </CollapsibleCard>
+          );
+        })} */}
+
+        {/* <CollapsibleCard style={styles.ActStepRow} title={actStep.step}>
+
+        </CollapsibleCard> */}
+
+        {/* <ListView
           dataSource={this.state.stepsDataSource}
-          renderRow={(actStep) => {return this._renderActStepRow(actStep) }} />
-
-
+          renderRow={(actStep) => {return this._renderActStepRow(actStep) }} /> */}
 
         <TouchableOpacity
           style={styles.buttonStyle}
@@ -91,6 +157,7 @@ export default class ActivityDetail extends Component {
         </TouchableOpacity>
 
       </ScrollView>
+      </Drawer>
     );
   }
   _renderActStepRow(actStep) {

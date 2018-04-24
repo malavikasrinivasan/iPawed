@@ -56,6 +56,22 @@ export default class GetPetDetails extends Component {
   }
 
   uploadPetProfile() {
+    console.log(this.state.petAdoptionDate == null)
+    console.log(this.state.petBirthDay == null)
+    if (this.state.petName == '' 
+      || this.state.petBreed == ''
+      || this.state.petColor == ''
+      || this.state.petWeight == ''
+      || this.state.petGender == ''
+      || this.state.petAdoptionDate == null
+      || this.state.petBirthDay == null
+    ){
+      alert("All fields are mandatory")
+      return
+    }
+
+
+
     firebase.database().ref('userDetails/'+ this.state.userID + '/petDetails').set({
       petName : this.state.petName,
       petBreed : this.state.petBreed,
@@ -65,7 +81,6 @@ export default class GetPetDetails extends Component {
       petAdoptionDate : this.state.petAdoptionDate,
       petBirthDay : this.state.petBirthDay
     }).then(() => {
-      // alert("Inserted");
       this.props.navigation.navigate('Home', {
       userID: this.state.userID,
       userName: this.state.userName
@@ -96,6 +111,7 @@ export default class GetPetDetails extends Component {
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="name"
               placeholderTextColor='lightgrey'
+              autoCorrect='false'
               onChangeText={petName => this.setState({ petName })}
               value={this.state.petName}
               />
@@ -110,6 +126,7 @@ export default class GetPetDetails extends Component {
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="breed"
               placeholderTextColor='lightgrey'
+              autoCorrect='false'
               onChangeText={petBreed => this.setState({ petBreed })}
               value={this.state.petBreed}
               />
@@ -136,6 +153,8 @@ export default class GetPetDetails extends Component {
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="weight (lbs)"
               placeholderTextColor='lightgrey'
+              autoCorrect='false'
+              keyboardType='numeric'
               onChangeText={petWeight => this.setState({ petWeight })}
               value={this.state.petWeight}
               />
@@ -149,6 +168,7 @@ export default class GetPetDetails extends Component {
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="male/female"
               placeholderTextColor='lightgrey'
+              autoCapitalize='none'
               onChangeText={petGender => this.setState({ petGender })}
               value={this.state.petGender}
               />
