@@ -3,7 +3,8 @@ import {AppRegistry,
         Text,
         View,
         StyleSheet,
-        TouchableOpacity} from 'react-native';
+        TouchableOpacity,
+        Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Stopwatch} from 'react-native-stopwatch-timer';
 import TimelineScreen from '../JournalScreens/TimelineScreen';
