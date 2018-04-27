@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { Card,
     ListItem,
     Button
@@ -7,24 +7,22 @@ import { Card,
 
 //   const navigation = this.props.navigation;
 
-export default class CategoryCard extends Component {
+export default class SpecificCategoryCard extends Component {
 	render() {
         const item = this.props.item
-        const userID = this.props.userID
-        console.log(item)
-        console.log("Image",this.props.item.imageurl)
 		return (
-                    <TouchableOpacity
-                        style={{ justifyContent: 'center', alignItems:'center'}} onPress={() => this.props.navigation.navigate('ActivityCategory', {item:item, userID:userID})}>
-                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                            <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
-                            <Image source={{uri: item.imageurl}} style={[styles.catImage, {position:'absolute'}]}/>
-                            <View style={styles.catInnerCirc}/>
-                            <Text style={styles.catTitle}>
-                            {item.title}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
+			<TouchableOpacity style={{ justifyContent: 'center', alignItems:'center', margin: 18}} onPress={() => this.props.navigation.navigate('ActivityDetail', {item})}>
+              <Card containerStyle={styles.cardStyle}>
+                    <ImageBackground
+                        style={styles.thumbnail}
+                        source={{uri: item.imageurl}}/>
+                    <View style={{justifyContent:'flex-end', flex:0.2}}>
+                      <Text style={styles.activityTitle}>
+                        {item.title}
+                      </Text>
+                    </View>
+              </Card>
+            </TouchableOpacity>
 			);
 	}
 }
@@ -70,24 +68,19 @@ const styles = StyleSheet.create({
     },
     catTitle: {
       textAlign: 'center',
-      color:'white',
+      color:'black',
       fontFamily: 'Century Gothic',
-      fontSize: 18,
+      fontSize: 14,
       opacity: 1,
       padding: 5,
       paddingBottom: 10,
+      fontStyle:'italic',
       position: 'absolute'
-    },
-    catImage: {
-      width:185,
-      height:185,
-      opacity: 0.6,
-      margin: 1,
     },
     catInnerCirc: {
       width:70,
       height:70,
-      opacity:0,
+      borderRadius: 35,
       position:'absolute',
       backgroundColor:'white'
     },
@@ -97,7 +90,6 @@ const styles = StyleSheet.create({
       fontFamily: 'Century Gothic',
       fontSize: 15,
       opacity: 1,
-      marginTop: -28.5,
       padding: 5,
       backgroundColor:'rgba(255,255,255,0.8)',
     },
@@ -115,6 +107,6 @@ const styles = StyleSheet.create({
       color: '#333333',
       fontFamily: 'Century Gothic',
     },
-  });  
+  });
 
-  module.exports = CategoryCard;
+  module.exports = SpecificCategoryCard;

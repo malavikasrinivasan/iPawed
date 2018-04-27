@@ -86,6 +86,8 @@ export default class ActivityDetail extends Component {
   render() {
     const {params} = this.props.navigation.state;
     // stepsArr = [params.item.steps]
+    const item = params.item;
+    const userID = params.userID;
 
     console.log(params.item.steps)
     return (
@@ -150,7 +152,7 @@ export default class ActivityDetail extends Component {
 
         <TouchableOpacity
           style={styles.buttonStyle}
-          onPress={() => this.props.navigation.navigate('ActivityPrestart')}>
+          onPress={() => this.props.navigation.navigate('ActivityPrestart', {item:item, userID:userID})}>
           <Text style={styles.textButtonStyle}>
             {"Next"}
           </Text>

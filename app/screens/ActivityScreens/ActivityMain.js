@@ -26,12 +26,9 @@ import RecActCard from '../../components/RecActCard';
 import HorActCards from '../../components/HorActCards';
 import ActCat from '../../components/ActCat';
 import ActivityCard from '../../components/ActivityCard';
-<<<<<<< HEAD
 import CategoryCard from '../../components/CategoryCard';
-=======
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
->>>>>>> c7a4debcf5afcaf381ae9921ab09579fd81a8c16
 
 export default class ActivityMain extends Component {
 
@@ -72,7 +69,10 @@ export default class ActivityMain extends Component {
     this.state = {
         dataSource: new ListView.DataSource({
             rowHasChanged: (row1, row2) => row1 !== row2
-        })
+        }),
+        dataSourceCat: new ListView.DataSource({
+          rowHasChanged: (row1, row2) => row1 !== row2
+      })
     }
 }
 
@@ -111,13 +111,7 @@ componentDidMount() {
   if(userID) {
     this.setState({
       userID: userID,
-      // recommendedActivities: user.recommendedActivities
     });
-
-    // this.getUserRecommendedActivities(userID)
-    // this.setState({
-    //           dataSource: this.state.dataSource.cloneWithRows(this.state.recommendedActivities)
-    //       });
   }
 
   // console.log("Getting Firebase items");
@@ -156,7 +150,7 @@ componentDidMount() {
     console.log('categories', categories);
 
     this.setState({
-        dataSourceCat: categories
+        dataSourceCat: this.state.dataSourceCat.cloneWithRows(categories)
     });
 });
 }
@@ -201,52 +195,6 @@ componentDidMount() {
                 renderRow={this._renderItem.bind(this)}
             />
       </ScrollView>
-
-        {/* <ScrollView horizontal={true}>
-            <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
-              <Card containerStyle={styles.cardStyle}>
-                    <ImageBackground
-                        style={styles.thumbnail}
-                        source={require('../../img/bath.jpeg')}/>
-                    <Text style={styles.activityTitle}>
-                      {"Bath Time"}
-                    </Text>
-              </Card>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
-              <Card containerStyle={styles.cardStyle}>
-                    <ImageBackground
-                        style={styles.thumbnail}
-                        source={require('../../img/dogpark.jpeg')}/>
-                    <Text style={styles.activityTitle}>
-                      {"Play Fetch"}
-                    </Text>
-              </Card>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
-              <Card containerStyle={styles.cardStyle}>
-                    <ImageBackground
-                        style={styles.thumbnail}
-                        source={require('../../img/swimming.jpeg')}/>
-                    <Text style={styles.activityTitle}>
-                      {"Swim"}
-                    </Text>
-              </Card>
-            </TouchableOpacity>
-            <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
-              <Card containerStyle={styles.cardStyle}>
-                    <ImageBackground
-                        style={styles.thumbnail}
-                        source={require('../../img/hiking.jpeg')}/>
-                    <Text style={styles.activityTitle}>
-                      {"Hike"}
-                    </Text>
-              </Card>
-            </TouchableOpacity>
-      </ScrollView> */}
-
 
       <Text style={styles.sectionTitle}>
         {"Your most recent:"}
@@ -301,111 +249,32 @@ componentDidMount() {
           {"Categories:"}
         </Text>
 
-        <View style={{margin:10}}>
-        <View style={{flexDirection:'row', justifyContent: 'center'}}>
-          <TouchableOpacity
-<<<<<<< HEAD
-            style={{ justifyContent: 'center', alignItems:'center', margin: 10}} onPress={() => this.props.navigation.navigate('ActivityCategoryTemp')}>
-=======
-            style={{ justifyContent: 'center', alignItems:'center'}}>
->>>>>>> c7a4debcf5afcaf381ae9921ab09579fd81a8c16
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
-              <Image source={require('../../img/wood.jpg')} style={[styles.catImage, {position:'absolute'}]}/>
-              <View style={styles.catInnerCirc}/>
-              <Text style={styles.catTitle}>
-                {"Home"}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ justifyContent: 'center', alignItems:'center'}}>
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
-              <Image source={require('../../img/grass.jpg')} style={[styles.catImage, {position:'absolute'}]}/>
-              <View style={styles.catInnerCirc}/>
-              <Text style={styles.catTitle}>
-                {"Play"}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-          <View style={{flexDirection:'row', justifyContent: 'center'}}>
-            <TouchableOpacity
-              style={{ justifyContent: 'center', alignItems:'center'}}>
-              <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
-                <Image source={require('../../img/fur.jpg')} style={[styles.catImage, {position:'absolute'}]}/>
-                <View style={styles.catInnerCirc}/>
-                <Text style={styles.catTitle}>
-                  {"Care"}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ justifyContent: 'center', alignItems:'center'}}>
-              <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
-                <Image source={require('../../img/blanket.jpg')} style={[styles.catImage, {position:'absolute'}]}/>
-                <View style={styles.catInnerCirc}/>
-                <Text style={styles.catTitle}>
-                  {"Lazy"}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-<<<<<<< HEAD
-        <View style={{flexDirection:'row', justifyContent: 'center'}}>
-          <FlatList
-              data = {this.state.dataSourceCat}
-              renderItem={this._renderItemFL.bind(this)}
-              keyExtractor={item => item.title} 
-          />
-          {/* <ListView
-                // style={styles.listView}
+        <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'}}>
+          <ListView
+                contentContainerStyle={{flexDirection: 'row',
+                flexWrap: 'wrap'}}
                 dataSource={this.state.dataSourceCat}
                 renderRow={this._renderItemFL.bind(this)}
-            /> */}
+            />
         </View>
 
 
 
-=======
->>>>>>> c7a4debcf5afcaf381ae9921ab09579fd81a8c16
     </ScrollView>
     </Drawer>
     );
   }
 
   _renderItem(item) {
-
-    const onPress = () => {
-      AlertIOS.prompt(
-        'Complete',
-        null,
-        [
-          {text: 'Complete', onPress: (text) => this.itemsRef.child(item._key).remove()},
-          {text: 'Cancel', onPress: (text) => console.log('Cancel')}
-        ],
-        'default'
-      );
-    };
-
     return (
-      <ActivityCard navigation={this.props.navigation} item={item} />
+      <ActivityCard navigation={this.props.navigation} item={item} userID = {this.state.userID} />
     );
   }
 
   _renderItemFL(item) {
-    console.log("FlatList")
-    const onPress = () => {
       return (
-        <CategoryCard navigation={this.props.navigation} item={item} />
+        <CategoryCard navigation={this.props.navigation} item={item} userID = {this.state.userID} />
       );
-    }
   }
 }
 

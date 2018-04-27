@@ -1585,7 +1585,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.iPawed897987-";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.iPawed897987;
 				PRODUCT_NAME = iPawed;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1611,7 +1611,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.iPawed897987-";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.iPawed897987;
 				PRODUCT_NAME = iPawed;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

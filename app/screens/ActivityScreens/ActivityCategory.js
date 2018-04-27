@@ -25,7 +25,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import RecActCard from '../../components/RecActCard';
 import HorActCards from '../../components/HorActCards';
 import ActCat from '../../components/ActCat';
-import ActivityCard from '../../components/ActivityCard';
+import SpecificCategoryCard from '../../components/SpecificCategoryCard';
 
 export default class ActivityCategory extends Component {
 
@@ -81,26 +81,10 @@ getRef() {
 
 componentDidMount() {
 
-  const user = firebase.auth().currentUser;
-  console.log("user",user)
-  const userID = user ? user.uid : null;
-  console.log("uid",userID)
+  const {params} = this.props.navigation.state
+  console.log(params.item)
 
-  if(userID) {
-    this.setState({
-      userID: userID,
-      // recommendedActivities: user.recommendedActivities
-    });
-  
-    // this.getUserRecommendedActivities(userID)
-    // this.setState({
-    //           dataSource: this.state.dataSource.cloneWithRows(this.state.recommendedActivities)
-    //       });
-  }
-
-  // console.log("Getting Firebase items");
-
-  firebase.database().ref('userDetails/' + userID + '/' + 'recommendedActivities' + '/').on('value', (snap) => {
+  firebase.database().ref('activityCategories/' + params.item.title + '/' + 'Activities').on('value', (snap) => {
       console.log('snap', snap);
 
       var items = [];
@@ -111,7 +95,7 @@ componentDidMount() {
             desc: child.val().desc,
             steps: child.val().steps,
             video: child.val().video,
-          imageurl: child.val().imageURL});
+            imageurl: child.val().imageurl});
       });
 
       console.log('items', items);
@@ -123,50 +107,31 @@ componentDidMount() {
 }
 
   render() {
-
+    const {params} = this.props.navigation.state
+    const item = params.item
     return (
       <ScrollView style={{flex: 1, backgroundColor: '#F8F8F8'}}>
 
       <Text style={styles.screenTitle}>
-        {"Explore Activities"}
+        {item.title}
       </Text>
 
-        <Text style={styles.subheader}>
-          {"Keep your routine strong or try something new. As long as you're hanging out with Peanut, you're making memories."}
-        </Text>
-
-        <Text style={styles.sectionTitle}>
-          {"Recommended for you:"}
-        </Text>
-
-        <ScrollView horizontal={true}>
+        <View style={{flexDirection:'row', justifyContent: 'center', flexWrap: 'wrap'}}>
             <ListView
-                horizontal={true}
+                contentContainerStyle = {{flexDirection: 'row', flexWrap: 'wrap'}}
                 // style={styles.listView}
                 dataSource={this.state.dataSource}
                 renderRow={this._renderItem.bind(this)}
             />
-        </ScrollView>
+        </View>
       </ScrollView>
       );
     }
   
     _renderItem(item) {
   
-      const onPress = () => {
-        AlertIOS.prompt(
-          'Complete',
-          null,
-          [
-            {text: 'Complete', onPress: (text) => this.itemsRef.child(item._key).remove()},
-            {text: 'Cancel', onPress: (text) => console.log('Cancel')}
-          ],
-          'default'
-        );
-      };
-  
       return (
-        <ActivityCard navigation={this.props.navigation} item={item} />
+        <SpecificCategoryCard navigation={this.props.navigation} item={item} />
       );
     }
   }
