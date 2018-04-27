@@ -15,6 +15,8 @@ import ViewEventScreen from './../screens/JournalScreens/ViewEventScreen';
 import ActivityPrestart from './../screens/ActivityScreens/ActivityPrestart';
 import ActivityRecord from './../screens/ActivityScreens/ActivityRecord';
 import ActivitySummary from './../screens/ActivityScreens/ActivitySummary';
+import ActivityCategory from './../screens/ActivityScreens/ActivityCategory';
+import ActivityCategoryTemp from './../screens/ActivityScreens/ActivityCategoryTemp';
 
 
 const LoginStack = StackNavigator({
@@ -30,6 +32,8 @@ const ActivityStack = StackNavigator({
   ActivityPrestart: { screen: ActivityPrestart},
   ActivityRecord: { screen: ActivityRecord},
   ActivitySummary: { screen: ActivitySummary},
+  ActivityCategory: { screen: ActivityCategory},
+  ActivityCategoryTemp: { screen: ActivityCategoryTemp},
 });
 
 const JournalStack = StackNavigator({

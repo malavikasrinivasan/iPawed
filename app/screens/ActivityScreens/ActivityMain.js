@@ -26,6 +26,7 @@ import RecActCard from '../../components/RecActCard';
 import HorActCards from '../../components/HorActCards';
 import ActCat from '../../components/ActCat';
 import ActivityCard from '../../components/ActivityCard';
+import CategoryCard from '../../components/CategoryCard';
 
 export default class ActivityMain extends Component {
 
@@ -110,7 +111,7 @@ componentDidMount() {
             desc: child.val().desc,
             steps: child.val().steps,
             video: child.val().video,
-          imageurl: child.val().imageURL});
+            imageurl: child.val().imageURL});
       });
 
       console.log('items', items);
@@ -119,6 +120,23 @@ componentDidMount() {
           dataSource: this.state.dataSource.cloneWithRows(items)
       });
   });
+
+  firebase.database().ref('activityCategories/' + '/').on('value', (snap) => {
+    console.log('snap', snap);
+
+    var categories = [];
+    snap.forEach((child) => {
+      categories.push({
+          title: child.val().title,
+          imageurl: child.val().imageurl});
+    });
+
+    console.log('categories', categories);
+
+    this.setState({
+        dataSourceCat: categories
+    });
+});
 }
 
   render() {
@@ -249,7 +267,7 @@ componentDidMount() {
         <View>
         <View style={{flexDirection:'row', justifyContent: 'center'}}>
           <TouchableOpacity
-            style={{ justifyContent: 'center', alignItems:'center', margin: 10}}>
+            style={{ justifyContent: 'center', alignItems:'center', margin: 10}} onPress={() => this.props.navigation.navigate('ActivityCategoryTemp')}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Image source={require('../../img/wood.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
               <View style={styles.catInnerCirc}/>
@@ -294,6 +312,19 @@ componentDidMount() {
           </View>
         </View>
 
+        <View style={{flexDirection:'row', justifyContent: 'center'}}>
+          <FlatList
+              data = {this.state.dataSourceCat}
+              renderItem={this._renderItemFL.bind(this)}
+              keyExtractor={item => item.title} 
+          />
+          {/* <ListView
+                // style={styles.listView}
+                dataSource={this.state.dataSourceCat}
+                renderRow={this._renderItemFL.bind(this)}
+            /> */}
+        </View>
+
 
 
     </ScrollView>
@@ -317,6 +348,15 @@ componentDidMount() {
     return (
       <ActivityCard navigation={this.props.navigation} item={item} />
     );
+  }
+
+  _renderItemFL(item) {
+    console.log("FlatList")
+    const onPress = () => {
+      return (
+        <CategoryCard navigation={this.props.navigation} item={item} />
+      );
+    }
   }
 }
 
