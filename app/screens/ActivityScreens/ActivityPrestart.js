@@ -62,6 +62,9 @@ export default class ActivityPrestart extends Component {
   }
 
   render() {
+    const {params} = this.props.navigation.state;
+    const item = params.item;
+    const userID = params.userID;
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
@@ -93,7 +96,7 @@ export default class ActivityPrestart extends Component {
 
         <TouchableOpacity
           style={styles.buttonStyle}
-          onPress={() => this.props.navigation.navigate('ActivityRecord')}>
+          onPress={() => this.props.navigation.navigate('ActivityRecord', {item:item, userID:userID})}>
           <Text style={styles.textButtonStyle}>
             {"Next"}
           </Text>
