@@ -26,12 +26,19 @@ import RecActCard from '../../components/RecActCard';
 import HorActCards from '../../components/HorActCards';
 import ActCat from '../../components/ActCat';
 import ActivityCard from '../../components/ActivityCard';
+<<<<<<< HEAD
 import CategoryCard from '../../components/CategoryCard';
+=======
+import Drawer from 'react-native-drawer';
+import ControlPanel from './../../components/ControlPanel';
+>>>>>>> c7a4debcf5afcaf381ae9921ab09579fd81a8c16
 
 export default class ActivityMain extends Component {
 
-  static navigationOptions = {
-    tabBarIcon: ({tintColor}) => (
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+    return {
+      tabBarIcon: ({tintColor}) => (
         <Icon name="paw" size={24} color={tintColor}/>
       ),
     title: 'Activities',
@@ -45,11 +52,19 @@ export default class ActivityMain extends Component {
       fontSize: 28,
       color: 'black'
     },
+    headerRight:
+      <TouchableOpacity onPress={() => params.handleMenuToggle()}>
+      <Image
+        source={require("../../icon/menu.png")}
+        style={{height:16, width:20, justifyContent:'center', margin:13}}/>
+      </TouchableOpacity>
+    }
   };
 
   state = {
     userID:'',
-    recommendedActivities: null
+    recommendedActivities: null,
+    menuOpen: false
   }
 
   constructor(props) {
@@ -59,6 +74,11 @@ export default class ActivityMain extends Component {
             rowHasChanged: (row1, row2) => row1 !== row2
         })
     }
+}
+
+toggleControlPanel = () => {
+  this.state.menuOpen ? this._drawer.close() : this._drawer.open();
+  this.setState({menuOpen: !this.state.menuOpen});
 }
 
 getUserRecommendedActivities(userID){
@@ -72,7 +92,7 @@ getUserRecommendedActivities(userID){
   .catch((error) => {
     alert("Error")
   })
-  
+
 }
 
 getRef() {
@@ -80,7 +100,9 @@ getRef() {
 }
 
 componentDidMount() {
-
+  this.props.navigation.setParams({
+    handleMenuToggle: this.toggleControlPanel,
+  });
   const user = firebase.auth().currentUser;
   console.log("user",user)
   const userID = user ? user.uid : null;
@@ -91,7 +113,7 @@ componentDidMount() {
       userID: userID,
       // recommendedActivities: user.recommendedActivities
     });
-  
+
     // this.getUserRecommendedActivities(userID)
     // this.setState({
     //           dataSource: this.state.dataSource.cloneWithRows(this.state.recommendedActivities)
@@ -142,6 +164,21 @@ componentDidMount() {
   render() {
 
     return (
+      <Drawer
+        ref={(ref) => this._drawer = ref}
+        type="overlay"
+        side='right'
+        content={<ControlPanel navigation={this.props.navigation}/>}
+        captureGestures={true}
+        acceptTap={true}
+        tapToClose={true}
+        openDrawerOffset={0.3} // 20% gap on the right side of drawer
+        panCloseMask={0.3}
+        negotiatePan={true}
+        tweenHandler={(ratio) => ({
+          main: { opacity:(2-ratio)/2 }
+        })}
+        >
       <ScrollView style={{flex: 1, backgroundColor: '#F8F8F8'}}>
 
       <Text style={styles.screenTitle}>
@@ -264,12 +301,17 @@ componentDidMount() {
           {"Categories:"}
         </Text>
 
-        <View>
+        <View style={{margin:10}}>
         <View style={{flexDirection:'row', justifyContent: 'center'}}>
           <TouchableOpacity
+<<<<<<< HEAD
             style={{ justifyContent: 'center', alignItems:'center', margin: 10}} onPress={() => this.props.navigation.navigate('ActivityCategoryTemp')}>
+=======
+            style={{ justifyContent: 'center', alignItems:'center'}}>
+>>>>>>> c7a4debcf5afcaf381ae9921ab09579fd81a8c16
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Image source={require('../../img/wood.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
+              <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
+              <Image source={require('../../img/wood.jpg')} style={[styles.catImage, {position:'absolute'}]}/>
               <View style={styles.catInnerCirc}/>
               <Text style={styles.catTitle}>
                 {"Home"}
@@ -277,9 +319,10 @@ componentDidMount() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ justifyContent: 'center', alignItems:'center', margin: 10}}>
+            style={{ justifyContent: 'center', alignItems:'center'}}>
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Image source={require('../../img/grass.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
+              <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
+              <Image source={require('../../img/grass.jpg')} style={[styles.catImage, {position:'absolute'}]}/>
               <View style={styles.catInnerCirc}/>
               <Text style={styles.catTitle}>
                 {"Play"}
@@ -288,11 +331,12 @@ componentDidMount() {
           </TouchableOpacity>
         </View>
 
-          <View style={{flexDirection:'row', justifyContent: 'center', paddingTop: -10}}>
+          <View style={{flexDirection:'row', justifyContent: 'center'}}>
             <TouchableOpacity
-              style={{ justifyContent: 'center', alignItems:'center', margin: 10}}>
+              style={{ justifyContent: 'center', alignItems:'center'}}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Image source={require('../../img/fur.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
+                <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
+                <Image source={require('../../img/fur.jpg')} style={[styles.catImage, {position:'absolute'}]}/>
                 <View style={styles.catInnerCirc}/>
                 <Text style={styles.catTitle}>
                   {"Care"}
@@ -300,9 +344,10 @@ componentDidMount() {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{ justifyContent: 'center', alignItems:'center', margin: 10}}>
+              style={{ justifyContent: 'center', alignItems:'center'}}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Image source={require('../../img/blanket.jpg')} style={{width:120, height:120, borderRadius: 60}}/>
+                <View style={[styles.catImage, {backgroundColor:'black', opacity:1}]}/>
+                <Image source={require('../../img/blanket.jpg')} style={[styles.catImage, {position:'absolute'}]}/>
                 <View style={styles.catInnerCirc}/>
                 <Text style={styles.catTitle}>
                   {"Lazy"}
@@ -312,6 +357,7 @@ componentDidMount() {
           </View>
         </View>
 
+<<<<<<< HEAD
         <View style={{flexDirection:'row', justifyContent: 'center'}}>
           <FlatList
               data = {this.state.dataSourceCat}
@@ -327,7 +373,10 @@ componentDidMount() {
 
 
 
+=======
+>>>>>>> c7a4debcf5afcaf381ae9921ab09579fd81a8c16
     </ScrollView>
+    </Drawer>
     );
   }
 
@@ -387,8 +436,8 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   cardStyle: {
-    height: 120,
-    width: 120,
+    height: 135,
+    width: 135,
     margin: 10,
     marginLeft: 5,
     marginRight: 5,
@@ -401,19 +450,24 @@ const styles = StyleSheet.create({
   },
   catTitle: {
     textAlign: 'center',
-    color:'black',
+    color:'white',
     fontFamily: 'Century Gothic',
-    fontSize: 14,
+    fontSize: 18,
     opacity: 1,
     padding: 5,
     paddingBottom: 10,
-    fontStyle:'italic',
     position: 'absolute'
+  },
+  catImage: {
+    width:185,
+    height:185,
+    opacity: 0.6,
+    margin: 1,
   },
   catInnerCirc: {
     width:70,
     height:70,
-    borderRadius: 35,
+    opacity:0,
     position:'absolute',
     backgroundColor:'white'
   },
@@ -428,8 +482,8 @@ const styles = StyleSheet.create({
     backgroundColor:'rgba(255,255,255,0.8)',
   },
   thumbnail: {
-    width: 120,
-    height: 120,
+    width: 135,
+    height: 135,
     justifyContent:'flex-start',
     alignItems:'stretch',
     marginTop:-16,

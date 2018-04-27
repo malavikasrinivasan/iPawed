@@ -15,13 +15,17 @@ import ViewEventScreen from './../screens/JournalScreens/ViewEventScreen';
 import ActivityPrestart from './../screens/ActivityScreens/ActivityPrestart';
 import ActivityRecord from './../screens/ActivityScreens/ActivityRecord';
 import ActivitySummary from './../screens/ActivityScreens/ActivitySummary';
+<<<<<<< HEAD
 import ActivityCategory from './../screens/ActivityScreens/ActivityCategory';
 import ActivityCategoryTemp from './../screens/ActivityScreens/ActivityCategoryTemp';
 
+=======
+import AboutScreen from './../screens/LoginScreens/AboutScreen';
+>>>>>>> c7a4debcf5afcaf381ae9921ab09579fd81a8c16
 
 const LoginStack = StackNavigator({
-  Home: { screen: HomeScreen }
-}, 
+  Home: { screen: HomeScreen },
+},
 {
   initialRouteName: 'Home',
 });
@@ -40,14 +44,13 @@ const JournalStack = StackNavigator({
   Timeline: { screen: TimelineScreen },
   AddEvent: { screen: AddEventScreen },
   ViewEvent: { screen: ViewEventScreen},
-  initialRouteName: 'Timeline'
 });
 
 export default TabNavigator(
   {
     Login: { screen: LoginStack },
     Activity: { screen: ActivityStack },
-    Journal: { screen:  JournalStack   }
+    Journal: { screen: JournalStack },
   },
   {
     tabBarComponent: TabBarBottom,

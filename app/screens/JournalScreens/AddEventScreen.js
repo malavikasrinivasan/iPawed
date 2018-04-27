@@ -4,39 +4,56 @@ import { Avatar, SocialIcon, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 import ImagePicker from 'react-native-image-crop-picker';
+import Drawer from 'react-native-drawer';
+import ControlPanel from './../../components/ControlPanel';
 import Header from './../../components/Header';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Input } from 'react-native-elements';
+import * as firebase from 'firebase';
 
 export default class AddEventScreen extends Component {
 
-  static navigationOptions = {
-    title: 'Timeline',
-     tabBarIcon: ({tintColor}) => (
-        <Icon name="heart" size={24} color={tintColor} />
-      ),
-      headerTintColor: '#5AC8B0',
-      headerBackTitle: 'back',
-      headerBackTitleStyle: {
-        fontFamily: 'Century Gothic'
-      },
-      headerTitleStyle: {
-        fontFamily: 'SignPainter',
-        fontSize: 28,
-        color: 'black'
-      },
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+    return {
+      title: 'Timeline',
+       tabBarIcon: ({tintColor}) => (
+          <Icon name="heart" size={24} color={tintColor} />
+        ),
+        headerTintColor: '#5AC8B0',
+        headerBackTitle: 'back',
+        headerBackTitleStyle: {
+          fontFamily: 'Century Gothic'
+        },
+        headerTitleStyle: {
+          fontFamily: 'SignPainter',
+          fontSize: 28,
+          color: 'black'
+        },
+        headerRight:
+          <TouchableOpacity onPress={() => params.handleMenuToggle()}>
+          <Image
+            source={require("../../icon/menu.png")}
+            style={{height:16, width:20, justifyContent:'center', margin:13}}/>
+          </TouchableOpacity>
+      }
     };
 
   constructor(props){
     super(props);
+
     this.state = {
-      eventTitle : 'Event Title',
-      description : '',
+      userID : '',
+      eventTitle : '',
+      eventNotes : '',
+      eventLocation : '',
       eventDate : new Date(),
       behavior1: false,
       behavior2: false,
       behavior3: false,
       behavior4: false,
       behavior5: false,
+      menuOpen: false
     };
     this.toggleB1 = this.toggleB1.bind(this);
     this.toggleB2 = this.toggleB2.bind(this);
@@ -45,6 +62,11 @@ export default class AddEventScreen extends Component {
     this.toggleB5 = this.toggleB5.bind(this);
     this._onCamPress = this._onCamPress.bind(this);
     this._onLibPress = this._onLibPress.bind(this);
+  }
+
+  toggleControlPanel = () => {
+    this.state.menuOpen ? this._drawer.close() : this._drawer.open();
+    this.setState({menuOpen: !this.state.menuOpen});
   }
 
   toggleB1() {
@@ -67,12 +89,14 @@ export default class AddEventScreen extends Component {
     this.setState({behavior5: !this.state.behavior5});
   }
 
-  handleTitle = (text) => {
-    this.setState({eventTitle : text})
+  componentDidMount(){
+    const { params } = this.props.navigation.state;
+    this.setState({
+        userID: params.userID
+    });
+
   }
-  handleDescription = (text) => {
-    this.setState({description : text})
-  }
+
 
   _onCamPress() {
     ImagePicker.openCamera({
@@ -94,8 +118,57 @@ export default class AddEventScreen extends Component {
     });
   }
 
+  uploadMemory = () => {
+
+    firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails').once("value").then(
+      (snapshot) => 
+        { 
+            var memoryCount = snapshot.numChildren();
+            var memoryID = this.state.userID+"-"+(memoryCount+1);
+            console.log(memoryID);
+
+            firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
+              eventTitle : this.state.eventTitle,
+              eventDate : this.state.eventDate,
+              eventLocation: this.state.eventLocation,
+              eventNotes: this.state.eventNotes,
+            });
+
+  
+        }
+      )
+    this.props.navigation.navigate('Timeline');
+
+  }
+
+
+
+
+
+  componentDidMount(){
+    this.props.navigation.setParams({
+      handleMenuToggle: this.toggleControlPanel,
+    });
+  }
+
+
   render() {
     return (
+      <Drawer
+        ref={(ref) => this._drawer = ref}
+        type="overlay"
+        side='right'
+        content={<ControlPanel navigation={this.props.navigation}/>}
+        captureGestures={true}
+        acceptTap={true}
+        tapToClose={true}
+        openDrawerOffset={0.3} // 20% gap on the right side of drawer
+        panCloseMask={0.3}
+        negotiatePan={true}
+        tweenHandler={(ratio) => ({
+          main: { opacity:(2-ratio)/2 }
+        })}
+        >
       <View style={styles.container}>
         <Text style={styles.welcomeText}>
           Record a memory!
@@ -105,6 +178,8 @@ export default class AddEventScreen extends Component {
           style = {styles.commenttext}
           placeholder="Title"
           placeholderTextColor="grey"
+          onChangeText={eventTitle => this.setState({ eventTitle })}
+          value={this.state.eventTitle}
         />
 
         <View style={styles.box}>
@@ -199,6 +274,9 @@ export default class AddEventScreen extends Component {
               types: '(cities)' // default: 'geocode'
             }}
 
+            onChangeText={eventLocation => this.setState({ eventLocation })}
+            value={this.state.eventLocation}
+
             styles={{
               textInputContainer: {
                 width: '100%',
@@ -233,35 +311,35 @@ export default class AddEventScreen extends Component {
              <TouchableOpacity onPress={this.toggleB1}>
                <View style={[styles.behavior, {backgroundColor:'#D3B69B'}, this.state.behavior1 && styles.bSelect]}/>
              </TouchableOpacity>
-             <Text style={styles.tagtext}>Calm</Text>
+             <Text style={styles.tagtext}>Anxious</Text>
             </View>
 
             <View style={{margin:10}}>
              <TouchableOpacity onPress={this.toggleB2}>
                <View style={[styles.behavior, {backgroundColor:'#163250'}, this.state.behavior2 && styles.bSelect]}/>
              </TouchableOpacity>
-             <Text style={styles.tagtext}>Fearful</Text>
+             <Text style={styles.tagtext}>Aggressive</Text>
             </View>
 
             <View style={{margin:10}}>
              <TouchableOpacity onPress={this.toggleB3}>
                <View style={[styles.behavior, {backgroundColor:'#F7C68F'}, this.state.behavior3 && styles.bSelect]}/>
              </TouchableOpacity>
-             <Text style={styles.tagtext}>Happy</Text>
+             <Text style={styles.tagtext}>Calm</Text>
             </View>
 
             <View style={{margin:10}}>
              <TouchableOpacity onPress={this.toggleB4}>
                <View style={[styles.behavior, {backgroundColor:'#CC2539'}, this.state.behavior4 && styles.bSelect]}/>
              </TouchableOpacity>
-             <Text style={styles.tagtext}>Joyful</Text>
+             <Text style={styles.tagtext}>Excited</Text>
             </View>
 
             <View style={{margin:10}}>
              <TouchableOpacity onPress={this.toggleB5}>
                <View style={[styles.behavior, {backgroundColor:'#F9D64B'}, this.state.behavior5 && styles.bSelect]}/>
              </TouchableOpacity>
-             <Text style={styles.tagtext}>Mellow</Text>
+             <Text style={styles.tagtext}>Affectionate</Text>
             </View>
           </View>
          </View>
@@ -274,6 +352,8 @@ export default class AddEventScreen extends Component {
                 style = {styles.commenttext}
                 placeholder="Notes"
                 placeholderTextColor="grey"
+                onChangeText={eventNotes => this.setState({ eventNotes })}
+                value={this.state.eventNotes}
               />
           </View>
         </View>
@@ -281,7 +361,7 @@ export default class AddEventScreen extends Component {
         <View style={styles.submitContainer}>
         <TouchableOpacity
           style={styles.deletebutton}
-          onPress={() => this.props.navigation.navigate('Timeline')}>
+          onPress={() => this.props.navigation.goBack()}>
           <Text style={styles.deletebuttontext}> </Text>
           <Text style={styles.deletebuttontext}>DELETE</Text>
           <Text style={styles.deletebuttontext}> </Text>
@@ -289,13 +369,14 @@ export default class AddEventScreen extends Component {
 
         <TouchableOpacity
           style={styles.savebutton}
-          onPress={() => this.props.navigation.navigate('Timeline')}>
+          onPress={this.uploadMemory}>
           <Text style={styles.savebuttontext}> </Text>
           <Text style={styles.savebuttontext}>SAVE</Text>
           <Text style={styles.savebuttontext}> </Text>
         </TouchableOpacity>
         </View>
       </View>
+      </Drawer>
     );
   }
 }
