@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, AppRegistry, Button, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 
 import Header from './../../components/Header';
 import { Avatar } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker';
 import Timeline from 'react-native-timeline-listview'
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
+import * as firebase from 'firebase';
 
 
 export default class TimelineScreen extends Component {
@@ -17,7 +18,7 @@ export default class TimelineScreen extends Component {
     return {
       title: 'Timeline',
        tabBarIcon: ({tintColor}) => (
-          <Icon name="heart" size={24} color={tintColor} />
+          <Icon name="ios-heart" size={24} color={tintColor} />
         ),
         headerTintColor: '#5AC8B0',
         headerBackTitle: 'back',
@@ -38,42 +39,54 @@ export default class TimelineScreen extends Component {
       }
     };
 
+    
   constructor(){
     super();
     this.onEventPress = this.onEventPress.bind(this)
     this.renderDetail = this.renderDetail.bind(this)
 
-    this.data = [
-      {
-        time: 'January 4, 2018',
-        title: 'Adoption Day!',
-        description: 'Adopted Peanut!!!',
-        imageUrl: 'https://i.pinimg.com/736x/dd/a4/3b/dda43bf31a3e21896a423f19fbebdf70--german-shepherd-pups-shepherd-dogs.jpg'
-      },
-      {
-        time: 'January 6, 2018',
-        title: 'First walk',
-        description: 'Went on our first walk, Peanut did great',
-        imageUrl: 'https://i1.wp.com/doglers.com/wp-content/uploads/2015/01/Cute-german-shepherd-Puppy-Playing.jpg'
-      },
-      {
-        time: 'January 9, 2018',
-        title: 'Vet visit',
-        description: 'Peanut got all his shots today, looking healthy!',
-        imageUrl: 'https://thehappypooch.com/wp-content/uploads/2016/03/sleeping-dog.jpg'
-      },
-      {
-        time: 'January 13, 2018',
-        title: 'Hike',
-        description: 'Went hiking on the trails behind our house, Peanut got into a fight with another dog :(',
-        imageUrl: 'https://i.pinimg.com/originals/fe/76/e2/fe76e2bdd2dc58485114a9ee11f910e4.jpg'
-      }
-    ];
-
     this.state = {
+      userID : '',
       selected: null,
+      timelineData: null,
       menuOpen: false
     };
+
+    // console.log(this.data);
+  }
+
+  componentDidMount(){ 
+
+    this.props.navigation.setParams({
+      handleMenuToggle: this.toggleControlPanel,
+    });
+
+    const firebaseUserID = firebase.auth().currentUser.uid;
+    this.setState({userID: firebaseUserID});
+
+    var memories = [];
+
+    // getting data from firebase for the timeline
+    firebase.database().ref('userDetails/'+ firebaseUserID + '/journalDetails').once("value").then((snapshot) => {
+      // console.log(snapshot.val());      
+      snapshot.forEach( function(child) {
+        // console.log(child.val());
+        memory = child.val();
+        memories.push({
+
+          time: memory.eventDate,
+          title: memory.eventTitle,
+          description: memory.eventNotes,
+          imageUrl: memory.imageURL,
+          location: memory.eventLocation,
+        });
+      });
+
+      this.setState({
+      timelineData : memories
+    });
+  });
+
   }
 
   toggleControlPanel = () => {
@@ -83,21 +96,26 @@ export default class TimelineScreen extends Component {
 
     onEventPress(data){
       this.setState({selected: data});
-      this.props.navigation.navigate('ViewEvent');
+      this.props.navigation.navigate('ViewEvent', {eventData: data});
     }
 
-    renderDetail(rowData, sectionID, rowID) {
-    let title = <Text style={[styles.title]}>{rowData.title}</Text>
-    var desc = (
-            <View style={styles.descriptionContainer}>
-              <Text style={[styles.textDescription]}>{rowData.description}</Text>
-            </View>
-          )
+  renderDetail(rowData, sectionID, rowID) {
+    let title = null
+    var desc = null
     if(rowData.description && rowData.imageUrl)
       desc = (
-        <View style={styles.descriptionContainer}>
-          <Image source={{uri: rowData.imageUrl}} style={styles.image}/>
-          <Text style={[styles.textDescription]}>{rowData.description}</Text>
+        <View style={{borderColor:'#ddd', borderRadius: 10, borderWidth:1, padding:5,  shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 1.0}}>
+          <Text style={[styles.time, {flex: 1, alignSelf: 'flex-start'}]}>{rowData.time}</Text>
+          <View style={styles.descriptionContainer}>
+            <Image source={{uri: rowData.imageUrl}} style={styles.image} resizeMode="contain"/>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={[styles.title]}>{rowData.title}</Text>
+              <Icon name='ios-pin' size={15} color ="#777">
+                <Text style={styles.locationText}> {rowData.location}</Text>
+              </Icon>
+              <Text style={styles.descriptionText}>"{rowData.description}"</Text>
+            </View>
+          </View>
         </View>
       )
 
@@ -107,15 +125,16 @@ export default class TimelineScreen extends Component {
         {desc}
       </View>
       )
-    }
-
-    componentDidMount(){
-      this.props.navigation.setParams({
-        handleMenuToggle: this.toggleControlPanel,
-      });
-    }
+  }
 
   render() {
+
+    if (!this.state.timelineData) {
+      return (
+        <ActivityIndicator size='large' />
+        );
+    }
+
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
@@ -133,27 +152,25 @@ export default class TimelineScreen extends Component {
         })}
         >
       <View style={styles.container}>
-        <View style={styles.topRow}>
-
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('AddEvent')}>
-            <View style={{justifyContent:'center', alignItems:'center'}}>
-              <Image
-                source={require("../../icon/plus.png")}
-                style={{height:25, width:25, justifyContent:'center', margin:13}}/>
+        <View>
+            <View style={{flexDirection: 'row', justifyContent:'flex-start', alignItems:'center', marginTop: 10, marginLeft: 10}}>
+              <TouchableOpacity>
+                <Icon
+                  name="ios-add-circle" size = {50} color = "#5AC8B0"
+                  style={{justifyContent:'center', shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 1.0}}
+                  onPress={() => this.props.navigation.navigate('AddEvent', {userID: this.state.userID})}/>
+              </TouchableOpacity>
+              <View style={{ flex:1 }}>
+                <Text style={styles.generalText}>Memories with Hobbes </Text>
+              </View>
             </View>
-          </TouchableOpacity>
-
-          <Text style={styles.generalText}>
-            Memories with Peanut!
-          </Text>
         </View>
-        <View style={styles.timelineContainer}>
+        <ScrollView style={styles.timelineContainer} >
           <Timeline
-            data = {this.data}
-            circleSize={12}
-            circleColor='#5AC8B0'
-            lineColor='grey'
+            data = {this.state.timelineData}
+            circleSize={15}
+            circleColor= '#5AC8B0'
+            lineColor='gray'
             lineWidth={1}
             timeContainerStyle={{minWidth:0, marginTop: -5}}
             timeStyle={styles.time}
@@ -162,11 +179,13 @@ export default class TimelineScreen extends Component {
             options={{
               style:{paddingTop:5}
             }}
-            columnFormat='two-column'
+            innerCircle={'none'}
+            // columnFormat='two-column'
             onEventPress={this.onEventPress}
             renderDetail={this.renderDetail}
+            showTime = {false}
         />
-      </View>
+      </ScrollView>
     </View>
     </Drawer>
     );
@@ -176,38 +195,47 @@ export default class TimelineScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   time: {
-    fontSize:14,
-    textAlign: 'right',
-    backgroundColor:'white',
-    color:'black',
+    fontSize:15,
+    color:'white',
+    backgroundColor: '#5AC8B0',
+    opacity: 0.8,
+    borderColor: '#5AC8B0',
+    borderWidth: 5,
     fontFamily:'Century Gothic',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    shadowOffset:{height: 1},
+    shadowColor: '#bbb',
+    shadowOpacity: 1.0,
+
   },
   title: {
-    fontSize: 12,
-    color: 'black',
-    fontWeight: 'bold',
-    fontFamily:'Century Gothic'
+    fontSize: 17,
+    color: '#5AC8B0',
+    opacity: 1.5,
+    // fontWeight: 'bold',
+    fontFamily:'Century Gothic',
+    marginTop: 5,
   },
   descriptionContainer:{
     flexDirection: 'row',
-    paddingRight: 50
+    marginLeft: 10,
   },
   textDescription: {
+    flex: 1, 
+    flexWrap: 'wrap',
     fontSize: 10,
     color:'black',
     fontFamily:'Century Gothic',
     margin: 5,
   },
   generalText: {
+    textAlign: 'center',
     fontFamily: 'Century Gothic',
-    fontSize: 26,
-    color: 'black',
-    margin: 10
+    fontSize: 24,
+    color: '#444',
   },
   topRow: {
     flexDirection: 'row',
@@ -216,18 +244,34 @@ const styles = StyleSheet.create({
   },
   timelineContainer: {
     flex: 1,
+    // alignItems: "center",
     margin: 10
   },
   list: {
     flex: 1,
-    marginTop:20,
+    margin:20,
+  },
+  descriptionText: {
+    fontFamily: 'Century Gothic',
+    color: '#777',
+    fontSize: 13,
+    marginTop: 5,
+    marginLeft: 20
   },
   image: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
-    margin: 5
-  }
+    flex: 1,
+    width: 150,
+    height: 150,
+    marginTop: 10,
+    marginLeft: 0,
+  },
+  locationText: {
+    fontFamily: 'Century Gothic',
+    color: '#777',
+    fontSize: 12,
+    marginTop: 5
+  },
+  
 });
 
-AppRegistry.registerComponent('TimelineScreen', () => TimelineScreen);
+

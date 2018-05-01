@@ -7,14 +7,11 @@ import { Card,
 
 //   const navigation = this.props.navigation;
 
-export default class ActivityCard extends Component {
+export default class SpecificCategoryCard extends Component {
 	render() {
         const item = this.props.item
-        const userID = this.props.userID
-        console.log(item)
-        console.log("Image",this.props.item.imageurl)
 		return (
-			<TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail', {item:item, userID:userID})}>
+			<TouchableOpacity style={{ justifyContent: 'center', alignItems:'center', margin: 18}} onPress={() => this.props.navigation.navigate('ActivityDetail', {item})}>
               <Card containerStyle={styles.cardStyle}>
                     <ImageBackground
                         style={styles.thumbnail}
@@ -112,4 +109,4 @@ const styles = StyleSheet.create({
     },
   });
 
-  module.exports = ActivityCard;
+  module.exports = SpecificCategoryCard;

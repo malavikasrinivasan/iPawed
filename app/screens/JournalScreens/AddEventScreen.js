@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, TextInput, DatePickerIOS, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, TextInput, DatePickerIOS, TouchableOpacity, Image, Alert} from 'react-native';
 import { Avatar, SocialIcon, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 import ImagePicker from 'react-native-image-crop-picker';
-import Header from './../../components/Header';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
-
+import Header from './../../components/Header';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Input } from 'react-native-elements';
+import * as firebase from 'firebase';
 
 export default class AddEventScreen extends Component {
 
@@ -40,10 +41,14 @@ export default class AddEventScreen extends Component {
 
   constructor(props){
     super(props);
+
     this.state = {
-      eventTitle : 'Event Title',
-      description : '',
-      eventDate : new Date(),
+      userID : null,
+      eventTitle : '',
+      eventNotes : '',
+      eventLocation : '',
+      eventDate : '',
+      imageUpload: true,
       behavior1: false,
       behavior2: false,
       behavior3: false,
@@ -85,12 +90,18 @@ export default class AddEventScreen extends Component {
     this.setState({behavior5: !this.state.behavior5});
   }
 
-  handleTitle = (text) => {
-    this.setState({eventTitle : text})
+  componentDidMount(){
+
+    this.props.navigation.setParams({
+      handleMenuToggle: this.toggleControlPanel,
+    });
+
+    const { params } = this.props.navigation.state;
+    this.setState({
+        userID: params.userID
+    });
   }
-  handleDescription = (text) => {
-    this.setState({description : text})
-  }
+
 
   _onCamPress() {
     ImagePicker.openCamera({
@@ -112,11 +123,60 @@ export default class AddEventScreen extends Component {
     });
   }
 
-  componentDidMount(){
-    this.props.navigation.setParams({
-      handleMenuToggle: this.toggleControlPanel,
-    });
+  validateInput = () => {
+
+    emptyvals = []
+    if(this.state.eventTitle == '') {
+      emptyvals.push('Title')
+    }
+    if(this.state.eventDate == '') {
+      emptyvals.push('Date')
+    }
+    if(!this.state.imageUpload) {
+      emptyvals.push('Media')
+    }
+    if(this.state.behavior1 == false && this.state.behavior2 == false  && this.state.behavior3 == false  && this.state.behavior4 == false  && this.state.behavior5 == false) {
+      console.log("aaaaaaaaaahhhhhhhhhh");
+      emptyvals.push('Behaviors')
+    }
+    if(emptyvals.length == 0) {
+      this.uploadMemory()
+    }
+    else {
+      Alert.alert("Please enter " + emptyvals.join(", "))
+    }
+
   }
+
+  uploadMemory = () => {
+
+    firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails').once("value").then(
+      (snapshot) => 
+        { 
+            var memoryCount = snapshot.numChildren();
+            var memoryID = this.state.userID+"-"+(memoryCount+1);
+            console.log(memoryID);
+
+            firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
+              eventTitle : this.state.eventTitle,
+              eventDate : this.state.eventDate,
+              eventLocation: this.state.eventLocation,
+              eventNotes: this.state.eventNotes,
+              imageURL: 'https://i.pinimg.com/originals/fe/76/e2/fe76e2bdd2dc58485114a9ee11f910e4.jpg',
+              anxious: this.state.behavior1,
+              aggressive: this.state.behavior2,
+              calm: this.state.behavior3,
+              excited: this.state.behavior4,
+              affectionate: this.state.behavior5,
+            });
+
+  
+        }
+      )
+    this.props.navigation.navigate('Timeline');
+
+  }
+
 
   render() {
     return (
@@ -144,6 +204,8 @@ export default class AddEventScreen extends Component {
           style = {styles.commenttext}
           placeholder="Title"
           placeholderTextColor="grey"
+          onChangeText={eventTitle => this.setState({ eventTitle })}
+          value={this.state.eventTitle}
         />
 
         <View style={styles.box}>
@@ -187,7 +249,7 @@ export default class AddEventScreen extends Component {
             date={this.state.eventDate}
             mode="date"
             placeholder="Date"
-            format="YYYY-MM-DD"
+            format="MMMM D, YYYY"
             minDate="2010-01-01"
             maxDate="2020-12-31"
             confirmBtnText="Confirm"
@@ -235,8 +297,11 @@ export default class AddEventScreen extends Component {
               // available options: https://developers.google.com/places/web-service/autocomplete
               key: 'AIzaSyCYo6KjI8l0Dk_nx-P4w3T_UOUKFyygMXc',
               language: 'en', // language of the results
-              types: '(cities)' // default: 'geocode'
+              types: '(regions)' // default: 'geocode'
             }}
+            
+            onChangeText={eventLocation => this.setState({ eventLocation })}
+            value={this.state.eventLocation}
 
             styles={{
               textInputContainer: {
@@ -313,6 +378,8 @@ export default class AddEventScreen extends Component {
                 style = {styles.commenttext}
                 placeholder="Notes"
                 placeholderTextColor="grey"
+                onChangeText={eventNotes => this.setState({ eventNotes })}
+                value={this.state.eventNotes}
               />
           </View>
         </View>
@@ -320,7 +387,7 @@ export default class AddEventScreen extends Component {
         <View style={styles.submitContainer}>
         <TouchableOpacity
           style={styles.deletebutton}
-          onPress={() => this.props.navigation.navigate('Timeline')}>
+          onPress={() => this.props.navigation.goBack()}>
           <Text style={styles.deletebuttontext}> </Text>
           <Text style={styles.deletebuttontext}>DELETE</Text>
           <Text style={styles.deletebuttontext}> </Text>
@@ -328,7 +395,7 @@ export default class AddEventScreen extends Component {
 
         <TouchableOpacity
           style={styles.savebutton}
-          onPress={() => this.props.navigation.navigate('Timeline')}>
+          onPress={this.validateInput}>
           <Text style={styles.savebuttontext}> </Text>
           <Text style={styles.savebuttontext}>SAVE</Text>
           <Text style={styles.savebuttontext}> </Text>

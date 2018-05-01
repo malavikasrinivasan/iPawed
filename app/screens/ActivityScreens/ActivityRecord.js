@@ -16,6 +16,8 @@ import {Stopwatch} from 'react-native-stopwatch-timer';
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
 
+import * as firebase from 'firebase';
+
 class CommentInput extends Component {
   render() {
     return (
@@ -87,6 +89,38 @@ export default class ActivityRecord extends Component{
 
   toggleStopwatch() {
     this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
+    const {params} = this.props.navigation.state
+    // console.log(params.item.title)
+    // console.log(new Date().getFullYear())
+    // console.log(new Date().getHours())
+    const recActID = params.item.title.replace(" ","") + new Date().getUTCFullYear() + new Date().getUTCMonth() + new Date().getUTCDate() + new Date().getUTCHours() + new Date().getUTCMinutes() + new Date().getUTCSeconds()
+
+    // if (this.state.stopwatchStart){
+    //   firebase.database().ref('userDetails/'+ this.state.userID + '/recentActivities').set({
+    //     ActivityID : recActID
+        
+    //   })
+    // }
+    if (!this.state.stopwatchStart)
+    {
+      startDate = new Date()
+      // console.log("Set")
+      firebase.database().ref('userDetails/'+ params.userID + '/recentActivities/' + recActID + '/' ).set({
+        title : params.item.title,
+        category : params.item.category,
+        status: "In Progress",
+        behavioralMarker: {Anxious: "",
+                           Aggressive: "",
+                           Calm: "",
+                           Excited: "",
+                           Affectionate: "" },
+        duration: 0,
+        activityStartDate: startDate,
+        image: "",
+        distance: "",
+        journalID: ""
+      });
+    }
   }
 
   resetStopwatch() {
@@ -139,6 +173,23 @@ export default class ActivityRecord extends Component{
     this.props.navigation.setParams({
       handleMenuToggle: this.toggleControlPanel,
     });
+
+    const user = firebase.auth().currentUser;
+    const userID = user ? user.uid : null;
+    console.log("uid",userID)
+
+    if(userID) {
+      this.setState({
+        userID: userID,
+      });
+    }
+
+    const {params} = this.props.navigation.state
+    console.log(params)
+
+    // firebase.database().ref('userDetails/'+ this.state.userID + '/recentActivities').set({
+      
+    // })
   }
 
   render(){

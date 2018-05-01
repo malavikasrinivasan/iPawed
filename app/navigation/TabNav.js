@@ -15,6 +15,8 @@ import ViewEventScreen from './../screens/JournalScreens/ViewEventScreen';
 import ActivityPrestart from './../screens/ActivityScreens/ActivityPrestart';
 import ActivityRecord from './../screens/ActivityScreens/ActivityRecord';
 import ActivitySummary from './../screens/ActivityScreens/ActivitySummary';
+import ActivityCategory from './../screens/ActivityScreens/ActivityCategory';
+
 import AboutScreen from './../screens/LoginScreens/AboutScreen';
 
 const LoginStack = StackNavigator({
@@ -30,13 +32,13 @@ const ActivityStack = StackNavigator({
   ActivityPrestart: { screen: ActivityPrestart},
   ActivityRecord: { screen: ActivityRecord},
   ActivitySummary: { screen: ActivitySummary},
+  ActivityCategory: { screen: ActivityCategory},
 });
 
 const JournalStack = StackNavigator({
   Timeline: { screen: TimelineScreen },
   AddEvent: { screen: AddEventScreen },
   ViewEvent: { screen: ViewEventScreen},
-  initialRouteName: 'Timeline'
 });
 
 export default TabNavigator(
