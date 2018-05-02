@@ -150,7 +150,6 @@ export default class ActivityDetail extends Component {
           dataSource={this.state.stepsDataSource}
           renderRow={(actStep) => {return this._renderActStepRow(actStep) }} /> */}
 
-        <View style={{backgroundColor:'white', width:400, height:500}}>
         <TouchableOpacity
           style={styles.buttonStyle}
           onPress={() => this.props.navigation.navigate('ActivityPrestart', {item:item, userID:userID})}>
@@ -158,7 +157,6 @@ export default class ActivityDetail extends Component {
             {"Next"}
           </Text>
         </TouchableOpacity>
-        </View>
       </ScrollView>
       </Drawer>
     );

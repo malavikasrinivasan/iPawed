@@ -46,7 +46,7 @@ class CollapsibleCard extends Component {
         this.anime.expanded = !this.anime.expanded;
         Animated.timing(this.anime.height, {
             toValue: this.anime.expanded ? this._getMaxValue() : this._getMinValue(),
-            duration: 300,
+            duration: 0,
         }).start();
         if (this.anime.expanded) {
           this.setState({icon: 'chevron-down'})
@@ -66,7 +66,9 @@ class CollapsibleCard extends Component {
               </View>
 
                 <Animated.View style={{ height: this.anime.height }} onLayout={this._initContentHeight}>
+                  <Text style={[styles.stepDesc, this.anime.expanded && {opacity:1}]}>
                     {this.props.children}
+                  </Text>
                 </Animated.View>
             </View>
         );
@@ -87,6 +89,14 @@ const styles = StyleSheet.create({
     marginRight: 0,
     flex: 0.06
   },
+  stepDesc: {
+   marginLeft: 25,
+   marginTop:0,
+   fontFamily: 'Century Gothic',
+   fontSize: 12,
+   fontStyle: 'italic',
+   opacity:0
+ },
 });
 
 module.exports=CollapsibleCard;
