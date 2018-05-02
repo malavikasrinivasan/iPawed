@@ -49,11 +49,56 @@ export default class TimelineScreen extends Component {
       userID : '',
       selected: null,
       timelineData: null,
-      menuOpen: false
+      menuOpen: false,
+      memoryUpdate: false
     };
 
     // console.log(this.data);
   }
+
+  memoryUpdate = (memoryUpdate) => {
+    // this.setState({memoryUpdate})
+    console.log(memoryUpdate);
+    const firebaseUserID = firebase.auth().currentUser.uid;
+    this.setState({userID: firebaseUserID});
+    console.log(firebaseUserID);
+
+    var memories = [];
+
+    // getting data from firebase for the timeline
+    firebase.database().ref('userDetails/'+ firebaseUserID + '/journalDetails').once("value").then((snapshot) => {
+      // console.log(snapshot.val());
+      console.log(snapshot.numChildren());            
+      snapshot.forEach( function(child) {
+
+        console.log(child.val());
+        memory = child.val();
+        memories.push({
+
+          time: memory.eventDate,
+          title: memory.eventTitle,
+          description: memory.eventNotes,
+          imageUrl: memory.imageURL,
+          location: memory.eventLocation,
+          anxious: memory.anxious,
+          aggressive: memory.aggressive,
+          calm: memory.calm,
+          excited: memory.excited,
+          affectionate: memory.affectionate,
+        });
+      });
+
+      console.log(length(memories));
+
+      this.setState({
+        timelineData : memories
+      });
+      
+    });
+
+  }
+
+
 
   componentDidMount(){ 
 
@@ -63,12 +108,12 @@ export default class TimelineScreen extends Component {
 
     const firebaseUserID = firebase.auth().currentUser.uid;
     this.setState({userID: firebaseUserID});
+    console.log(firebaseUserID);
 
     var memories = [];
 
     // getting data from firebase for the timeline
     firebase.database().ref('userDetails/'+ firebaseUserID + '/journalDetails').once("value").then((snapshot) => {
-      // console.log(snapshot.val());      
       snapshot.forEach( function(child) {
         // console.log(child.val());
         memory = child.val();
@@ -79,12 +124,18 @@ export default class TimelineScreen extends Component {
           description: memory.eventNotes,
           imageUrl: memory.imageURL,
           location: memory.eventLocation,
+          anxious: memory.anxious,
+          aggressive: memory.aggressive,
+          calm: memory.calm,
+          excited: memory.excited,
+          affectionate: memory.affectionate,
         });
       });
 
       this.setState({
-      timelineData : memories
-    });
+        timelineData : memories
+      });
+      
   });
 
   }
@@ -96,6 +147,7 @@ export default class TimelineScreen extends Component {
 
     onEventPress(data){
       this.setState({selected: data});
+      console.log(data);
       this.props.navigation.navigate('ViewEvent', {eventData: data});
     }
 
@@ -135,6 +187,14 @@ export default class TimelineScreen extends Component {
         );
     }
 
+    // console.log("Inside render now!");
+    // console.log(this.state.timelineData);
+
+    // if(this.state.memoryUpdate) {
+    //   this.componentDidMount()
+    // }
+
+
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
@@ -158,7 +218,7 @@ export default class TimelineScreen extends Component {
                 <Icon
                   name="ios-add-circle" size = {50} color = "#5AC8B0"
                   style={{justifyContent:'center', shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 1.0}}
-                  onPress={() => this.props.navigation.navigate('AddEvent', {userID: this.state.userID})}/>
+                  onPress={() => this.props.navigation.navigate('AddEvent', {userID: this.state.userID, onNavigateBack: this.memoryUpdate})}/>
               </TouchableOpacity>
               <View style={{ flex:1 }}>
                 <Text style={styles.generalText}>Memories with Hobbes </Text>
@@ -213,7 +273,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    color: '#5AC8B0',
+    color: '#163250',
     opacity: 1.5,
     // fontWeight: 'bold',
     fontFamily:'Century Gothic',

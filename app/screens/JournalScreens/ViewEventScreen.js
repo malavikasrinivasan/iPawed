@@ -88,22 +88,19 @@ export default class ViewEventScreen extends Component {
           <Text style={[styles.welcomeText, {alignSelf: 'center'}]}>
             {params.eventData.title}
           </Text>
-          <Icon name="edit" size={20} color="black" style={{marginTop: 10, alignSelf: 'center'}}
-          onPress={() => this.props.navigation.navigate('AddEvent')}/>
         </View>
         <Image
           style={styles.image}
           source={{uri: params.eventData.imageurl}}
           resizeMode="contain"
-          
         />
         <View style = {styles.uploadContainer}>
           <Text style={styles.label}> {params.eventData.time} </Text>
-          <Text style={styles.label}> Berkeley, CA </Text>
+          <Text style={styles.label}> {params.eventData.location} </Text>
         </View>
          <View style={styles.box}>
            <View style={styles.commentbox}>
-              <Text style={styles.subheader}>Notes:</Text>
+              <Text style={styles.subheader}>Notes</Text>
               <Text style={styles.commenttext}>
                 {params.eventData.description}
               </Text>
