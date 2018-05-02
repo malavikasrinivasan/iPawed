@@ -19,7 +19,10 @@ export default class ControlPanel extends Component {
     return (
       <ScrollView style={styles.menu}>
         <TouchableOpacity>
-          <Text style={styles.links}>Update profile</Text>
+          <Text style={styles.links}>Update Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.links}>Update Goals</Text>
         </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.links}>Reset Password</Text>

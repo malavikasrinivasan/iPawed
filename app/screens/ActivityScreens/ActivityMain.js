@@ -84,7 +84,7 @@ toggleControlPanel = () => {
 
 setRecommendedActivities(userID){
   firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/').remove();
-  firebase.database().ref('activityCategories/Train/Activities/').once('value')
+  firebase.database().ref('activities/').once('value')
   .then((snapshot) => {
     snapshot.forEach((childSnapshot) => {
       var key = childSnapshot.key;
@@ -271,7 +271,7 @@ componentDidMount() {
           {"Categories:"}
         </Text>
 
-        <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', marginTop:10}}>
           <ListView
                 contentContainerStyle={{flexDirection: 'row',
                 flexWrap: 'wrap'}}
