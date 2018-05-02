@@ -10,6 +10,7 @@ import { Card,
 export default class SpecificCategoryCard extends Component {
 	render() {
         const item = this.props.item
+
 		return (
 			<TouchableOpacity style={{ justifyContent: 'center', alignItems:'center', margin: 18}} onPress={() => this.props.navigation.navigate('ActivityDetail', {item})}>
               <Card containerStyle={styles.cardStyle}>

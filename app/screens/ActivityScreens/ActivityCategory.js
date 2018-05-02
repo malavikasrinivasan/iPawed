@@ -61,40 +61,22 @@ export default class ActivityCategory extends Component {
     }
 }
 
-getActivities(category){
-  firebase.database().ref('userDetails/' + userID + '/' + 'recommendedActivities' + '/').once('value')
-  .then((snapshot) => {
-    this.setState({
-      recommendedActivities: snapshot.val()
-    });
-    // console.log(recommendedActivities)
-  })
-  .catch((error) => {
-    alert("Error")
-  })
-  
-}
-
-getRef() {
-  return firebase.database().ref();
-}
-
 componentDidMount() {
 
   const {params} = this.props.navigation.state
   console.log(params.item)
 
-  firebase.database().ref('activityCategories/' + params.item.title + '/' + 'Activities').on('value', (snap) => {
-      console.log('snap', snap);
+  firebase.database().ref('activityCategories/' + params.item.title + '/' + 'Activities' + '/').once('value')
+  .then( (snap) => {
 
       var items = [];
       snap.forEach((child) => {
           items.push({
             title: child.val().title,
-            category: child.val().category,
+            category: child.val().Category,
             desc: child.val().desc,
-            steps: child.val().steps,
-            video: child.val().video,
+            steps: child.val().Steps,
+            video: child.val().Video,
             imageurl: child.val().imageurl});
       });
 

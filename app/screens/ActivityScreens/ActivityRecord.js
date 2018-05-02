@@ -12,11 +12,15 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-crop-picker';
+import DatePicker from 'react-native-datepicker';
 import {Stopwatch} from 'react-native-stopwatch-timer';
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import * as firebase from 'firebase';
+
+const today = new Date();
 
 class CommentInput extends Component {
   render() {
@@ -66,6 +70,10 @@ export default class ActivityRecord extends Component{
     this.state = {
       stopwatchStart: false,
       stopwatchReset: false,
+      eventTitle : '',
+      eventNotes : '',
+      eventLocation : '',
+      eventDate : new Date(),
       behavior1: false,
       behavior2: false,
       behavior3: false,
@@ -80,6 +88,7 @@ export default class ActivityRecord extends Component{
     this.toggleB3 = this.toggleB3.bind(this);
     this.toggleB4 = this.toggleB4.bind(this);
     this.toggleB5 = this.toggleB5.bind(this);
+    this._onAddPress = this._onAddPress.bind(this);
   }
 
   toggleControlPanel = () => {
@@ -185,7 +194,7 @@ export default class ActivityRecord extends Component{
     }
 
     const {params} = this.props.navigation.state
-    console.log(params)
+    // console.log(params)
 
     // firebase.database().ref('userDetails/'+ this.state.userID + '/recentActivities').set({
       
@@ -193,6 +202,8 @@ export default class ActivityRecord extends Component{
   }
 
   render(){
+    const {params} = this.props.navigation.state;
+    
         return(
         <Drawer
           ref={(ref) => this._drawer = ref}
@@ -209,14 +220,118 @@ export default class ActivityRecord extends Component{
             main: { opacity:(2-ratio)/2 }
           })}
           >
+          <View style={styles.box}>
+          <View style={{margin:5}}>
+            <Text style={styles.addbuttontext}>
+              Take {params.petName}'s photo!
+            </Text>
+            <Text style={styles.addbuttontext}>
+            </Text>
+            <View style = {styles.uploadContainer}>
+              <View style={{flex:0.5}}>
+                <TouchableOpacity onPress={this._onCamPress}>
+                  <View style={{justifyContent:'center', alignItems:'center'}}>
+                    <Image
+                      source={require("../../icon/camera.png")}
+                      style={{height: 25, width: 25, justifyContent: 'center'}}/>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={[styles.dateContainer, {flexDirection:'row'}]}>
+          {/* <Text style={styles.label}>Location</Text> */}
+            <GooglePlacesAutocomplete
+              placeholder='Location'
+              minLength={2} // minimum length of text to search
+              autoFocus={false}
+              returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+              listViewDisplayed='auto'    // true/false/undefined
+              fetchDetails={true}
+              renderDescription={row => row.description} // custom description render
+              onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+                console.log(data, details);
+              }}
+
+              getDefaultValue={() => ''}
+
+              query={{
+                // available options: https://developers.google.com/places/web-service/autocomplete
+                key: 'AIzaSyCYo6KjI8l0Dk_nx-P4w3T_UOUKFyygMXc',
+                language: 'en', // language of the results
+                types: '(cities)' // default: 'geocode'
+              }}
+
+              onChangeText={eventLocation => this.setState({ eventLocation })}
+              value={this.state.eventLocation}
+
+              styles={{
+                textInputContainer: {
+                  width: '100%',
+                  backgroundColor: 'rgba(0,0,0,0)',
+                  borderTopWidth: 0,
+                  borderBottomWidth:0
+                },
+                description: {
+                  fontWeight: 'bold'
+                },
+                textInput: {
+                  color: 'black',
+                  fontSize: 14,
+                  fontFamily:'Century Gothic'
+                },
+                predefinedPlacesDescription: {
+                  color: '#1faadb'
+                }
+              }}
+
+              currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
+            />
+            
+            <Text style={styles.label}>Date</Text>
+            <DatePicker
+            date={this.state.eventDate}
+            mode="date"
+            placeholder="Date"
+            format="YYYY-MM-DD"
+            minDate="1990-01-01"
+            maxDate={today}
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            // iconComponent={<Icon name="calendar" size = {24} color="gray" />}
+            customStyles={{
+              dateInput: {
+                borderWidth: 0
+              },
+              btnTextConfirm: {
+                color: 'black',
+                fontFamily: 'Century Gothic'
+              },
+              btnTextCancel: {
+                color: 'black',
+                fontFamily: 'Century Gothic'
+              },
+              dateText: {
+                color: 'black',
+                fontFamily: 'Century Gothic'
+              }
+
+            }}
+            onDateChange={(date) => {this.setState({eventDate: date})}}
+            />
+
+        </View>
+        
         <View style={styles.screenContainer}>
-          <View style={{paddingTop:15, paddingBottom:15}}>
+          {/* <View style={{paddingTop:15, paddingBottom:15}}>
             <Text style={styles.header}>TIME</Text>
             <Stopwatch laps start={this.state.stopwatchStart}
                 reset={this.state.stopwatchReset}
                 options={options}
                 getTime={this.getFormattedTime} />
-          </View>
+          </View> */}
 
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -239,7 +354,7 @@ export default class ActivityRecord extends Component{
             </View>
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
-          <View style={{flexDirection:'row', paddingTop:10, paddingBottom:10}}>
+          {/* <View style={{flexDirection:'row', paddingTop:10, paddingBottom:10}}>
             <TouchableOpacity
               style={styles.addimg}
               onPress={this._onAddPress}>
@@ -257,7 +372,7 @@ export default class ActivityRecord extends Component{
                />
              </View>
 
-          </View>
+          </View> */}
 
 
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
@@ -266,35 +381,35 @@ export default class ActivityRecord extends Component{
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <View style={{margin:10}}>
                <TouchableOpacity onPress={this.toggleB1}>
-                 <View style={[styles.behavior, {backgroundColor:'#D3B69B'}, this.state.behavior1 && styles.bSelect]}/>
+                 <View style={[styles.behavior, {backgroundColor:'#4E0250'}, this.state.behavior1 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Anxious</Text>
               </View>
 
               <View style={{margin:10}}>
                <TouchableOpacity onPress={this.toggleB2}>
-                 <View style={[styles.behavior, {backgroundColor:'#163250'}, this.state.behavior2 && styles.bSelect]}/>
+                 <View style={[styles.behavior, {backgroundColor:'#CC2539'}, this.state.behavior2 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Aggressive</Text>
               </View>
 
               <View style={{margin:10}}>
                <TouchableOpacity onPress={this.toggleB3}>
-                 <View style={[styles.behavior, {backgroundColor:'#F7C68F'}, this.state.behavior3 && styles.bSelect]}/>
+                 <View style={[styles.behavior, {backgroundColor:'#6592CC'}, this.state.behavior3 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Calm</Text>
               </View>
 
               <View style={{margin:10}}>
                <TouchableOpacity onPress={this.toggleB4}>
-                 <View style={[styles.behavior, {backgroundColor:'#CC2539'}, this.state.behavior4 && styles.bSelect]}/>
+                 <View style={[styles.behavior, {backgroundColor:'#5AC8B0'}, this.state.behavior4 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Excited</Text>
               </View>
 
               <View style={{margin:10}}>
                <TouchableOpacity onPress={this.toggleB5}>
-                 <View style={[styles.behavior, {backgroundColor:'#F9D64B'}, this.state.behavior5 && styles.bSelect]}/>
+                 <View style={[styles.behavior, {backgroundColor:'#C58502'}, this.state.behavior5 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Affectionate</Text>
               </View>
@@ -404,12 +519,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Century Gothic'
   },
   addimg: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
+    // width: 350,
+    height: 180,
+    alignSelf: 'stretch',
     backgroundColor: '#F0F0F0',
     justifyContent: 'center',
-    margin:10,
+    // margin:10,
     borderColor: 'lightgrey',
     borderWidth: 0.5
   },
@@ -466,6 +581,31 @@ const styles = StyleSheet.create({
     margin: 5,
     opacity: 0.8
   },
+  subheader: {
+    color: 'black',
+    fontSize: 15,
+    fontFamily: 'Century Gothic',
+    paddingBottom: 5,
+    textAlign: 'center'
+  },
+  label: {
+    margin: 10,
+    color: 'black',
+    fontSize: 10,
+    fontFamily:'Century Gothic'
+  },
+  box: {
+    height: 180,
+    alignItems: 'stretch',
+    backgroundColor: '#F6F6F6',
+    borderColor: '#E0E0E0',
+    borderWidth: 1.5,
+    justifyContent: 'center',
+  },
+  uploadContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+   },
 })
 
 const handleTimerComplete = () => alert("custom completion function");
