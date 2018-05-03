@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, TextInput, DatePickerIOS, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, TextInput, DatePickerIOS, TouchableOpacity, Image, Alert} from 'react-native';
 import { Avatar, SocialIcon, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
@@ -9,6 +9,7 @@ import ControlPanel from './../../components/ControlPanel';
 import Header from './../../components/Header';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Input } from 'react-native-elements';
+import RNFetchBlob from 'react-native-fetch-blob';
 import * as firebase from 'firebase';
 
 export default class AddEventScreen extends Component {
@@ -43,17 +44,21 @@ export default class AddEventScreen extends Component {
     super(props);
 
     this.state = {
-      userID : '',
+      userID : null,
       eventTitle : '',
       eventNotes : '',
       eventLocation : '',
-      eventDate : new Date(),
+      eventDate : '',
+      imageUrl : '',
+      image: null,
+      imageUpload: false,
       behavior1: false,
       behavior2: false,
       behavior3: false,
       behavior4: false,
       behavior5: false,
-      menuOpen: false
+      menuOpen: false,
+      memoryUpdate: true,
     };
     this.toggleB1 = this.toggleB1.bind(this);
     this.toggleB2 = this.toggleB2.bind(this);
@@ -90,11 +95,15 @@ export default class AddEventScreen extends Component {
   }
 
   componentDidMount(){
+
+    this.props.navigation.setParams({
+      handleMenuToggle: this.toggleControlPanel,
+    });
+
     const { params } = this.props.navigation.state;
     this.setState({
         userID: params.userID
     });
-
   }
 
 
@@ -104,52 +113,107 @@ export default class AddEventScreen extends Component {
       height: 300,
       cropping: true
     }).then(image => {
-      console.log(image);
+      // console.log(image);
+      this.setState ({
+        image: {uri: image.path, width: image.width, height: image.height},
+        imageUpload: true
+      })
     });
   }
 
   _onLibPress() {
     ImagePicker.openPicker({
-      width: 300,
-      height: 300,
+      width: 100,
+      height: 100,
+      includeBase64: true,
       cropping: true
     }).then(image => {
       console.log(image);
+      this.setState ({
+        image: {uri: image.path, width: image.width, height: image.height, data: image.data},
+        imageUpload: true
+      })
     });
+  }
+
+  validateInput = () => {
+
+    emptyvals = []
+    if(this.state.eventTitle == '') {
+      emptyvals.push('Title')
+    }
+    if(this.state.eventDate == '') {
+      emptyvals.push('Date')
+    }
+    if(!this.state.imageUpload) {
+      emptyvals.push('Media')
+    }
+    if(this.state.behavior1 == false && this.state.behavior2 == false  && this.state.behavior3 == false  && this.state.behavior4 == false  && this.state.behavior5 == false) {
+      emptyvals.push('Behaviors')
+    }
+    if(emptyvals.length == 0) {
+      this.uploadMemory()
+    }
+    else {
+      Alert.alert("Please enter " + emptyvals.join(", "))
+    }
+
   }
 
   uploadMemory = () => {
 
-    firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails').once("value").then(
-      (snapshot) => 
-        { 
-            var memoryCount = snapshot.numChildren();
-            var memoryID = this.state.userID+"-"+(memoryCount+1);
-            console.log(memoryID);
+    var memoryID = this.state.userID+"-"+Date.now();
 
-            firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
-              eventTitle : this.state.eventTitle,
-              eventDate : this.state.eventDate,
-              eventLocation: this.state.eventLocation,
-              eventNotes: this.state.eventNotes,
-            });
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob;
 
-  
-        }
-      )
-    this.props.navigation.navigate('Timeline');
+    let uploadBlob = null;
+    const imageRef = firebase.storage().ref('images/'+this.state.userID+'/journalImages/').child(Date.now()+".jpeg")
+    let mime = 'image/jpeg';
+
+    const data = this.state.image.data;
+    console.log(data);
+
+    Blob.build(data, 
+      { type: `${mime};BASE64` }).then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType: mime })
+      }).then(() => {
+        uploadBlob.close()
+        return imageRef.getDownloadURL()
+      }).then((url) => {
+        this.setState({
+          imageUrl: url
+        })
+      }). then(() => {
+        firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
+          eventTitle : this.state.eventTitle,
+          eventDate : this.state.eventDate,
+          eventLocation: this.state.eventLocation,
+          eventNotes: this.state.eventNotes,
+          imageURL: this.state.imageUrl,
+          anxious: this.state.behavior1,
+          aggressive: this.state.behavior2,
+          calm: this.state.behavior3,
+          excited: this.state.behavior4,
+          affectionate: this.state.behavior5,
+        }).then(() => {
+          this.props.navigation.state.params.onNavigateBack(this.state.memoryUpdate);
+          this.props.navigation.navigate('Timeline');
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
   }
 
-
-
-
-
-  componentDidMount(){
-    this.props.navigation.setParams({
-      handleMenuToggle: this.toggleControlPanel,
-    });
+  renderImage(image) {
+    return <Image style={{width: 100, height: 100, resizeMode: 'contain'}} source={image} />
   }
+
 
 
   render() {
@@ -202,6 +266,12 @@ export default class AddEventScreen extends Component {
               </View>
 
               <View style={{flex:0.5}}>
+                <View style={{justifyContent:'center', alignItems:'center'}}>
+                  {this.state.image ? this.renderImage(this.state.image) : null}
+                 </View>
+              </View>
+
+              <View style={{flex:0.5}}>
                 <TouchableOpacity onPress={this._onLibPress}>
                   <View style={{justifyContent:'center', alignItems:'center'}}>
                     <Image
@@ -213,6 +283,7 @@ export default class AddEventScreen extends Component {
                   {"Upload from library"}
                 </Text>
               </View>
+
             </View>
           </View>
         </View>
@@ -223,7 +294,7 @@ export default class AddEventScreen extends Component {
             date={this.state.eventDate}
             mode="date"
             placeholder="Date"
-            format="YYYY-MM-DD"
+            format="MMMM D, YYYY"
             minDate="2010-01-01"
             maxDate="2020-12-31"
             confirmBtnText="Confirm"
@@ -263,6 +334,9 @@ export default class AddEventScreen extends Component {
             renderDescription={row => row.description} // custom description render
             onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
               console.log(data, details);
+              this.setState({
+                eventLocation: data.description
+              })
             }}
 
             getDefaultValue={() => ''}
@@ -271,10 +345,9 @@ export default class AddEventScreen extends Component {
               // available options: https://developers.google.com/places/web-service/autocomplete
               key: 'AIzaSyCYo6KjI8l0Dk_nx-P4w3T_UOUKFyygMXc',
               language: 'en', // language of the results
-              types: '(cities)' // default: 'geocode'
+              types: '(regions)' // default: 'geocode'
             }}
-
-            onChangeText={eventLocation => this.setState({ eventLocation })}
+            
             value={this.state.eventLocation}
 
             styles={{
@@ -369,7 +442,7 @@ export default class AddEventScreen extends Component {
 
         <TouchableOpacity
           style={styles.savebutton}
-          onPress={this.uploadMemory}>
+          onPress={this.validateInput}>
           <Text style={styles.savebuttontext}> </Text>
           <Text style={styles.savebuttontext}>SAVE</Text>
           <Text style={styles.savebuttontext}> </Text>
@@ -421,7 +494,7 @@ const styles = StyleSheet.create({
   },
   uploadContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
    },
    submitContainer: {
     flexDirection: 'row',

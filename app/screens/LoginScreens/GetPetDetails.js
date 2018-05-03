@@ -102,11 +102,9 @@ export default class GetPetDetails extends Component {
         && !this.state.color4
         && !this.state.color5)
     ){
-      alert("All fields are mandatory")
+      alert("Please fill all fields (guessing is fine!)")
       return
     }
-
-
 
     firebase.database().ref('userDetails/'+ this.state.userID + '/petDetails').set({
       petName : this.state.petName,
@@ -121,7 +119,7 @@ export default class GetPetDetails extends Component {
       petAdoptionDate : this.state.petAdoptionDate,
       petBirthDay : this.state.petBirthDay
     }).then(() => {
-      this.props.navigation.navigate('Home', {
+      this.props.navigation.navigate('OnboardingQ1', {
       userID: this.state.userID,
       userName: this.state.userName
     });

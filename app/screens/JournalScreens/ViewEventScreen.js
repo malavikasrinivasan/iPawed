@@ -37,10 +37,12 @@ export default class ViewEventScreen extends Component {
       };
 
   state = {
-    eventTitle : 'Peanut Goes to the Vet!',
+    eventTitle : '',
     description : '',
-    eventDate : new Date(),
-    notesText: 'Today, Peanut went to the vet to get his second round of shots. He did well and also met some other huskies! What a good doggo!',
+    eventDate : '',
+    eventLocation: '',
+
+    notesText: '',
     menuOpen: false
   }
 
@@ -62,7 +64,42 @@ export default class ViewEventScreen extends Component {
     });
   }
 
+    renderBehaviors(behaviors_on) {
+      const circles = [];
+
+      behaviors_on.map(behavior => 
+        // console.log(behavior);
+        circles.push(
+          <View>
+          <View style={[styles.behaviorCircle, {backgroundColor:behavior.color}]}/>
+            <Text style={styles.tagtext}>{behavior.name}</Text>
+          </View>
+        )
+      )
+    return circles
+  }
+
   render() {
+    const {params} = this.props.navigation.state;
+    console.log(params);
+
+    var behaviors_on = []
+    if(params.eventData.anxious == true) {
+      behaviors_on.push({name : "Anxious", color: "#D3B69B"})
+    }
+    if(params.eventData.aggressive == true) {
+      behaviors_on.push({name : "Aggressive", color: "#163250"})
+    }
+    if(params.eventData.calm == true) {
+      behaviors_on.push({name : "Calm", color: "#F7C68F"})
+    }
+    if(params.eventData.excited == true) {
+      behaviors_on.push({name : "Excited", color: "#CC2539"})
+    }
+    if(params.eventData.affectionate == true) {
+      behaviors_on.push({name : "Affectionate", color: "#F9D64B"})
+    }
+
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
@@ -80,50 +117,31 @@ export default class ViewEventScreen extends Component {
         })}
         >
       <View style={styles.container}>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start'}}>
-          <Text style={styles.welcomeText}>
-            {this.state.eventTitle}
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+          <Text style={[styles.welcomeText, {alignSelf: 'center'}]}>
+            {params.eventData.title}
           </Text>
-          <View>
-            <Icon name="edit" size={20} color="black" style={{margin: 10}}
-            onPress={() => this.props.navigation.navigate('AddEvent')}/>
-          </View>
-
         </View>
         <Image
           style={styles.image}
-          source={require('./../../img/vet.png')}
+          source={{uri: params.eventData.imageUrl}}
           resizeMode="contain"
         />
         <View style = {styles.uploadContainer}>
-          <Text style={styles.label}> April 15, 2018 </Text>
-          <Text style={styles.label}> Berkeley, CA </Text>
+          <Text style={styles.label}> {params.eventData.time} </Text>
+          <Text style={styles.label}> {params.eventData.location} </Text>
         </View>
          <View style={styles.box}>
            <View style={styles.commentbox}>
-              <Text style={styles.subheader}>Notes:</Text>
+              <Text style={styles.subheader}>Notes</Text>
               <Text style={styles.commenttext}>
-                {this.state.notesText}
+                {params.eventData.description}
               </Text>
           </View>
         </View>
         <View>
-          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-             <TouchableOpacity onPress={this.behavior1} style={{margin:10}}>
-               <View style={[styles.behavior, {backgroundColor:'#D3B69B'}]}/>
-               <Text style={styles.tagtext}>Calm</Text>
-             </TouchableOpacity>
-
-             <TouchableOpacity onPress={this.behavior3} style={{margin:10}}>
-               <View style={[styles.behavior, {backgroundColor:'#F7C68F'}]}/>
-               <Text style={styles.tagtext}>Happy</Text>
-             </TouchableOpacity>
-
-             <TouchableOpacity onPress={this.behavior4} style={{margin:10}}>
-               <View style={[styles.behavior, {backgroundColor:'#CC2539'}]}/>
-               <Text style={styles.tagtext}>Joyful</Text>
-             </TouchableOpacity>
-
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+             {behaviors_on ? this.renderBehaviors(behaviors_on) : null}
           </View>
          </View>
 
@@ -230,8 +248,25 @@ const styles = StyleSheet.create({
     fontFamily: 'Century Gothic'
   },
   image: {
-    width: 300,
-    height: 300,
+    width: 250,
+    height: 250,
     alignSelf: 'center'
+  },
+  behaviorCircle: {
+    width: 30,
+    height: 30,
+    alignSelf: 'center',
+    borderColor: 'black',
+    borderRadius: 100,
+    borderWidth: 0,
+    margin: 5,
+    opacity: 0.8
+  },
+  tagtext: {
+    color: 'black',
+    fontSize: 10,
+    fontFamily: 'Century Gothic',
+    textAlign: 'center',
+    fontStyle: 'italic'
   }
 });

@@ -157,7 +157,6 @@ export default class ActivityDetail extends Component {
             {"Next"}
           </Text>
         </TouchableOpacity>
-
       </ScrollView>
       </Drawer>
     );
