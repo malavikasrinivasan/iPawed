@@ -144,7 +144,7 @@ export default class UserLoginScreen extends Component {
               placeholderTextColor='grey'
               keyboardType='email-address'
               autoCapitalize='none'
-              autoCorrect='false'
+              autoCorrect={false}
               onChangeText={email => this.setState({ email })}
               value={this.state.email}
             />
