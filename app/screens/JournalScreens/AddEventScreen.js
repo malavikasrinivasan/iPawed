@@ -111,11 +111,12 @@ export default class AddEventScreen extends Component {
     ImagePicker.openCamera({
       width: 300,
       height: 300,
+      includeBase64: true,
       cropping: true
     }).then(image => {
       // console.log(image);
       this.setState ({
-        image: {uri: image.path, width: image.width, height: image.height},
+        image: {uri: image.path, width: image.width, height: image.height, data: image.data},
         imageUpload: true
       })
     });

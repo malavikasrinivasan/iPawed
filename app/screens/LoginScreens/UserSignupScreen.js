@@ -123,7 +123,7 @@ export default class UserLoginScreen extends Component {
               style={styles.formTextInput}
               placeholder="Name"
               placeholderTextColor='grey'
-              autoCorrect='false'
+              autoCorrect={false}
               onChangeText={name => this.setState({ name })}
               value={this.state.name}
             />
@@ -134,7 +134,7 @@ export default class UserLoginScreen extends Component {
               placeholderTextColor='grey'
               keyboardType='email-address'
               autoCapitalize='none'
-              autoCorrect='false'
+              autoCorrect={false}
               onChangeText={email => this.setState({ email })}
               value={this.state.email}
             />

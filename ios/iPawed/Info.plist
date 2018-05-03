@@ -38,7 +38,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Taking photos of your pet for your personal enjoyment!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Storing photos of your pet for your personal enjoyment!</string>
 	<key>UIAppFonts</key>
