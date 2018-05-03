@@ -48,12 +48,58 @@ export default class TimelineScreen extends Component {
     this.state = {
       userID : '',
       selected: null,
+      petName: null,
       timelineData: null,
-      menuOpen: false
+      menuOpen: false,
+      memoryUpdate: false
     };
 
     // console.log(this.data);
   }
+
+  memoryUpdate = (memoryUpdate) => {
+    // this.setState({memoryUpdate})
+    console.log(memoryUpdate);
+    const firebaseUserID = firebase.auth().currentUser.uid;
+    this.setState({userID: firebaseUserID});
+    console.log(firebaseUserID);
+
+    var memories = [];
+
+    // getting data from firebase for the timeline
+    firebase.database().ref('userDetails/'+ firebaseUserID + '/journalDetails').once("value").then((snapshot) => {
+      // console.log(snapshot.val());
+      console.log(snapshot.numChildren());            
+      snapshot.forEach( function(child) {
+
+        console.log(child.val());
+        memory = child.val();
+        memories.push({
+
+          time: memory.eventDate,
+          title: memory.eventTitle,
+          description: memory.eventNotes,
+          imageUrl: memory.imageURL,
+          location: memory.eventLocation,
+          anxious: memory.anxious,
+          aggressive: memory.aggressive,
+          calm: memory.calm,
+          excited: memory.excited,
+          affectionate: memory.affectionate,
+        });
+      });
+
+      console.log(length(memories));
+
+      this.setState({
+        timelineData : memories
+      });
+      
+    });
+
+  }
+
+
 
   componentDidMount(){ 
 
@@ -63,12 +109,21 @@ export default class TimelineScreen extends Component {
 
     const firebaseUserID = firebase.auth().currentUser.uid;
     this.setState({userID: firebaseUserID});
+    console.log(firebaseUserID);
 
     var memories = [];
 
+    // getting pet name 
+    firebase.database().ref('userDetails/'+ firebaseUserID + '/petDetails').once("value").then((snapshot) => {
+      console.log(snapshot.val().petName);
+      this.setState({
+        petName: snapshot.val().petName
+      })
+    });
+
+
     // getting data from firebase for the timeline
     firebase.database().ref('userDetails/'+ firebaseUserID + '/journalDetails').once("value").then((snapshot) => {
-      // console.log(snapshot.val());      
       snapshot.forEach( function(child) {
         // console.log(child.val());
         memory = child.val();
@@ -79,12 +134,18 @@ export default class TimelineScreen extends Component {
           description: memory.eventNotes,
           imageUrl: memory.imageURL,
           location: memory.eventLocation,
+          anxious: memory.anxious,
+          aggressive: memory.aggressive,
+          calm: memory.calm,
+          excited: memory.excited,
+          affectionate: memory.affectionate,
         });
       });
 
       this.setState({
-      timelineData : memories
-    });
+        timelineData : memories
+      });
+      
   });
 
   }
@@ -96,13 +157,55 @@ export default class TimelineScreen extends Component {
 
     onEventPress(data){
       this.setState({selected: data});
+      console.log(data);
       this.props.navigation.navigate('ViewEvent', {eventData: data});
     }
+
+  renderLocation(location) {
+    return    <Icon name='ios-pin' size={15} color ="#777">
+                <Text style={styles.locationText}> {location}</Text>
+              </Icon>
+  }
+
+  renderBehaviors(behaviors_on) {
+      const circles = [];
+
+      behaviors_on.map(behavior => 
+        // console.log(behavior);
+        circles.push(
+          <View>
+          <View style={[styles.behaviorCircle, {backgroundColor:behavior.color}]}/>
+          </View>
+        )
+      )
+    return circles
+
+  }
+
+
 
   renderDetail(rowData, sectionID, rowID) {
     let title = null
     var desc = null
-    if(rowData.description && rowData.imageUrl)
+    // Checking which behaviors are on.
+    var behaviors_on = []
+    if(rowData.anxious == true) {
+      behaviors_on.push({name : "Anxious", color: "#D3B69B"})
+    }
+    if(rowData.aggressive == true) {
+      behaviors_on.push({name : "Aggressive", color: "#163250"})
+    }
+    if(rowData.calm == true) {
+      behaviors_on.push({name : "Calm", color: "#F7C68F"})
+    }
+    if(rowData.excited == true) {
+      behaviors_on.push({name : "Excited", color: "#CC2539"})
+    }
+    if(rowData.affectionate == true) {
+      behaviors_on.push({name : "Affectionate", color: "#F9D64B"})
+    }
+    // console.log(behaviors_on);
+    if(rowData.title && rowData.imageUrl)
       desc = (
         <View style={{borderColor:'#ddd', borderRadius: 10, borderWidth:1, padding:5,  shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 1.0}}>
           <Text style={[styles.time, {flex: 1, alignSelf: 'flex-start'}]}>{rowData.time}</Text>
@@ -110,10 +213,11 @@ export default class TimelineScreen extends Component {
             <Image source={{uri: rowData.imageUrl}} style={styles.image} resizeMode="contain"/>
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
               <Text style={[styles.title]}>{rowData.title}</Text>
-              <Icon name='ios-pin' size={15} color ="#777">
-                <Text style={styles.locationText}> {rowData.location}</Text>
-              </Icon>
+              {rowData.location ? this.renderLocation(rowData.location) : null}
               <Text style={styles.descriptionText}>"{rowData.description}"</Text>
+              <View style={{flex : 0.5, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+              {behaviors_on ? this.renderBehaviors(behaviors_on) : null}
+              </View>
             </View>
           </View>
         </View>
@@ -134,6 +238,14 @@ export default class TimelineScreen extends Component {
         <ActivityIndicator size='large' />
         );
     }
+
+    // console.log("Inside render now!");
+    // console.log(this.state.timelineData);
+
+    // if(this.state.memoryUpdate) {
+    //   this.componentDidMount()
+    // }
+
 
     return (
       <Drawer
@@ -158,10 +270,10 @@ export default class TimelineScreen extends Component {
                 <Icon
                   name="ios-add-circle" size = {50} color = "#5AC8B0"
                   style={{justifyContent:'center', shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 1.0}}
-                  onPress={() => this.props.navigation.navigate('AddEvent', {userID: this.state.userID})}/>
+                  onPress={() => this.props.navigation.navigate('AddEvent', {userID: this.state.userID, onNavigateBack: this.memoryUpdate})}/>
               </TouchableOpacity>
               <View style={{ flex:1 }}>
-                <Text style={styles.generalText}>Memories with Hobbes </Text>
+                <Text style={styles.generalText}>Memories with {this.state.petName} </Text>
               </View>
             </View>
         </View>
@@ -206,14 +318,14 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     fontFamily:'Century Gothic',
     fontWeight: 'bold',
-    shadowOffset:{height: 1},
+    shadowOffset:{height: 2},
     shadowColor: '#bbb',
     shadowOpacity: 1.0,
 
   },
   title: {
     fontSize: 17,
-    color: '#5AC8B0',
+    color: '#163250',
     opacity: 1.5,
     // fontWeight: 'bold',
     fontFamily:'Century Gothic',
@@ -233,8 +345,8 @@ const styles = StyleSheet.create({
   },
   generalText: {
     textAlign: 'center',
-    fontFamily: 'Century Gothic',
-    fontSize: 24,
+    fontFamily: 'SignPainter',
+    fontSize: 36,
     color: '#444',
   },
   topRow: {
@@ -260,8 +372,8 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
     marginTop: 10,
     marginLeft: 0,
   },
@@ -271,6 +383,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5
   },
+  behaviorCircle: {
+    width: 15,
+    height: 15,
+    alignSelf: 'center',
+    borderColor: 'black',
+    borderRadius: 100,
+    borderWidth: 0,
+    margin: 5,
+    opacity: 0.8
+  },
+  tagtext: {
+    color: 'black',
+    fontSize: 10,
+    fontFamily: 'Century Gothic',
+    textAlign: 'center',
+    fontStyle: 'italic'
+  }
   
 });
 

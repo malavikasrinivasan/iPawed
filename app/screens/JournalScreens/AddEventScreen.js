@@ -9,6 +9,7 @@ import ControlPanel from './../../components/ControlPanel';
 import Header from './../../components/Header';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Input } from 'react-native-elements';
+import RNFetchBlob from 'react-native-fetch-blob';
 import * as firebase from 'firebase';
 
 export default class AddEventScreen extends Component {
@@ -48,13 +49,16 @@ export default class AddEventScreen extends Component {
       eventNotes : '',
       eventLocation : '',
       eventDate : '',
-      imageUpload: true,
+      imageUrl : '',
+      image: null,
+      imageUpload: false,
       behavior1: false,
       behavior2: false,
       behavior3: false,
       behavior4: false,
       behavior5: false,
-      menuOpen: false
+      menuOpen: false,
+      memoryUpdate: true,
     };
     this.toggleB1 = this.toggleB1.bind(this);
     this.toggleB2 = this.toggleB2.bind(this);
@@ -107,19 +111,29 @@ export default class AddEventScreen extends Component {
     ImagePicker.openCamera({
       width: 300,
       height: 300,
+      includeBase64: true,
       cropping: true
     }).then(image => {
-      console.log(image);
+      // console.log(image);
+      this.setState ({
+        image: {uri: image.path, width: image.width, height: image.height, data: image.data},
+        imageUpload: true
+      })
     });
   }
 
   _onLibPress() {
     ImagePicker.openPicker({
-      width: 300,
-      height: 300,
+      width: 100,
+      height: 100,
+      includeBase64: true,
       cropping: true
     }).then(image => {
       console.log(image);
+      this.setState ({
+        image: {uri: image.path, width: image.width, height: image.height, data: image.data},
+        imageUpload: true
+      })
     });
   }
 
@@ -136,7 +150,6 @@ export default class AddEventScreen extends Component {
       emptyvals.push('Media')
     }
     if(this.state.behavior1 == false && this.state.behavior2 == false  && this.state.behavior3 == false  && this.state.behavior4 == false  && this.state.behavior5 == false) {
-      console.log("aaaaaaaaaahhhhhhhhhh");
       emptyvals.push('Behaviors')
     }
     if(emptyvals.length == 0) {
@@ -150,32 +163,58 @@ export default class AddEventScreen extends Component {
 
   uploadMemory = () => {
 
-    firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails').once("value").then(
-      (snapshot) => 
-        { 
-            var memoryCount = snapshot.numChildren();
-            var memoryID = this.state.userID+"-"+(memoryCount+1);
-            console.log(memoryID);
+    var memoryID = this.state.userID+"-"+Date.now();
 
-            firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
-              eventTitle : this.state.eventTitle,
-              eventDate : this.state.eventDate,
-              eventLocation: this.state.eventLocation,
-              eventNotes: this.state.eventNotes,
-              imageURL: 'https://i.pinimg.com/originals/fe/76/e2/fe76e2bdd2dc58485114a9ee11f910e4.jpg',
-              anxious: this.state.behavior1,
-              aggressive: this.state.behavior2,
-              calm: this.state.behavior3,
-              excited: this.state.behavior4,
-              affectionate: this.state.behavior5,
-            });
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob;
 
-  
-        }
-      )
-    this.props.navigation.navigate('Timeline');
+    let uploadBlob = null;
+    const imageRef = firebase.storage().ref('images/'+this.state.userID+'/journalImages/').child(Date.now()+".jpeg")
+    let mime = 'image/jpeg';
+
+    const data = this.state.image.data;
+    console.log(data);
+
+    Blob.build(data, 
+      { type: `${mime};BASE64` }).then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType: mime })
+      }).then(() => {
+        uploadBlob.close()
+        return imageRef.getDownloadURL()
+      }).then((url) => {
+        this.setState({
+          imageUrl: url
+        })
+      }). then(() => {
+        firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
+          eventTitle : this.state.eventTitle,
+          eventDate : this.state.eventDate,
+          eventLocation: this.state.eventLocation,
+          eventNotes: this.state.eventNotes,
+          imageURL: this.state.imageUrl,
+          anxious: this.state.behavior1,
+          aggressive: this.state.behavior2,
+          calm: this.state.behavior3,
+          excited: this.state.behavior4,
+          affectionate: this.state.behavior5,
+        }).then(() => {
+          this.props.navigation.state.params.onNavigateBack(this.state.memoryUpdate);
+          this.props.navigation.navigate('Timeline');
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
   }
+
+  renderImage(image) {
+    return <Image style={{width: 100, height: 100, resizeMode: 'contain'}} source={image} />
+  }
+
 
 
   render() {
@@ -228,6 +267,12 @@ export default class AddEventScreen extends Component {
               </View>
 
               <View style={{flex:0.5}}>
+                <View style={{justifyContent:'center', alignItems:'center'}}>
+                  {this.state.image ? this.renderImage(this.state.image) : null}
+                 </View>
+              </View>
+
+              <View style={{flex:0.5}}>
                 <TouchableOpacity onPress={this._onLibPress}>
                   <View style={{justifyContent:'center', alignItems:'center'}}>
                     <Image
@@ -239,6 +284,7 @@ export default class AddEventScreen extends Component {
                   {"Upload from library"}
                 </Text>
               </View>
+
             </View>
           </View>
         </View>
@@ -289,6 +335,9 @@ export default class AddEventScreen extends Component {
             renderDescription={row => row.description} // custom description render
             onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
               console.log(data, details);
+              this.setState({
+                eventLocation: data.description
+              })
             }}
 
             getDefaultValue={() => ''}
@@ -300,7 +349,6 @@ export default class AddEventScreen extends Component {
               types: '(regions)' // default: 'geocode'
             }}
             
-            onChangeText={eventLocation => this.setState({ eventLocation })}
             value={this.state.eventLocation}
 
             styles={{
@@ -447,7 +495,7 @@ const styles = StyleSheet.create({
   },
   uploadContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
    },
    submitContainer: {
     flexDirection: 'row',

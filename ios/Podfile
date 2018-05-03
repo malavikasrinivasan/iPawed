@@ -22,6 +22,8 @@ target 'iPawed' do
   pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
   pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
 end
 
 # very important to have, unless you removed React dependencies for Libraries

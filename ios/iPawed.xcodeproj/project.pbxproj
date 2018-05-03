@@ -46,6 +46,7 @@
 		3FD4D57F0FF449F3A278A569 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 665ADCFC7EE441E684401D40 /* Ionicons.ttf */; };
 		4A27683A9BED61042EF539E2 /* libPods-iPawed.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7006009643011179EC958FA1 /* libPods-iPawed.a */; };
 		4D4B749DEF9E4AA9B6C16CB3 /* Rubik-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7242059C146D4642BDEB0186 /* Rubik-BlackItalic.ttf */; };
+		52C3F9162095233600B7613D /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C3F912209522AB00B7613D /* libRNSVG.a */; };
 		531FA0CDBD5A4529B41A1139 /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F041A6A816E4413A4D6E267 /* Rubik-Black.ttf */; };
 		5422D8FD0C1C4E81A1625689 /* Rubik-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8CC0C2F43DA248128C1C72C5 /* Rubik-Italic.ttf */; };
 		5DDFA31D2B104C5D9ECCD34A /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D25B6773561D417F845549FD /* Rubik-Regular.ttf */; };
@@ -343,6 +344,20 @@
 			remoteGlobalIDString = 3D3CD9181DE5FBD800167DC4;
 			remoteInfo = "jschelpers-tvOS";
 		};
+		52C3F911209522AB00B7613D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 52C3F8E4209522AB00B7613D /* RNSVG.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0CF68AC11AF0540F00FF9E5C;
+			remoteInfo = RNSVG;
+		};
+		52C3F913209522AB00B7613D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 52C3F8E4209522AB00B7613D /* RNSVG.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 94DDAC5C1F3D024300EED511;
+			remoteInfo = "RNSVG-tvOS";
+		};
 		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
@@ -422,6 +437,7 @@
 		2FF38C70273370D2CC734B01 /* Pods-iPawed.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iPawed.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iPawed/Pods-iPawed.debug.xcconfig"; sourceTree = "<group>"; };
 		348B634AA16D4A0798FD1155 /* Rubik-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Light.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-Light.ttf"; sourceTree = "<group>"; };
 		44DD9F8BD54D4E538575FDD6 /* GOTHIC.TTF */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GOTHIC.TTF; path = "../assets/fonts/century-gothic/GOTHIC.TTF"; sourceTree = "<group>"; };
+		52C3F8E4209522AB00B7613D /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		5CA1EB2BA8184E77805B7756 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/@shoutem/ui/fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		5FFD4DECD3D94B29B12EE858 /* Rubik-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-BoldItalic.ttf"; path = "../node_modules/@shoutem/ui/fonts/Rubik-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -471,7 +487,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D6305122099AEC90084E803 /* libRNCamera.a in Frameworks */,
+				52C3F9162095233600B7613D /* libRNSVG.a in Frameworks */,
 				EED5AE61208EF550007AA31B /* libRNFetchBlob.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
@@ -723,6 +739,15 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		52C3F8E5209522AB00B7613D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				52C3F912209522AB00B7613D /* libRNSVG.a */,
+				52C3F914209522AB00B7613D /* libRNSVG-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -753,7 +778,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				0D6304E32099AE560084E803 /* RNCamera.xcodeproj */,
+				52C3F8E4209522AB00B7613D /* RNSVG.xcodeproj */,
 				EED5AE5B208EF53E007AA31B /* RNFetchBlob.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -917,10 +942,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = ZZ67M9S8G7;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = XRFUL4UQ39;
+						DevelopmentTeam = ZZ67M9S8G7;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1008,6 +1034,10 @@
 				{
 					ProductGroup = 20BF2672207E950600ECC5C6 /* Products */;
 					ProjectRef = 09FA87D308D1440F8106B6B9 /* RNPhotoView.xcodeproj */;
+				},
+				{
+					ProductGroup = 52C3F8E5209522AB00B7613D /* Products */;
+					ProjectRef = 52C3F8E4209522AB00B7613D /* RNSVG.xcodeproj */;
 				},
 				{
 					ProductGroup = 20BF267A207E950700ECC5C6 /* Products */;
@@ -1277,6 +1307,20 @@
 			remoteRef = 3DAD3EAE1DF850E9000B6D8A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		52C3F912209522AB00B7613D /* libRNSVG.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSVG.a;
+			remoteRef = 52C3F911209522AB00B7613D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		52C3F914209522AB00B7613D /* libRNSVG-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNSVG-tvOS.a";
+			remoteRef = 52C3F913209522AB00B7613D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1537,6 +1581,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = ZZ67M9S8G7;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1569,7 +1615,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = ZZ67M9S8G7;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1601,7 +1649,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = XRFUL4UQ39;
+				DEVELOPMENT_TEAM = ZZ67M9S8G7;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1615,7 +1663,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.iPawed897987;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.iPawed8979871;
 				PRODUCT_NAME = iPawed;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1627,7 +1675,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = XRFUL4UQ39;
+				DEVELOPMENT_TEAM = ZZ67M9S8G7;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1641,7 +1689,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.iPawed897987;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.iPawed8979871;
 				PRODUCT_NAME = iPawed;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

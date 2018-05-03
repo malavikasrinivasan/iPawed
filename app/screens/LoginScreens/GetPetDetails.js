@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import DatePicker from 'react-native-datepicker';
 import Header from './../../components/Header';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import RNFetchBlob from 'react-native-fetch-blob';
 import * as firebase from 'firebase';
 
 export default class GetPetDetails extends Component {
@@ -25,6 +25,7 @@ export default class GetPetDetails extends Component {
 
   constructor(props){
     super(props);
+
     this.state = {
       userID:'',
       userName:'',
@@ -34,6 +35,9 @@ export default class GetPetDetails extends Component {
       petGender: '',
       petAdoptionDate : null,
       petBirthDay : null,
+      image: null,
+      imageUpload: false,
+      petPic: null,
       color1: false,
       color2: false,
       color3: false,
@@ -45,6 +49,8 @@ export default class GetPetDetails extends Component {
     this.toggleC3 = this.toggleC3.bind(this);
     this.toggleC4 = this.toggleC4.bind(this);
     this.toggleC5 = this.toggleC5.bind(this);
+    this._onCamPress = this._onCamPress.bind(this);
+    this._onLibPress = this._onLibPress.bind(this);
   }
 
   toggleC1() {
@@ -77,68 +83,148 @@ export default class GetPetDetails extends Component {
       });
   }
 
-  _onAddPress() {
-    ImagePicker.openPicker({
+  _onCamPress() {
+    ImagePicker.openCamera({
       width: 300,
       height: 300,
-      cropping: true
+      includeBase64: true,
+      cropping: true,
+      compressImageQuality: 0.25
     }).then(image => {
-      console.log(image);
+      // console.log(image);
+      this.setState ({
+        image: {uri: image.path, width: image.width, height: image.height, data: image.data},
+        imageUpload: true
+      })
+    });
+  }
+
+  _onLibPress() {
+    ImagePicker.openPicker({
+      // width: 100,
+      // height: 100,
+      includeBase64: true,
+      // cropping: true,
+      compressImageQuality: 0.25
+    }).then(image => {
+      // console.log(image);
+      this.setState ({
+        image: {uri: image.path, width: image.width, height: image.height, data: image.data},
+        imageUpload: true
+      })
     });
   }
 
   uploadPetProfile() {
-    console.log(this.state.petAdoptionDate == null)
-    console.log(this.state.petBirthDay == null)
     if (this.state.petName == ''
       || this.state.petBreed == ''
       || this.state.petWeight == ''
       || this.state.petGender == ''
       || this.state.petAdoptionDate == null
       || this.state.petBirthDay == null
+      || this.state.imageUpload == false
       ||  (!this.state.color1
         && !this.state.color2
         && !this.state.color3
         && !this.state.color4
         && !this.state.color5)
     ){
-      alert("All fields are mandatory")
+      alert("Please fill all fields (guessing is fine!)")
       return
     }
-    
-    firebase.database().ref('userDetails/'+ this.state.userID + '/petDetails').set({
-      petName : this.state.petName,
-      petBreed : this.state.petBreed,
-      color1: this.state.color1,
-      color2: this.state.color2,
-      color3: this.state.color3,
-      color4: this.state.color4,
-      color5: this.state.color5,
-      petWeight: this.state.petWeight,
-      petGender: this.state.petGender,
-      petAdoptionDate : this.state.petAdoptionDate,
-      petBirthDay : this.state.petBirthDay
-    }).then(() => {
-      this.props.navigation.navigate('Home', {
-      userID: this.state.userID,
-      userName: this.state.userName
-    });
-    }).catch((error) => {
-      alert(error)
+
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob;
+
+    let uploadBlob = null;
+    const imageRef = firebase.storage().ref('images/'+this.state.userID+'/').child("profilePic.jpg")
+    let mime = 'image/jpeg';
+
+    const data = this.state.image.data;
+    // console.log(data);
+
+    Blob.build(data, 
+      { type: `${mime};BASE64` }).then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType: mime })
+      }).then(() => {
+        uploadBlob.close()
+        return imageRef.getDownloadURL()
+      }).then((url) => {
+        this.setState({
+          imageUrl: url
+        })
+      }). then(() => {    
+        firebase.database().ref('userDetails/'+ this.state.userID + '/petDetails').set({
+          petName : this.state.petName,
+          petBreed : this.state.petBreed,
+          color1: this.state.color1,
+          color2: this.state.color2,
+          color3: this.state.color3,
+          color4: this.state.color4,
+          color5: this.state.color5,
+          petWeight: this.state.petWeight,
+          petGender: this.state.petGender,
+          petAdoptionDate : this.state.petAdoptionDate,
+          petBirthDay : this.state.petBirthDay,
+          petPic: this.state.imageUrl
+        }).then(() => {
+          this.props.navigation.navigate('OnboardingQ1', {
+          userID: this.state.userID,
+          userName: this.state.userName
+        });
+        }).catch((error) => {
+          alert(error)
+      }).catch((error) => {
+        alert(error)
+      });
     });
   }
 
-  render() {
+  renderImage(image) {
+    return <Image style={{width: 100, height: 100, resizeMode: 'contain'}} source={image} />
+  }
 
+  render() {
+    // console.log(this.state.image)
     return (
       <View style={styles.screenContainer}>
 
-        <TouchableOpacity
-          style={styles.addimg}
-          onPress={this._onAddPress}>
-          <Text style={styles.addbuttontext}>{"Upload your pet's\nphoto!"}</Text>
-          <Text style={styles.plustext}>+</Text>
-        </TouchableOpacity>
+        <View style = {styles.uploadContainer}>
+          <View style={{flex:0.5, justifyContent: 'center', alignSelf:'center'}}>
+            <TouchableOpacity onPress={this._onCamPress}>
+              <View style={{justifyContent:'center', alignItems:'center'}}>
+                <Image
+                  source={require("../../icon/camera.png")}
+                  style={{height: 25, width: 25, justifyContent: 'center'}}/>
+              </View>
+            </TouchableOpacity>
+            <Text style={[styles.label, {fontSize: 10, textAlign: 'center'}]}>
+              {"Take photo"}
+            </Text>
+          </View>
+
+          <View style={{flex:0.5, justifyContent:'center', alignItems:'center'}}>
+            <View style={{justifyContent:'center', alignItems:'center'}}>
+              {this.state.image ? this.renderImage(this.state.image) : null}
+             </View>
+          </View>
+
+          <View style={{flex:0.5, justifyContent: 'center', alignSelf:'center'}}>
+            <TouchableOpacity onPress={this._onLibPress}>
+              <View style={{justifyContent:'center', alignItems:'center'}}>
+                <Image
+                  source={require("../../icon/plus.png")}
+                  style={{height: 25, width: 25, justifyContent: 'center'}}/>
+              </View>
+            </TouchableOpacity>
+            <Text style={[styles.label, {fontSize: 10, textAlign: 'center'}]}>
+              {"Upload from library"}
+            </Text>
+          </View>
+        </View>
 
         <View style={styles.formContainer}>
           <View style={styles.formTextInput}>
@@ -149,7 +235,7 @@ export default class GetPetDetails extends Component {
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="name"
               placeholderTextColor='lightgrey'
-              autoCorrect='false'
+              autoCorrect= {false}
               onChangeText={petName => this.setState({ petName })}
               value={this.state.petName}
               />
@@ -164,7 +250,7 @@ export default class GetPetDetails extends Component {
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="breed"
               placeholderTextColor='lightgrey'
-              autoCorrect='false'
+              autoCorrect={false}
               onChangeText={petBreed => this.setState({ petBreed })}
               value={this.state.petBreed}
               />
@@ -208,7 +294,7 @@ export default class GetPetDetails extends Component {
             <TextInput style={{fontFamily: "Century Gothic", fontWeight:'bold', flex:0.5}}
               placeholder="weight (lbs)"
               placeholderTextColor='lightgrey'
-              autoCorrect='false'
+              autoCorrect={false}
               keyboardType='numeric'
               onChangeText={petWeight => this.setState({ petWeight })}
               value={this.state.petWeight}
@@ -323,13 +409,15 @@ export default class GetPetDetails extends Component {
             </View>
           </View>
         </View>
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={ () => this.uploadPetProfile() }>
-          <Text style={styles.textButtonStyle}>
-            Create profile
-          </Text>
-        </TouchableOpacity>
+        <View style = {{flex: 0.2, justifyContent: 'center', alignSelf:'center'}}>
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={ () => this.uploadPetProfile() }>
+            <Text style={styles.textButtonStyle}>
+              Create profile
+            </Text>
+          </TouchableOpacity>
+        </View>    
       </View>
     );
   }
@@ -351,6 +439,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   formContainer: {
+    flex: 1,
     alignSelf: 'stretch',
     backgroundColor: '#FCFCFC',
     borderColor: '#F0F0F0',
@@ -418,5 +507,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Century Gothic',
     textAlign: 'center',
     fontStyle: 'italic'
+  },
+  uploadContainer: {
+    flex: 0.4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignSelf:'center'
+   },
+  label: {
+    margin: 10,
+    color: 'black',
+    fontSize: 14,
+    fontFamily:'Century Gothic'
   },
 });

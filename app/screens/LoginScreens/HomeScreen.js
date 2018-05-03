@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, AppRegistry, Button, TextInput, TouchableOpacity, ActivityIndicator, Image, Platform} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Header from './../../components/Header';
-import * as firebase from 'firebase';
-import RNFetchBlob from 'react-native-fetch-blob'
-import ImagePicker from 'react-native-image-crop-picker';
+import { StyleSheet, Text, View, AppRegistry, TouchableOpacity, Image, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
+import {WeeklyProgressRing} from './../../components/WeeklyProgressRing';
+import LineChartComp from './../../components/LineChartComp';
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
+import * as firebase from 'firebase';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default class GetPetDetails extends Component {
+// console.disableYellowBox = true;
+
+export default class WelcomeScreen extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
+    
     return {
       tabBarIcon: ({tintColor}) => (
           <Icon name="home" size={24} color={tintColor}/>
@@ -45,6 +47,7 @@ export default class GetPetDetails extends Component {
     this.setState({menuOpen: !this.state.menuOpen});
   }
 
+
   getUserData(userID){
     firebase.database().ref('userDetails/' + userID + '/').once('value')
     .then((snapshot) => {
@@ -57,50 +60,6 @@ export default class GetPetDetails extends Component {
       alert("Error")
     })
 
-  }
-
-
-  uploadImage(){
-
-    const Blob = RNFetchBlob.polyfill.Blob
-    const fs = RNFetchBlob.fs
-    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-    window.Blob = Blob
-
-    let uploadBlob = null
-    const imageRef = firebase.storage().ref('images').child("test.jpg")
-    let mime = 'image/jpeg'
-
-
-    ImagePicker.openPicker({
-      width: 300,
-      height: 300,
-      cropping: true,
-      includeBase64: true,
-      compressImageQuality: 0.2
-    }).then(imageObj => {
-      console.log(imageObj);
-      const data = imageObj.data
-
-      Blob.build(data, { type: `${mime};BASE64` })
-      .then((blob) => {
-        uploadBlob = blob
-        return imageRef.put(blob, { contentType: mime })
-      })
-      .then(() => {
-        uploadBlob.close()
-        return imageRef.getDownloadURL()
-      })
-      .then((url) => {
-        console.log(url);
-        this.setState({
-          imageUrl: url
-        })
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    });
   }
 
   componentDidMount(){
@@ -133,15 +92,14 @@ export default class GetPetDetails extends Component {
   }
 
   render() {
-
+    console.log(this.state.userDetails)
     if (!this.state.userDetails) {
       return (
         <ActivityIndicator size='large' />
         );
     }
-    // console.log(this.state.userDetails)
     return (
-    <Drawer
+      <Drawer
       ref={(ref) => this._drawer = ref}
       type="overlay"
       side='right'
@@ -156,32 +114,79 @@ export default class GetPetDetails extends Component {
         main: { opacity:(2-ratio)/2 }
       })}
       >
-      <View style={styles.screenContainer}>
-        <Text style={styles.welcomeText}>
-          Welcome {this.state.userName}
-        </Text>
+        <View style={styles.screenContainer}>
+          <View style={styles.imageContainer}>
+            <ImageBackground
+              style={styles.image}
+              source={{uri: this.state.userDetails.petDetails.petPic}}>
+              <View style={{justifyContent:'flex-end', flex: 1}}>
+                <Text style={styles.imageTitle}>
+                  { this.state.userDetails.petDetails.petName } on { this.state.userDetails.petDetails.petAdoptionDate }
+                </Text>
+              </View>
+            </ImageBackground>
+          </View>
 
-        <View>
-          <TouchableOpacity
-            onPress={() => this.uploadImage()}>
-            <View style={{justifyContent:'center', alignItems:'center'}}>
-              <Image
-                source={require("../../icon/plus.png")}
-                style={{height:25, width:25, justifyContent:'center', margin:13}}/>
-            </View>
-          </TouchableOpacity>
+          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
-          <Text style={{fontFamily:'Century Gothic'}}>
-            Memories with Peanut!
-          </Text>
+          <View style = {{ alignSelf: 'flex-start', marginHorizontal: 5, marginTop: 15, marginBottom: 5 }}>
+            <Text style = {styles.weeklyGoalsTitle}> Weekly Goals </Text>
+          </View>
+
+          <View style = {styles.weeklyProgressContainer}>
+            <WeeklyProgressRing 
+              completed = { 4 }
+              total = { 10 }
+              completedColor = { '#e54747' }
+              blankColor = { '#f7e1e1' }
+              activityName = { 'Train' }
+            />
+            <WeeklyProgressRing 
+              completed = { 3 }
+              total = { 5 }
+              completedColor = { '#d5e244' }
+              blankColor = { '#fbfced' }
+              activityName = { 'Care' }
+            />
+            <WeeklyProgressRing 
+              completed = { 1 }
+              total = { 3 }
+              completedColor = { '#7cff8c' }
+              blankColor = { '#edf9ee' }
+              activityName = { 'Play' }
+            />
+            <WeeklyProgressRing 
+              completed = { 7 }
+              total = { 7 }
+              completedColor = { '#8beff4' }
+              blankColor = { '#e8fbfc' }
+              activityName = { 'Calm' }
+            />
+          </View>
+
+          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch', marginTop: 15}}/>
+
+          <View style = {{ flex:1 }}>
+            <ScrollView
+            horizontal={true}>
+
+              <View>
+                <View style={{ flex: 0.3 }}>
+                  <Text style = {styles.graphTitle}> Behavioral Trend: Anxious </Text>
+                </View>
+                <LineChartComp />
+              </View>
+
+              <View>
+                <View style={{ flex: 0.3 }}>
+                  <Text style = {styles.graphTitle}> Behavioral Trend: Aggressive </Text>
+                </View>
+                <LineChartComp />
+              </View>  
+
+            </ScrollView>
+          </View>          
         </View>
-        {this.state.imageUrl ?
-        <Image
-          style={{width: 250, height: 250}}
-          source={{uri: this.state.imageUrl}}
-        /> : null
-        }
-      </View>
       </Drawer>
     );
   }
@@ -190,17 +195,84 @@ export default class GetPetDetails extends Component {
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     alignSelf: 'stretch',
     justifyContent: 'space-around'
   },
+  logoStyle: {
+    width:200,
+    height:200
+  },
   welcomeText: {
     color: 'black',
     fontSize: 30,
-    margin: 15,
+    fontWeight: 'bold',
+    fontFamily: 'SignPainter'
+  },
+  descriptionText: {
+    color: 'black',
+    fontSize: 16,
+    marginHorizontal: 30,
     textAlign: 'center',
-    fontFamily: "Century Gothic"
+    fontFamily: 'Century Gothic'
+  },
+  buttonStyle: {
+    width: 130,
+    backgroundColor: '#5AC8B0',
+    borderRadius: 7,
+    shadowOffset:{height: 2},
+    shadowColor: 'grey',
+    shadowOpacity: 1.0,
+    shadowRadius: 2
+  },
+  textButtonStyle: {
+    margin: 8,
+    textAlign: 'center',
+    fontSize: 13,
+    color: 'white',
+    fontFamily: 'Century Gothic'
+  },
+  weeklyProgressContainer: {
+    // flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: 30,
+  },
+    imageContainer: {
+    alignSelf: 'stretch',
+    backgroundColor: '#FCFCFC',
+    borderColor: '#F0F0F0',
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // flexDirection: 'row'
+  },
+  image: {
+    width: 380,
+    height: 220,
+    // alignSelf: 'center'
+  },
+  imageTitle: {
+    textAlign: 'center',
+    color:'black',
+    fontFamily: 'Century Gothic',
+    fontSize: 15,
+    opacity: 1,
+    padding: 5,
+    backgroundColor:'rgba(255,255,255,0.8)',
+  },
+  weeklyGoalsTitle:{
+    textAlign: 'left',
+    color:'black',
+    fontFamily: 'Century Gothic',
+    fontSize: 24,
+    padding: 5,
+  },
+  graphTitle:{
+    color:'black',
+    fontFamily: 'Century Gothic',
+    fontSize: 16,
+    padding: 5,
   }
 });
