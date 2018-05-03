@@ -105,9 +105,7 @@ export default class GetPetDetails extends Component {
       alert("All fields are mandatory")
       return
     }
-
-
-
+    
     firebase.database().ref('userDetails/'+ this.state.userID + '/petDetails').set({
       petName : this.state.petName,
       petBreed : this.state.petBreed,

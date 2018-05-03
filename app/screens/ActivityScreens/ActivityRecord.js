@@ -10,6 +10,7 @@ import {
   Image,
   TextInput
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-crop-picker';
 import DatePicker from 'react-native-datepicker';
@@ -19,6 +20,9 @@ import ControlPanel from './../../components/ControlPanel';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import * as firebase from 'firebase';
+
+// import { RNCamera } from 'react-native-camera';
+import ProgressCircle from 'react-native-progress-circle';
 
 const today = new Date();
 
@@ -97,39 +101,30 @@ export default class ActivityRecord extends Component{
   }
 
   toggleStopwatch() {
-    this.setState({stopwatchStart: !this.state.stopwatchStart, stopwatchReset: false});
     const {params} = this.props.navigation.state
-    // console.log(params.item.title)
-    // console.log(new Date().getFullYear())
-    // console.log(new Date().getHours())
-    const recActID = params.item.title.replace(" ","") + new Date().getUTCFullYear() + new Date().getUTCMonth() + new Date().getUTCDate() + new Date().getUTCHours() + new Date().getUTCMinutes() + new Date().getUTCSeconds()
-
-    // if (this.state.stopwatchStart){
-    //   firebase.database().ref('userDetails/'+ this.state.userID + '/recentActivities').set({
-    //     ActivityID : recActID
-        
-    //   })
-    // }
-    if (!this.state.stopwatchStart)
-    {
-      startDate = new Date()
-      // console.log("Set")
-      firebase.database().ref('userDetails/'+ params.userID + '/recentActivities/' + recActID + '/' ).set({
+    CompleteDate = new Date()
+    firebase.database().ref('userDetails/'+ params.userID + '/' + 'recentActivities/' + params.recActID + '/').once('value')
+  .then((snapshot) => {
+    if (snapshot.val() !== null){
+      console.log(params.startDate)
+      firebase.database().ref('userDetails/'+ params.userID + '/recentActivities/' + params.recActID + '/' ).set({
         title : params.item.title,
         category : params.item.category,
-        status: "In Progress",
-        behavioralMarker: {Anxious: "",
-                           Aggressive: "",
-                           Calm: "",
-                           Excited: "",
-                           Affectionate: "" },
+        status: "Completed",
+        behavioralMarker: {Anxious: this.state.behavior1,
+                           Aggressive: this.state.behavior2,
+                           Calm: this.state.behavior3,
+                           Excited: this.state.behavior4,
+                           Affectionate: this.state.behavior5 },
         duration: 0,
-        activityStartDate: startDate,
+        activityStartDate: params.startDate,
+        activityCompleteDate: CompleteDate,
         image: "",
         distance: "",
         journalID: ""
       });
     }
+  });
   }
 
   resetStopwatch() {
@@ -172,11 +167,20 @@ export default class ActivityRecord extends Component{
     }).then(image => {
       console.log(image);
     });
-  }
+  };
+
+  // takePicture = async function() {
+  //   console.log("Cam")
+  //   if (this.camera) {
+  //     const options = { quality: 0.5, base64: true };
+  //     const data = await this.camera.takePictureAsync(options)
+  //     console.log(data.uri);
+  //   }
+  // };
 
   _onFinish() {
     this.props.navigation.navigate('ActivitySummary');
-  }
+  };
 
   componentDidMount(){
     this.props.navigation.setParams({
@@ -194,11 +198,18 @@ export default class ActivityRecord extends Component{
     }
 
     const {params} = this.props.navigation.state
-    // console.log(params)
+  }
 
-    // firebase.database().ref('userDetails/'+ this.state.userID + '/recentActivities').set({
-      
-    // })
+  reset = () => {
+
+    const {params} = this.props.navigation.state;
+    firebase.database().ref('userDetails/'+ params.userID + '/' + 'recentActivities/' + params.recActID + '/').once('value')
+  .then((snapshot) => {
+    if (snapshot.val() !== null){
+      firebase.database().ref('userDetails/'+ params.userID + '/' + 'recentActivities/' + params.recActID + '/').remove();
+    }
+  });
+    this.props.navigation.navigate("ActivityMain");
   }
 
   render(){
@@ -221,6 +232,26 @@ export default class ActivityRecord extends Component{
           })}
           >
           <View style={styles.box}>
+
+          <RNCamera
+            ref={ref => {
+              this.camera = ref;
+            }}
+            style = {styles.preview}
+            type={RNCamera.Constants.Type.back}
+            flashMode={RNCamera.Constants.FlashMode.on}
+            permissionDialogTitle={'Permission to use camera'}
+            permissionDialogMessage={'We need your permission to use your camera phone'}
+        />
+        {/* <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center',}}>
+        <TouchableOpacity
+            onPress={this.takePicture.bind(this)}
+            style = {styles.capture}
+        >
+            <Text style={{fontSize: 14}}> SNAP </Text>
+        </TouchableOpacity>
+        </View> */}
+
           <View style={{margin:5}}>
             <Text style={styles.addbuttontext}>
               Take {params.petName}'s photo!
@@ -229,7 +260,8 @@ export default class ActivityRecord extends Component{
             </Text>
             <View style = {styles.uploadContainer}>
               <View style={{flex:0.5}}>
-                <TouchableOpacity onPress={this._onCamPress}>
+                <TouchableOpacity onPress={this._onAddPress}>
+                {/* <TouchableOpacity onPress={this.takePicture.bind(this)}> */}
                   <View style={{justifyContent:'center', alignItems:'center'}}>
                     <Image
                       source={require("../../icon/camera.png")}
@@ -290,7 +322,7 @@ export default class ActivityRecord extends Component{
               currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
             />
             
-            <Text style={styles.label}>Date</Text>
+            {/* <Text style={styles.label}>Date</Text> */}
             <DatePicker
             date={this.state.eventDate}
             mode="date"
@@ -300,6 +332,7 @@ export default class ActivityRecord extends Component{
             maxDate={today}
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
+            showIcon={false}
             // iconComponent={<Icon name="calendar" size = {24} color="gray" />}
             customStyles={{
               dateInput: {
@@ -325,89 +358,98 @@ export default class ActivityRecord extends Component{
         </View>
         
         <View style={styles.screenContainer}>
-          {/* <View style={{paddingTop:15, paddingBottom:15}}>
-            <Text style={styles.header}>TIME</Text>
-            <Stopwatch laps start={this.state.stopwatchStart}
-                reset={this.state.stopwatchReset}
-                options={options}
-                getTime={this.getFormattedTime} />
-          </View> */}
 
-          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
+          <View style={{justifyContent:'center'}}>
+          <Text style={styles.subheader}>Weekly activity progress:</Text>
+          </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <View>
-                <Text style={[styles.header, {paddingLeft:20,paddingRight:20}]}>ACTIVITY</Text>
-                <Text style={styles.subheader}>Bath time</Text>
+              <View style={{marginLeft:30}}>
+                <ProgressCircle
+                  percent={30}
+                  radius={30}
+                  borderWidth={3}
+                  color="#3399FF"
+                  shadowColor="#ffffff"
+                  bgColor="#ffffff"
+                >
+                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{30*10/100}</Text>
+                </ProgressCircle>
+                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
               </View>
-              <View>
-                <Text style={[styles.header, {paddingLeft:20,paddingRight:20}]}>GOAL</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={styles.completedgoal}/>
-                  <View style={styles.remaininggoal}/>
-                  <View style={styles.remaininggoal}/>
-                </View>
+              <View style={{marginLeft:30}}>
+                <ProgressCircle
+                  percent={50}
+                  radius={30}
+                  borderWidth={3}
+                  color="#C58502"
+                  shadowColor="#ffffff"
+                  bgColor="#ffffff"
+                >
+                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{50*10/100}</Text>
+                </ProgressCircle>
+                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
               </View>
-              <View>
-                <Text style={[styles.header, {paddingLeft:20,paddingRight:20}]}>DISTANCE</Text>
-                <Text style={styles.subheader}>N/A</Text>
+              <View style={{marginLeft:30}}>
+                <ProgressCircle
+                  percent={80}
+                  radius={30}
+                  borderWidth={3}
+                  color="#5AC8B0"
+                  shadowColor="#ffffff"
+                  bgColor="#ffffff"
+                >
+                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{80*10/100}</Text>
+                </ProgressCircle>
+                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
+              </View>
+              <View style={{marginLeft:30}}>
+                <ProgressCircle
+                  percent={10}
+                  radius={30}
+                  borderWidth={3}
+                  color="#4E0250"
+                  shadowColor="#ffffff"
+                  bgColor="#ffffff"
+                >
+                  <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{10*10/100}</Text>
+                </ProgressCircle>
+                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
               </View>
             </View>
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
-          {/* <View style={{flexDirection:'row', paddingTop:10, paddingBottom:10}}>
-            <TouchableOpacity
-              style={styles.addimg}
-              onPress={this._onAddPress}>
-              <Text style={styles.addbuttontext}>{'add photo'}</Text>
-              <Text style={styles.plustext}>+</Text>
-            </TouchableOpacity>
-
-            <View style={styles.commentbox}>
-               <TextInput
-                 multiline = {true}
-                 numberOfLines = {4}
-                 style = {styles.commenttext}
-                 placeholder="Notes:"
-                 placeholderTextColor="grey"
-               />
-             </View>
-
-          </View> */}
-
-
-          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
-          <View>
+          <View style={{height: 75}}>
             <Text style={styles.subheader}>Behavior tags:</Text>
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-              <View style={{margin:10}}>
+              <View style={{margin:10, marginTop:0}}>
                <TouchableOpacity onPress={this.toggleB1}>
                  <View style={[styles.behavior, {backgroundColor:'#4E0250'}, this.state.behavior1 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Anxious</Text>
               </View>
 
-              <View style={{margin:10}}>
+              <View style={{margin:10, marginTop:0}}>
                <TouchableOpacity onPress={this.toggleB2}>
                  <View style={[styles.behavior, {backgroundColor:'#CC2539'}, this.state.behavior2 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Aggressive</Text>
               </View>
 
-              <View style={{margin:10}}>
+              <View style={{margin:10, marginTop:0}}>
                <TouchableOpacity onPress={this.toggleB3}>
                  <View style={[styles.behavior, {backgroundColor:'#6592CC'}, this.state.behavior3 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Calm</Text>
               </View>
 
-              <View style={{margin:10}}>
+              <View style={{margin:10, marginTop:0}}>
                <TouchableOpacity onPress={this.toggleB4}>
                  <View style={[styles.behavior, {backgroundColor:'#5AC8B0'}, this.state.behavior4 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Excited</Text>
               </View>
 
-              <View style={{margin:10}}>
+              <View style={{margin:10, marginTop:0}}>
                <TouchableOpacity onPress={this.toggleB5}>
                  <View style={[styles.behavior, {backgroundColor:'#C58502'}, this.state.behavior5 && styles.bSelect]}/>
                </TouchableOpacity>
@@ -417,25 +459,31 @@ export default class ActivityRecord extends Component{
            </View>
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
-
+          <View style={styles.commentbox}>
+            <TextInput
+              multiline = {true}
+              numberOfLines = {4}
+              style = {styles.commenttext}
+              placeholder="Notes:"
+              placeholderTextColor="grey"
+            />
+          </View>
+          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
           <View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <TouchableOpacity style={styles.startbutton} onPress={this.toggleStopwatch}>
+              <TouchableOpacity style={styles.startbutton} onPress={this.reset}>
                 <Text style={styles.startbuttontext}> </Text>
-                <Text style={styles.startbuttontext}>{!this.state.stopwatchStart ? "START" : "STOP"}</Text>
+                <Text style={styles.startbuttontext}>DELETE</Text>
                 <Text style={styles.startbuttontext}> </Text>
               </TouchableOpacity>
-
-              <TouchableOpacity style={styles.finishbutton} onPress={this._onFinish}>
+              <View style={{marginRight:50}} />
+              <TouchableOpacity style={styles.finishbutton} onPress={this.toggleStopwatch.bind(this)}>
                 <Text style={styles.finishbuttontext}> </Text>
-                <Text style={styles.finishbuttontext}>FINISH</Text>
+                <Text style={styles.finishbuttontext}>SAVE</Text>
                 <Text style={styles.finishbuttontext}> </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={this.resetStopwatch}>
-              <Text style={styles.subheader}>Reset</Text>
-            </TouchableOpacity>
           </View>
         </View>
         </Drawer>
@@ -454,11 +502,12 @@ const styles = StyleSheet.create({
   },
   commentbox: {
     backgroundColor: '#F0F0F0',
-    width: 200,
+    // width: 200,
     height: 100,
-    margin: 10,
+    // margin: 10,
     borderColor: 'lightgrey',
-    borderWidth: 0.5
+    borderWidth: 0.5,
+    alignSelf: 'stretch'
   },
   commenttext: {
     color: 'black',
@@ -591,11 +640,12 @@ const styles = StyleSheet.create({
   label: {
     margin: 10,
     color: 'black',
-    fontSize: 10,
-    fontFamily:'Century Gothic'
+    fontSize: 18,
+    fontFamily:'Century Gothic',
+    marginLeft: 40
   },
   box: {
-    height: 180,
+    height: 150,
     alignItems: 'stretch',
     backgroundColor: '#F6F6F6',
     borderColor: '#E0E0E0',
@@ -605,6 +655,13 @@ const styles = StyleSheet.create({
   uploadContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+   },
+   dateContainer: {
+    flex : 0,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: 40
    },
 })
 

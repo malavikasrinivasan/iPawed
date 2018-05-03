@@ -37,10 +37,12 @@ export default class ViewEventScreen extends Component {
       };
 
   state = {
-    eventTitle : 'Peanut Goes to the Vet!',
+    eventTitle : '',
     description : '',
-    eventDate : new Date(),
-    notesText: 'Today, Peanut went to the vet to get his second round of shots. He did well and also met some other huskies! What a good doggo!',
+    eventDate : '',
+    eventLocation: '',
+
+    notesText: '',
     menuOpen: false
   }
 
@@ -63,6 +65,8 @@ export default class ViewEventScreen extends Component {
   }
 
   render() {
+    const {params} = this.props.navigation.state;
+    console.log(params);
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
@@ -80,30 +84,28 @@ export default class ViewEventScreen extends Component {
         })}
         >
       <View style={styles.container}>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start'}}>
-          <Text style={styles.welcomeText}>
-            {this.state.eventTitle}
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+          <Text style={[styles.welcomeText, {alignSelf: 'center'}]}>
+            {params.eventData.title}
           </Text>
-          <View>
-            <Icon name="edit" size={20} color="black" style={{margin: 10}}
-            onPress={() => this.props.navigation.navigate('AddEvent')}/>
-          </View>
-
+          <Icon name="edit" size={20} color="black" style={{marginTop: 10, alignSelf: 'center'}}
+          onPress={() => this.props.navigation.navigate('AddEvent')}/>
         </View>
         <Image
           style={styles.image}
-          source={require('./../../img/vet.png')}
+          source={{uri: params.eventData.imageurl}}
           resizeMode="contain"
+          
         />
         <View style = {styles.uploadContainer}>
-          <Text style={styles.label}> April 15, 2018 </Text>
+          <Text style={styles.label}> {params.eventData.time} </Text>
           <Text style={styles.label}> Berkeley, CA </Text>
         </View>
          <View style={styles.box}>
            <View style={styles.commentbox}>
               <Text style={styles.subheader}>Notes:</Text>
               <Text style={styles.commenttext}>
-                {this.state.notesText}
+                {params.eventData.description}
               </Text>
           </View>
         </View>

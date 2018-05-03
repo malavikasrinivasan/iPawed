@@ -81,18 +81,35 @@ toggleControlPanel = () => {
   this.setState({menuOpen: !this.state.menuOpen});
 }
 
-getUserRecommendedActivities(userID){
-  firebase.database().ref('userDetails/' + userID + '/' + 'recommendedActivities' + '/').once('value')
-  .then((snapshot) => {
-    this.setState({
-      recommendedActivities: snapshot.val()
-    });
-    // console.log(recommendedActivities)
-  })
-  .catch((error) => {
-    alert("Error")
-  })
 
+setRecommendedActivities(userID){
+  firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/').remove();
+  firebase.database().ref('activityCategories/Train/Activities/').once('value')
+  .then((snapshot) => {
+    snapshot.forEach((childSnapshot) => {
+      var key = childSnapshot.key;
+      var childData = childSnapshot.val();
+      console.log(key);
+      this.setState({
+        title:key,
+        steps:childData.Steps,
+        category:childData.Category,
+        desc:childData.desc,
+        imageurl:childData.imageurl,
+        video:childData.Video
+      });
+      firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
+        title: this.state.title,
+        steps: this.state.steps,
+        video: this.state.video,
+        desc: this.state.desc,
+        imageurl: this.state.imageurl,
+        category: this.state.category
+      }).catch((error) => {
+        alert(error)
+      });
+    })
+  });
 }
 
 getRef() {
@@ -110,6 +127,11 @@ componentDidMount() {
     this.setState({
       userID: userID,
     });
+
+    this.setRecommendedActivities(userID);
+    // this.setState({
+    //           dataSource: this.state.dataSource.cloneWithRows(this.state.recommendedActivities)
+    //       });
   }
 
   // console.log("Getting Firebase items");

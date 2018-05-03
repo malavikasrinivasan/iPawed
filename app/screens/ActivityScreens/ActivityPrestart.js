@@ -13,6 +13,7 @@ import ActivityDetail from './ActivityDetail';
 import ActivityRecord from './ActivityRecord';
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
+import ProgressCircle from 'react-native-progress-circle';
 
 export default class ActivityPrestart extends Component {
 
@@ -43,12 +44,38 @@ export default class ActivityPrestart extends Component {
   };
 
   state = {
-    menuOpen: false
+    menuOpen: false,
+    actStartDate: ''
   }
 
   toggleControlPanel = () => {
     this.state.menuOpen ? this._drawer.close() : this._drawer.open();
     this.setState({menuOpen: !this.state.menuOpen});
+  }
+
+  _activityStart = () => {
+    const {params} = this.props.navigation.state;
+    const recActID = params.item.title.replace(" ","") + new Date().getUTCFullYear() + new Date().getUTCMonth() + new Date().getUTCDate() + new Date().getUTCHours() + new Date().getUTCMinutes() + new Date().getUTCSeconds();
+    startDate = new Date();
+    this.setState({actStartDate: startDate});
+    console.log(startDate)
+    firebase.database().ref('userDetails/'+ params.userID + '/recentActivities/' + recActID + '/' ).set({
+      title : params.item.title,
+      category : params.item.category,
+      status: "In Progress",
+      behavioralMarker: {Anxious: "",
+                         Aggressive: "",
+                         Calm: "",
+                         Excited: "",
+                         Affectionate: "" },
+      duration: 0,
+      activityStartDate: startDate,
+      activityCompleteDate: "",
+      image: "",
+      distance: "",
+      journalID: ""
+    });
+    this.props.navigation.navigate('ActivityRecord', {item:params.item, userID:params.userID, petName:this.state.petName, recActID:recActID, startDate:startDate})
   }
 
   componentDidMount(){
@@ -139,9 +166,69 @@ export default class ActivityPrestart extends Component {
           Weekly goals with {this.state.petName}: April 15 - April 21, 2018
         </Text>
 
+        <View style={{justifyContent:'center'}}>
+          <Text style={styles.subheader}>Weekly activity progress:</Text>
+          </View>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <View style={{marginLeft:30}}>
+                <ProgressCircle
+                  percent={30}
+                  radius={30}
+                  borderWidth={3}
+                  color="#3399FF"
+                  shadowColor="#ffffff"
+                  bgColor="#ffffff"
+                >
+                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{30*10/100}</Text>
+                </ProgressCircle>
+                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
+              </View>
+              <View style={{marginLeft:30}}>
+                <ProgressCircle
+                  percent={50}
+                  radius={30}
+                  borderWidth={3}
+                  color="#C58502"
+                  shadowColor="#ffffff"
+                  bgColor="#ffffff"
+                >
+                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{50*10/100}</Text>
+                </ProgressCircle>
+                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
+              </View>
+              <View style={{marginLeft:30}}>
+                <ProgressCircle
+                  percent={80}
+                  radius={30}
+                  borderWidth={3}
+                  color="#5AC8B0"
+                  shadowColor="#ffffff"
+                  bgColor="#ffffff"
+                >
+                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{80*10/100}</Text>
+                </ProgressCircle>
+                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
+              </View>
+              <View style={{marginLeft:30}}>
+                <ProgressCircle
+                  percent={10}
+                  radius={30}
+                  borderWidth={3}
+                  color="#4E0250"
+                  shadowColor="#ffffff"
+                  bgColor="#ffffff"
+                >
+                  <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{10*10/100}</Text>
+                </ProgressCircle>
+                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
+              </View>
+            </View>
+          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
+
         <TouchableOpacity
           style={styles.startbutton}
-          onPress={() => this.props.navigation.navigate('ActivityRecord', {item:item, userID:userID, petName:this.state.petName})}>
+          onPress={this._activityStart.bind(this)}>
+          {/* onPress={() => this.props.navigation.navigate('ActivityRecord', {item:item, userID:userID, petName:this.state.petName})}> */}
           <Text style={styles.startbuttontext}> </Text>
           <Text style={styles.startbuttontext}>START</Text>
           <Text style={styles.startbuttontext}> </Text>

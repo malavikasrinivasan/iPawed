@@ -33,7 +33,11 @@ const ActivityStack = StackNavigator({
   ActivityRecord: { screen: ActivityRecord},
   ActivitySummary: { screen: ActivitySummary},
   ActivityCategory: { screen: ActivityCategory},
-});
+}
+,
+  {
+    initialRouteName: 'ActivityMain',
+  });
 
 const JournalStack = StackNavigator({
   Timeline: { screen: TimelineScreen },
