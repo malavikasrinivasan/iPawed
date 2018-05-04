@@ -99,7 +99,7 @@ export default class UserLoginScreen extends Component {
   }
 
   static navigationOptions = {
-    title: 'Pet Set Go!',
+    title: '',
     headerTintColor: '#5AC8B0',
     headerBackTitle: 'back',
     headerBackTitleStyle: {
