@@ -18,9 +18,10 @@ export default class OnboardingQ3 extends Component {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 
@@ -85,6 +86,7 @@ export default class OnboardingQ3 extends Component {
               <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={[styles.dot, {backgroundColor:'#5E0D6E'}]}/>
+              <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={styles.dot}/>
             </View>

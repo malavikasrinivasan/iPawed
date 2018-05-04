@@ -13,7 +13,7 @@ export default class WelcomeScreen extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
-    
+
     return {
       tabBarIcon: ({tintColor}) => (
           <Icon name="home" size={24} color={tintColor}/>
@@ -22,8 +22,9 @@ export default class WelcomeScreen extends Component {
       headerBackTitle: 'back',
       headerLeft: null,
       headerTitleStyle: {
-        fontFamily: 'SignPainter',
-        fontSize: 28
+        fontFamily: 'Century Gothic',
+        fontSize: 22,
+        fontWeight: 'normal'
       },
       headerRight:
         <TouchableOpacity onPress={() => params.handleMenuToggle()}>
@@ -134,32 +135,32 @@ export default class WelcomeScreen extends Component {
           </View>
 
           <View style = {styles.weeklyProgressContainer}>
-            <WeeklyProgressRing 
-              completed = { 4 }
-              total = { 10 }
-              completedColor = { '#e54747' }
-              blankColor = { '#f7e1e1' }
+            <WeeklyProgressRing
+              completed = { this.state.userDetails.weeklyGoals.trainGoalProgress }
+              total = { this.state.userDetails.weeklyGoals.trainGoal }
+              completedColor = { 'rgb(214,154,56,1)' }
+              blankColor = { 'rgb(214,154,56,0.3)' }
               activityName = { 'Train' }
             />
-            <WeeklyProgressRing 
-              completed = { 3 }
-              total = { 5 }
-              completedColor = { '#d5e244' }
-              blankColor = { '#fbfced' }
+            <WeeklyProgressRing
+              completed = { this.state.userDetails.weeklyGoals.careGoalProgress }
+              total = { this.state.userDetails.weeklyGoals.careGoal }
+              completedColor = { 'rgb(87,193,170,1)' }
+              blankColor = { 'rgb(87,193,170,0.3)' }
               activityName = { 'Care' }
             />
-            <WeeklyProgressRing 
-              completed = { 1 }
-              total = { 3 }
-              completedColor = { '#7cff8c' }
-              blankColor = { '#edf9ee' }
+            <WeeklyProgressRing
+              completed = { this.state.userDetails.weeklyGoals.playGoalProgress }
+              total = { this.state.userDetails.weeklyGoals.playGoal }
+              completedColor = { 'rgb(207,65,83,1)' }
+              blankColor = { 'rgb(207,65,83,0.3)' }
               activityName = { 'Play' }
             />
-            <WeeklyProgressRing 
-              completed = { 7 }
-              total = { 7 }
-              completedColor = { '#8beff4' }
-              blankColor = { '#e8fbfc' }
+            <WeeklyProgressRing
+              completed = { this.state.userDetails.weeklyGoals.calmGoalProgress }
+              total = { this.state.userDetails.weeklyGoals.calmGoal }
+              completedColor = { 'rgb(91,13,107,0.9)' }
+              blankColor = { 'rgb(91,13,107,0.3)' }
               activityName = { 'Calm' }
             />
           </View>
@@ -182,10 +183,10 @@ export default class WelcomeScreen extends Component {
                   <Text style = {styles.graphTitle}> Behavioral Trend: Aggressive </Text>
                 </View>
                 <LineChartComp />
-              </View>  
+              </View>
 
             </ScrollView>
-          </View>          
+          </View>
         </View>
       </Drawer>
     );
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 30,
     fontWeight: 'bold',
-    fontFamily: 'SignPainter'
+    fontFamily: 'Century Gothic'
   },
   descriptionText: {
     color: 'black',
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: '#FCFCFC',
     borderColor: '#F0F0F0',
-    borderWidth: 1.5,
+    borderWidth: 0,
     justifyContent: 'center',
     alignItems: 'center',
     // flexDirection: 'row'

@@ -17,9 +17,10 @@ export default class OnboardingQ4 extends Component {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 
@@ -91,7 +92,8 @@ export default class OnboardingQ4 extends Component {
   updateProfile() {
     if (!this.state.opt1
         && !this.state.opt2
-        && !this.state.opt3)
+        && !this.state.opt3
+        && !this.state.opt4)
     {
       alert("Please select a choice (guessing is fine!)")
       return
@@ -165,6 +167,7 @@ export default class OnboardingQ4 extends Component {
               <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={[styles.dot, {backgroundColor:'#D74456'}]}/>
+              <View style={styles.dot}/>
               <View style={styles.dot}/>
             </View>
             <TouchableOpacity

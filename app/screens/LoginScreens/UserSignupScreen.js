@@ -83,16 +83,17 @@ export default class UserLoginScreen extends Component {
 
 
   static navigationOptions = {
-    title: 'Peternal',
+    title: 'Pet Set Go!',
     headerTintColor: '#5AC8B0',
     headerBackTitle: 'back',
     headerBackTitleStyle: {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 
@@ -111,10 +112,10 @@ export default class UserLoginScreen extends Component {
       <View style={styles.screenContainer}>
         <Image
         style={styles.logoStyle}
-        source={require('./../../img/temp_logo.png')}
+        source={require('./../../img/logo.png')}
         />
 
-        <View>
+        <View style={{alignItems:'center', justifyContent: 'center'}}>
           <Text style={styles.descriptionText}>
             {"Please enter your email address\nand create a password:\n"}
           </Text>
@@ -166,7 +167,7 @@ export default class UserLoginScreen extends Component {
               {"Existing User? Log in "}
             </Text>
             <Text
-            style = {{ color: 'blue', textDecorationLine: 'underline'}}
+            style = {{ color: '#449684', textDecorationLine: 'underline'}}
             onPress = {() => this.props.navigation.navigate('UserLogin')}
             >
              {"here"}
@@ -190,8 +191,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   logoStyle: {
-    width:150,
-    height:150
+    width:250,
+    height:250
   },
   descriptionText: {
     color: 'black',
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
   textButtonStyle: {
     margin: 8,
     textAlign: 'center',
-    fontSize: 13,
+    fontSize: 16,
     color: 'white',
     fontFamily: 'Century Gothic'
   }

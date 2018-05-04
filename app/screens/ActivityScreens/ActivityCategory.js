@@ -40,9 +40,10 @@ export default class ActivityCategory extends Component {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 
@@ -109,21 +110,20 @@ componentDidMount() {
       </ScrollView>
       );
     }
-  
+
     _renderItem(item) {
-  
+
       return (
         <SpecificCategoryCard navigation={this.props.navigation} item={item} />
       );
     }
   }
-  
+
   const styles = StyleSheet.create({
     screenTitle: {
       color: 'black',
-      fontSize: 30,
-      fontWeight: 'bold',
-      fontFamily: 'SignPainter',
+      fontSize: 26,
+      fontFamily: 'Century Gothic',
       textAlign: 'center',
       marginTop: 10
     },
@@ -200,6 +200,5 @@ componentDidMount() {
       fontFamily: 'Century Gothic',
     },
   });
-  
+
   AppRegistry.registerComponent('ActivityMain', () => ActivityMain);
-  

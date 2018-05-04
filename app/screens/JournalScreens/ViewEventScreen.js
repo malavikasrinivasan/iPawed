@@ -23,9 +23,10 @@ export default class ViewEventScreen extends Component {
           fontFamily: 'Century Gothic'
         },
         headerTitleStyle: {
-          fontFamily: 'SignPainter',
-          fontSize: 28,
-          color: 'black'
+          fontFamily: 'Century Gothic',
+          fontSize: 22,
+          color: 'black',
+          fontWeight: 'normal'
         },
         headerRight:
           <TouchableOpacity onPress={() => params.handleMenuToggle()}>
@@ -67,7 +68,7 @@ export default class ViewEventScreen extends Component {
     renderBehaviors(behaviors_on) {
       const circles = [];
 
-      behaviors_on.map(behavior => 
+      behaviors_on.map(behavior =>
         // console.log(behavior);
         circles.push(
           <View>
@@ -84,20 +85,20 @@ export default class ViewEventScreen extends Component {
     console.log(params);
 
     var behaviors_on = []
-    if(params.eventData.anxious == true) {
-      behaviors_on.push({name : "Anxious", color: "#D3B69B"})
-    }
-    if(params.eventData.aggressive == true) {
-      behaviors_on.push({name : "Aggressive", color: "#163250"})
-    }
     if(params.eventData.calm == true) {
-      behaviors_on.push({name : "Calm", color: "#F7C68F"})
+      behaviors_on.push({name : "Content", color: "#8FBAEC"})
     }
-    if(params.eventData.excited == true) {
-      behaviors_on.push({name : "Excited", color: "#CC2539"})
+    if(params.eventData.anxious == true) {
+      behaviors_on.push({name : "Anxious", color: "#e6b800"})
     }
     if(params.eventData.affectionate == true) {
-      behaviors_on.push({name : "Affectionate", color: "#F9D64B"})
+      behaviors_on.push({name : "Affectionate", color: "plum"})
+    }
+    if(params.eventData.aggressive == true) {
+      behaviors_on.push({name : "Aggressive", color: "indianred"})
+    }
+    if(params.eventData.excited == true) {
+      behaviors_on.push({name : "Excited", color: "#B8E986"})
     }
 
     return (
@@ -117,7 +118,7 @@ export default class ViewEventScreen extends Component {
         })}
         >
       <View style={styles.container}>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
           <Text style={[styles.welcomeText, {alignSelf: 'center'}]}>
             {params.eventData.title}
           </Text>
@@ -159,9 +160,8 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     color: 'black',
-    fontSize: 32,
-    fontWeight: 'bold',
-    fontFamily: 'SignPainter',
+    fontSize: 26,
+    fontFamily: 'Century Gothic',
     textAlign: 'center',
     marginTop: 10,
   },

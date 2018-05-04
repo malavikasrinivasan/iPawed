@@ -17,9 +17,10 @@ export default class OnboardingQ1 extends Component {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 
@@ -133,6 +134,7 @@ export default class OnboardingQ1 extends Component {
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <View style={{flexDirection:'row', margin: 15}}>
               <View style={[styles.dot, {backgroundColor:'#5AC8B0'}]}/>
+              <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={styles.dot}/>

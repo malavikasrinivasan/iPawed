@@ -99,16 +99,17 @@ export default class UserLoginScreen extends Component {
   }
 
   static navigationOptions = {
-    title: 'Peternal',
+    title: 'Pet Set Go!',
     headerTintColor: '#5AC8B0',
     headerBackTitle: 'back',
     headerBackTitleStyle: {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 
@@ -125,17 +126,17 @@ export default class UserLoginScreen extends Component {
     return (
       <View style={styles.screenContainer}>
         <Text style={styles.welcomeText}>
-          Welcome to Peternal!
+          Welcome to Pet Set Go!
         </Text>
 
         <Image
         style={styles.logoStyle}
-        source={require('./../../img/temp_logo.png')}
+        source={require('./../../img/logo.png')}
         />
 
         <View>
           <Text style={styles.descriptionText}>
-            {"Let's get you signed in!\n"}
+            {"Let's get you signed in:\n"}
           </Text>
           <View style={styles.formContainer}>
             <TextInput
@@ -176,7 +177,7 @@ export default class UserLoginScreen extends Component {
               {"New User? Sign up "}
             </Text>
             <Text
-            style = {{ color: 'blue', textDecorationLine: 'underline'}}
+            style = {{ color: '#449684', textDecorationLine: 'underline'}}
             onPress = {() => this.props.navigation.navigate('UserSignup')}
             >
              {"here"}
@@ -188,7 +189,7 @@ export default class UserLoginScreen extends Component {
               {"Developer? Skip "}
             </Text>
             <Text
-            style = {{ color: 'blue', textDecorationLine: 'underline'}}
+            style = {{ color: '#449684', textDecorationLine: 'underline'}}
             onPress = {() => this.onPressDeveloperSignIn()}
             >
              {"here"}
@@ -211,13 +212,12 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     color: 'black',
-    fontSize: 30,
-    fontWeight: 'bold',
-    fontFamily: 'SignPainter'
+    fontSize: 24,
+    fontFamily: 'Century Gothic'
   },
   logoStyle: {
-    width:200,
-    height:200
+    width:250,
+    height:250
   },
   descriptionText: {
     color: 'black',
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   textButtonStyle: {
     margin: 8,
     textAlign: 'center',
-    fontSize: 13,
+    fontSize: 16,
     color: 'white',
     fontFamily: 'Century Gothic'
   }

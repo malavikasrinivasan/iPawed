@@ -18,6 +18,7 @@ import OnboardingQ2 from './../screens/LoginScreens/OnboardingQ2';
 import OnboardingQ3 from './../screens/LoginScreens/OnboardingQ3';
 import OnboardingQ4 from './../screens/LoginScreens/OnboardingQ4';
 import OnboardingQ5 from './../screens/LoginScreens/OnboardingQ5';
+import OnboardingGoals from './../screens/LoginScreens/OnboardingGoals';
 import OnboardingSummary from './../screens/LoginScreens/OnboardingSummary';
 import AboutScreen from './../screens/LoginScreens/AboutScreen';
 
@@ -31,6 +32,7 @@ const RootStack = StackNavigator(
     OnboardingQ3: { screen: OnboardingQ3},
     OnboardingQ4: { screen: OnboardingQ4},
     OnboardingQ5: { screen: OnboardingQ5},
+    OnboardingGoals: { screen: OnboardingGoals},
     OnboardingSummary: { screen: OnboardingSummary},
   	TabNav: {
   	  screen: TabNav,
