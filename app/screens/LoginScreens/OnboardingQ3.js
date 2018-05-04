@@ -88,6 +88,7 @@ export default class OnboardingQ3 extends Component {
               <View style={[styles.dot, {backgroundColor:'#5E0D6E'}]}/>
               <View style={styles.dot}/>
               <View style={styles.dot}/>
+              <View style={styles.dot}/>
             </View>
             <TouchableOpacity
               style={styles.nextContainer}

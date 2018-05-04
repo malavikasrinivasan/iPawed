@@ -170,8 +170,9 @@ export default class OnboardingQ2 extends Component {
         <View style={{justifyContent: 'flex-end', alignItems: 'flex-end', flex: 1}}>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <View style={{flexDirection:'row', margin: 15}}>
-                          <View style={styles.dot}/>
+              <View style={styles.dot}/>
               <View style={[styles.dot, {backgroundColor:'#DFA13A'}]}/>
+              <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={styles.dot}/>

@@ -138,6 +138,7 @@ export default class OnboardingQ1 extends Component {
               <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={styles.dot}/>
+              <View style={styles.dot}/>
             </View>
             <TouchableOpacity
               style={styles.nextContainer}

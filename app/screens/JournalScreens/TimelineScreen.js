@@ -191,20 +191,20 @@ export default class TimelineScreen extends Component {
     var desc = null
     // Checking which behaviors are on.
     var behaviors_on = []
-    if(rowData.anxious == true) {
-      behaviors_on.push({name : "Anxious", color: "#D3B69B"})
-    }
-    if(rowData.aggressive == true) {
-      behaviors_on.push({name : "Aggressive", color: "#163250"})
-    }
     if(rowData.calm == true) {
-      behaviors_on.push({name : "Calm", color: "#F7C68F"})
+      behaviors_on.push({name : "Content", color: "#8FBAEC"})
     }
-    if(rowData.excited == true) {
-      behaviors_on.push({name : "Excited", color: "#CC2539"})
+    if(rowData.anxious == true) {
+      behaviors_on.push({name : "Anxious", color: "#e6b800"})
     }
     if(rowData.affectionate == true) {
-      behaviors_on.push({name : "Affectionate", color: "#F9D64B"})
+      behaviors_on.push({name : "Affectionate", color: "plum"})
+    }
+    if(rowData.aggressive == true) {
+      behaviors_on.push({name : "Aggressive", color: "indianred"})
+    }
+    if(rowData.excited == true) {
+      behaviors_on.push({name : "Excited", color: "#B8E986"})
     }
     // console.log(behaviors_on);
     if(rowData.title && rowData.imageUrl)

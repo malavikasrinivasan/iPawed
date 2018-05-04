@@ -273,7 +273,7 @@ export default class ActivityRecord extends Component{
               </View>
               <View style={{margin:10}}>
                <TouchableOpacity onPress={this.toggleB1}>
-                 <View style={[styles.behavior, {backgroundColor:'gold'}, this.state.behavior1 && styles.bSelect]}/>
+                 <View style={[styles.behavior, {backgroundColor:'#e6b800'}, this.state.behavior1 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Anxious</Text>
               </View>

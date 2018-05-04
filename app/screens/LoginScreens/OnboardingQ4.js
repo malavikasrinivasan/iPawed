@@ -92,7 +92,8 @@ export default class OnboardingQ4 extends Component {
   updateProfile() {
     if (!this.state.opt1
         && !this.state.opt2
-        && !this.state.opt3)
+        && !this.state.opt3
+        && !this.state.opt4)
     {
       alert("Please select a choice (guessing is fine!)")
       return
@@ -166,6 +167,7 @@ export default class OnboardingQ4 extends Component {
               <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={[styles.dot, {backgroundColor:'#D74456'}]}/>
+              <View style={styles.dot}/>
               <View style={styles.dot}/>
             </View>
             <TouchableOpacity
