@@ -19,9 +19,10 @@ export default class OnboardingQ5 extends Component {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 

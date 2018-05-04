@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, ScrollView, AppRegistry, Button, Image, Activit
 import Header from './../../components/Header';
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 import Timeline from 'react-native-timeline-listview'
 import Drawer from 'react-native-drawer';
@@ -18,7 +19,7 @@ export default class TimelineScreen extends Component {
     return {
       title: 'Timeline',
        tabBarIcon: ({tintColor}) => (
-          <Icon name="ios-heart" size={24} color={tintColor} />
+          <FAIcon name="heart" size={24} color={tintColor}/>
         ),
         headerTintColor: '#5AC8B0',
         headerBackTitle: 'back',
@@ -26,9 +27,10 @@ export default class TimelineScreen extends Component {
           fontFamily: 'Century Gothic'
         },
         headerTitleStyle: {
-          fontFamily: 'SignPainter',
-          fontSize: 28,
-          color: 'black'
+          fontFamily: 'Century Gothic',
+          fontSize: 22,
+          color: 'black',
+          fontWeight: 'normal'
         },
         headerRight:
           <TouchableOpacity onPress={() => params.handleMenuToggle()}>
@@ -39,7 +41,7 @@ export default class TimelineScreen extends Component {
       }
     };
 
-    
+
   constructor(){
     super();
     this.onEventPress = this.onEventPress.bind(this)
@@ -69,7 +71,7 @@ export default class TimelineScreen extends Component {
     // getting data from firebase for the timeline
     firebase.database().ref('userDetails/'+ firebaseUserID + '/journalDetails').once("value").then((snapshot) => {
       // console.log(snapshot.val());
-      console.log(snapshot.numChildren());            
+      console.log(snapshot.numChildren());
       snapshot.forEach( function(child) {
 
         console.log(child.val());
@@ -94,14 +96,14 @@ export default class TimelineScreen extends Component {
       this.setState({
         timelineData : memories
       });
-      
+
     });
 
   }
 
 
 
-  componentDidMount(){ 
+  componentDidMount(){
 
     this.props.navigation.setParams({
       handleMenuToggle: this.toggleControlPanel,
@@ -113,7 +115,7 @@ export default class TimelineScreen extends Component {
 
     var memories = [];
 
-    // getting pet name 
+    // getting pet name
     firebase.database().ref('userDetails/'+ firebaseUserID + '/petDetails').once("value").then((snapshot) => {
       console.log(snapshot.val().petName);
       this.setState({
@@ -145,7 +147,7 @@ export default class TimelineScreen extends Component {
       this.setState({
         timelineData : memories
       });
-      
+
   });
 
   }
@@ -170,7 +172,7 @@ export default class TimelineScreen extends Component {
   renderBehaviors(behaviors_on) {
       const circles = [];
 
-      behaviors_on.map(behavior => 
+      behaviors_on.map(behavior =>
         // console.log(behavior);
         circles.push(
           <View>
@@ -336,7 +338,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   textDescription: {
-    flex: 1, 
+    flex: 1,
     flexWrap: 'wrap',
     fontSize: 10,
     color:'black',
@@ -345,9 +347,9 @@ const styles = StyleSheet.create({
   },
   generalText: {
     textAlign: 'center',
-    fontFamily: 'SignPainter',
-    fontSize: 36,
-    color: '#444',
+    fontFamily: 'Century Gothic',
+    fontSize: 26,
+    color: 'black',
   },
   topRow: {
     flexDirection: 'row',
@@ -400,7 +402,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic'
   }
-  
+
 });
-
-

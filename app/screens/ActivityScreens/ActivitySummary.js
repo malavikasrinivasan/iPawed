@@ -26,9 +26,10 @@ export default class ActivitySummary extends Component {
         fontFamily: 'Century Gothic'
       },
       headerTitleStyle: {
-        fontFamily: 'SignPainter',
-        fontSize: 28,
-        color: 'black'
+        fontFamily: 'Century Gothic',
+        fontSize: 22,
+        color: 'black',
+        fontWeight: 'normal'
       },
       headerRight:
         <TouchableOpacity onPress={() => params.handleMenuToggle()}>

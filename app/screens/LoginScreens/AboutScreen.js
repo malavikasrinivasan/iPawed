@@ -21,9 +21,10 @@ export default class AboutScreen extends Component {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
   header: {
     color: 'black',
     fontFamily: 'Century Gothic',
-    fontSize: 24,
+    fontSize: 26,
     textAlign: 'center'
   },
   subheader: {

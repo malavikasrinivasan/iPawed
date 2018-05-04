@@ -3,6 +3,17 @@ package com.ipawed;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.horcrux.svg.SvgPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.reactnative.photoview.PhotoViewPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.horcrux.svg.SvgPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
@@ -47,6 +58,17 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
+            new VectorIconsPackage(),
+            new SvgPackage(),
+            new SplashScreenReactPackage(),
+            new PickerPackage(),
+            new RNFetchBlobPackage(),
+            new PhotoViewPackage(),
+            new LinearGradientPackage(),
+            new VectorIconsPackage(),
+            new SplashScreenReactPackage(),
+            new SplashScreenReactPackage(),
             new SvgPackage(),
             new VectorIconsPackage(),
             new PickerPackage(),

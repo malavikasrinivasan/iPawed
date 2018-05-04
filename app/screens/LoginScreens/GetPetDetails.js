@@ -10,16 +10,17 @@ import * as firebase from 'firebase';
 export default class GetPetDetails extends Component {
 
   static navigationOptions = {
-    title: 'Peternal',
+    title: 'Pet Set Go!',
     headerTintColor: '#5AC8B0',
     headerBackTitle: 'back',
     headerBackTitleStyle: {
       fontFamily: 'Century Gothic'
     },
     headerTitleStyle: {
-      fontFamily: 'SignPainter',
-      fontSize: 28,
-      color: 'black'
+      fontFamily: 'Century Gothic',
+      fontSize: 22,
+      color: 'black',
+      fontWeight: 'normal'
     },
   };
 
@@ -145,7 +146,7 @@ export default class GetPetDetails extends Component {
     const data = this.state.image.data;
     // console.log(data);
 
-    Blob.build(data, 
+    Blob.build(data,
       { type: `${mime};BASE64` }).then((blob) => {
         uploadBlob = blob
         return imageRef.put(blob, { contentType: mime })
@@ -156,7 +157,7 @@ export default class GetPetDetails extends Component {
         this.setState({
           imageUrl: url
         })
-      }). then(() => {    
+      }). then(() => {
         firebase.database().ref('userDetails/'+ this.state.userID + '/petDetails').set({
           petName : this.state.petName,
           petBreed : this.state.petBreed,
@@ -268,11 +269,11 @@ export default class GetPetDetails extends Component {
                  </TouchableOpacity>
 
                  <TouchableOpacity onPress={this.toggleC2}>
-                   <View style={[styles.colorTags, {backgroundColor:'brown'}, this.state.color2 && styles.cSelect]}/>
+                   <View style={[styles.colorTags, {backgroundColor:'sienna'}, this.state.color2 && styles.cSelect]}/>
                  </TouchableOpacity>
 
                  <TouchableOpacity onPress={this.toggleC3}>
-                   <View style={[styles.colorTags, {backgroundColor:'beige'}, this.state.color3 && styles.cSelect]}/>
+                   <View style={[styles.colorTags, {backgroundColor:'beige', borderWidth:0.5, borderColor:'grey'}, this.state.color3 && styles.cSelect]}/>
                  </TouchableOpacity>
 
                  <TouchableOpacity onPress={this.toggleC4}>
@@ -280,7 +281,7 @@ export default class GetPetDetails extends Component {
                  </TouchableOpacity>
 
                  <TouchableOpacity onPress={this.toggleC5}>
-                   <View style={[styles.colorTags, {backgroundColor:'tan'}, this.state.color5 && styles.cSelect]}/>
+                   <View style={[styles.colorTags, {backgroundColor:'burlywood'}, this.state.color5 && styles.cSelect]}/>
                  </TouchableOpacity>
               </View>
             </View>
@@ -417,7 +418,7 @@ export default class GetPetDetails extends Component {
               Create profile
             </Text>
           </TouchableOpacity>
-        </View>    
+        </View>
       </View>
     );
   }
@@ -439,7 +440,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   formContainer: {
-    flex: 1,
+    flex: 0.5,
     alignSelf: 'stretch',
     backgroundColor: '#FCFCFC',
     borderColor: '#F0F0F0',
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
   textButtonStyle: {
     margin: 8,
     textAlign: 'center',
-    fontSize: 13,
+    fontSize: 16,
     color: 'white',
     fontFamily: 'Century Gothic'
   },
@@ -492,13 +493,12 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     alignSelf: 'center',
-    borderColor: 'black',
     borderRadius: 10,
-    borderWidth: 0,
     opacity: 0.3
   },
   cSelect: {
     borderWidth: 1,
+    borderColor: 'black',
     opacity: 0.8
   },
   tagtext: {
