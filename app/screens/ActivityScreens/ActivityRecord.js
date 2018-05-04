@@ -18,6 +18,7 @@ import {Stopwatch} from 'react-native-stopwatch-timer';
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import {WeeklyProgressRing} from './../../components/WeeklyProgressRing';
 
 import * as firebase from 'firebase';
 
@@ -233,25 +234,6 @@ export default class ActivityRecord extends Component{
           >
           <View style={styles.box}>
 
-          <RNCamera
-            ref={ref => {
-              this.camera = ref;
-            }}
-            style = {styles.preview}
-            type={RNCamera.Constants.Type.back}
-            flashMode={RNCamera.Constants.FlashMode.on}
-            permissionDialogTitle={'Permission to use camera'}
-            permissionDialogMessage={'We need your permission to use your camera phone'}
-        />
-        {/* <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center',}}>
-        <TouchableOpacity
-            onPress={this.takePicture.bind(this)}
-            style = {styles.capture}
-        >
-            <Text style={{fontSize: 14}}> SNAP </Text>
-        </TouchableOpacity>
-        </View> */}
-
           <View style={{margin:5}}>
             <Text style={styles.addbuttontext}>
               Take {params.petName}'s photo!
@@ -362,59 +344,35 @@ export default class ActivityRecord extends Component{
           <View style={{justifyContent:'center'}}>
           <Text style={styles.subheader}>Weekly activity progress:</Text>
           </View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <View style={{marginLeft:30}}>
-                <ProgressCircle
-                  percent={30}
-                  radius={30}
-                  borderWidth={3}
-                  color="#3399FF"
-                  shadowColor="#ffffff"
-                  bgColor="#ffffff"
-                >
-                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{30*10/100}</Text>
-                </ProgressCircle>
-                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
-              </View>
-              <View style={{marginLeft:30}}>
-                <ProgressCircle
-                  percent={50}
-                  radius={30}
-                  borderWidth={3}
-                  color="#C58502"
-                  shadowColor="#ffffff"
-                  bgColor="#ffffff"
-                >
-                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{50*10/100}</Text>
-                </ProgressCircle>
-                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
-              </View>
-              <View style={{marginLeft:30}}>
-                <ProgressCircle
-                  percent={80}
-                  radius={30}
-                  borderWidth={3}
-                  color="#5AC8B0"
-                  shadowColor="#ffffff"
-                  bgColor="#ffffff"
-                >
-                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{80*10/100}</Text>
-                </ProgressCircle>
-                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
-              </View>
-              <View style={{marginLeft:30}}>
-                <ProgressCircle
-                  percent={10}
-                  radius={30}
-                  borderWidth={3}
-                  color="#4E0250"
-                  shadowColor="#ffffff"
-                  bgColor="#ffffff"
-                >
-                  <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{10*10/100}</Text>
-                </ProgressCircle>
-                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
-              </View>
+            <View style = {styles.weeklyProgressContainer}>
+              <WeeklyProgressRing 
+                completed = { 4 }
+                total = { 10 }
+                completedColor = { '#e54747' }
+                blankColor = { '#f7e1e1' }
+                activityName = { 'Train' }
+              />
+              <WeeklyProgressRing 
+                completed = { 3 }
+                total = { 5 }
+                completedColor = { '#d5e244' }
+                blankColor = { '#fbfced' }
+                activityName = { 'Care' }
+              />
+              <WeeklyProgressRing 
+                completed = { 1 }
+                total = { 3 }
+                completedColor = { '#7cff8c' }
+                blankColor = { '#edf9ee' }
+                activityName = { 'Play' }
+              />
+              <WeeklyProgressRing 
+                completed = { 7 }
+                total = { 7 }
+                completedColor = { '#8beff4' }
+                blankColor = { '#e8fbfc' }
+                activityName = { 'Calm' }
+              />
             </View>
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
@@ -503,7 +461,7 @@ const styles = StyleSheet.create({
   commentbox: {
     backgroundColor: '#F0F0F0',
     // width: 200,
-    height: 100,
+    height: 50,
     // margin: 10,
     borderColor: 'lightgrey',
     borderWidth: 0.5,
@@ -663,6 +621,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     height: 40
    },
+   weeklyProgressContainer: {
+    // flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: 30,
+  },
 })
 
 const handleTimerComplete = () => alert("custom completion function");

@@ -13,7 +13,7 @@ import ActivityDetail from './ActivityDetail';
 import ActivityRecord from './ActivityRecord';
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
-import ProgressCircle from 'react-native-progress-circle';
+import {WeeklyProgressRing} from './../../components/WeeklyProgressRing';
 
 export default class ActivityPrestart extends Component {
 
@@ -45,7 +45,18 @@ export default class ActivityPrestart extends Component {
 
   state = {
     menuOpen: false,
-    actStartDate: ''
+    eventTitle : '',
+    eventNotes : '',
+    eventLocation : '',
+    eventDate : '',
+    imageUrl : '',
+    image: null,
+    imageUpload: false,
+    behavior1: false,
+    behavior2: false,
+    behavior3: false,
+    behavior4: false,
+    behavior5: false,
   }
 
   toggleControlPanel = () => {
@@ -58,24 +69,39 @@ export default class ActivityPrestart extends Component {
     const recActID = params.item.title.replace(" ","") + new Date().getUTCFullYear() + new Date().getUTCMonth() + new Date().getUTCDate() + new Date().getUTCHours() + new Date().getUTCMinutes() + new Date().getUTCSeconds();
     startDate = new Date();
     this.setState({actStartDate: startDate});
-    console.log(startDate)
     firebase.database().ref('userDetails/'+ params.userID + '/recentActivities/' + recActID + '/' ).set({
       title : params.item.title,
-      category : params.item.category,
-      status: "In Progress",
-      behavioralMarker: {Anxious: "",
-                         Aggressive: "",
-                         Calm: "",
-                         Excited: "",
-                         Affectionate: "" },
-      duration: 0,
-      activityStartDate: startDate,
-      activityCompleteDate: "",
-      image: "",
-      distance: "",
-      journalID: ""
+        category : params.item.category,
+        status: "In Progress",
+        behavioralMarker: {Anxious: this.state.behavior1,
+                           Aggressive: this.state.behavior2,
+                           Calm: this.state.behavior3,
+                           Excited: this.state.behavior4,
+                           Affectionate: this.state.behavior5 },
+        duration: 0,
+        activityStartDate: Date.now(),
+        activityCompleteDate: "",
+        image: "",
+        distance: "",
+        journalID: ""
+      // title : params.item.title,
+      // category : params.item.category,
+      // status: "In Progress",
+      // activityStartDate: Date.now(),
+      // activityCompleteDate: "",
+      // journal: {journalID: "",
+      //           eventTitle : this.state.eventTitle,
+      //           eventDate : this.state.eventDate,
+      //           eventLocation: this.state.eventLocation,
+      //           eventNotes: this.state.eventNotes,
+      //           imageURL: this.state.imageUrl,
+      //           anxious: this.state.behavior1,
+      //           aggressive: this.state.behavior2,
+      //           calm: this.state.behavior3,
+      //           excited: this.state.behavior4,
+      //           affectionate: this.state.behavior5}
     });
-    this.props.navigation.navigate('ActivityRecord', {item:params.item, userID:params.userID, petName:this.state.petName, recActID:recActID, startDate:startDate})
+    this.props.navigation.navigate('ActivityRecord', {item:params.item, userID:params.userID, petName:this.state.petName, recActID:recActID, startDate:Date.now()})
   }
 
   componentDidMount(){
@@ -97,23 +123,6 @@ export default class ActivityPrestart extends Component {
         this.setState({
           petName: snap.val().petName
         })
-
-        // var items = [];
-        // snap.forEach((child) => {
-        //     items.push({
-        //       title: child.val().title,
-        //       category: child.val().category,
-        //       desc: child.val().desc,
-        //       steps: child.val().steps,
-        //       video: child.val().video,
-        //       imageurl: child.val().imageURL});
-        // });
-
-        // console.log('items', items);
-
-        // this.setState({
-        //     dataSource: this.state.dataSource.cloneWithRows(items)
-        // });
     });
   }
 
@@ -145,8 +154,6 @@ export default class ActivityPrestart extends Component {
         >
       <View style={styles.screenContainer}>
         
-        {/* <Text style={styles.header}>Your goal is to give Peanut a bath today.</Text> */}
-        {/* <Text style={styles.subheader}>{"Giving your dog a bath in an essential and excellent way to understand your dog's behavior."}</Text> */}
         <View style={styles.descriptionContainer}>
           <ImageBackground
             style={styles.image}
@@ -159,9 +166,6 @@ export default class ActivityPrestart extends Component {
           </ImageBackground>
         </View>
 
-        {/* <TouchableOpacity onPress={this._onPress}>
-          <Text style={styles.textlink}>Review training here.</Text>
-        </TouchableOpacity> */}
         <Text style={styles.descriptionContainer}>
           Weekly goals with {this.state.petName}: April 15 - April 21, 2018
         </Text>
@@ -169,60 +173,36 @@ export default class ActivityPrestart extends Component {
         <View style={{justifyContent:'center'}}>
           <Text style={styles.subheader}>Weekly activity progress:</Text>
           </View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              <View style={{marginLeft:30}}>
-                <ProgressCircle
-                  percent={30}
-                  radius={30}
-                  borderWidth={3}
-                  color="#3399FF"
-                  shadowColor="#ffffff"
-                  bgColor="#ffffff"
-                >
-                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{30*10/100}</Text>
-                </ProgressCircle>
-                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
-              </View>
-              <View style={{marginLeft:30}}>
-                <ProgressCircle
-                  percent={50}
-                  radius={30}
-                  borderWidth={3}
-                  color="#C58502"
-                  shadowColor="#ffffff"
-                  bgColor="#ffffff"
-                >
-                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{50*10/100}</Text>
-                </ProgressCircle>
-                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
-              </View>
-              <View style={{marginLeft:30}}>
-                <ProgressCircle
-                  percent={80}
-                  radius={30}
-                  borderWidth={3}
-                  color="#5AC8B0"
-                  shadowColor="#ffffff"
-                  bgColor="#ffffff"
-                >
-                   <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{80*10/100}</Text>
-                </ProgressCircle>
-                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
-              </View>
-              <View style={{marginLeft:30}}>
-                <ProgressCircle
-                  percent={10}
-                  radius={30}
-                  borderWidth={3}
-                  color="#4E0250"
-                  shadowColor="#ffffff"
-                  bgColor="#ffffff"
-                >
-                  <Text style={{ fontSize: 18, fontFamily: 'Century Gothic' }}>{10*10/100}</Text>
-                </ProgressCircle>
-                <Text style={{ fontSize: 12, fontFamily: 'Century Gothic' }}>out of 10</Text>
-              </View>
-            </View>
+          <View style = {styles.weeklyProgressContainer}>
+            <WeeklyProgressRing 
+              completed = { 4 }
+              total = { 10 }
+              completedColor = { '#e54747' }
+              blankColor = { '#f7e1e1' }
+              activityName = { 'Train' }
+            />
+            <WeeklyProgressRing 
+              completed = { 3 }
+              total = { 5 }
+              completedColor = { '#d5e244' }
+              blankColor = { '#fbfced' }
+              activityName = { 'Care' }
+            />
+            <WeeklyProgressRing 
+              completed = { 1 }
+              total = { 3 }
+              completedColor = { '#7cff8c' }
+              blankColor = { '#edf9ee' }
+              activityName = { 'Play' }
+            />
+            <WeeklyProgressRing 
+              completed = { 7 }
+              total = { 7 }
+              completedColor = { '#8beff4' }
+              blankColor = { '#e8fbfc' }
+              activityName = { 'Calm' }
+            />
+          </View>
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
         <TouchableOpacity
@@ -345,6 +325,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontFamily: 'Century Gothic'
+  },
+  weeklyProgressContainer: {
+    // flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: 30,
   },
 });
 
