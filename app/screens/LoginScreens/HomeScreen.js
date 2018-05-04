@@ -136,29 +136,29 @@ export default class WelcomeScreen extends Component {
 
           <View style = {styles.weeklyProgressContainer}>
             <WeeklyProgressRing
-              completed = { 4 }
-              total = { 10 }
+              completed = { this.state.userDetails.weeklyGoals.trainGoalProgress }
+              total = { this.state.userDetails.weeklyGoals.trainGoal }
               completedColor = { 'rgb(214,154,56,1)' }
               blankColor = { 'rgb(214,154,56,0.3)' }
               activityName = { 'Train' }
             />
             <WeeklyProgressRing
-              completed = { 3 }
-              total = { 5 }
+              completed = { this.state.userDetails.weeklyGoals.careGoalProgress }
+              total = { this.state.userDetails.weeklyGoals.careGoal }
               completedColor = { 'rgb(87,193,170,1)' }
               blankColor = { 'rgb(87,193,170,0.3)' }
               activityName = { 'Care' }
             />
             <WeeklyProgressRing
-              completed = { 1 }
-              total = { 3 }
+              completed = { this.state.userDetails.weeklyGoals.playGoalProgress }
+              total = { this.state.userDetails.weeklyGoals.playGoal }
               completedColor = { 'rgb(207,65,83,1)' }
               blankColor = { 'rgb(207,65,83,0.3)' }
               activityName = { 'Play' }
             />
             <WeeklyProgressRing
-              completed = { 7 }
-              total = { 7 }
+              completed = { this.state.userDetails.weeklyGoals.calmGoalProgress }
+              total = { this.state.userDetails.weeklyGoals.calmGoal }
               completedColor = { 'rgb(91,13,107,0.9)' }
               blankColor = { 'rgb(91,13,107,0.3)' }
               activityName = { 'Calm' }

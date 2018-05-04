@@ -97,9 +97,13 @@ export default class OnboardingGoals extends Component {
 
   updateProfile() {
   firebase.database().ref('userDetails/'+ this.state.userID + '/weeklyGoals/').update({
+    trainGoalProgress: 0,
     trainGoal: this.state.opt1,
+    careGoalProgress: 0,
     careGoal: this.state.opt2,
+    playGoalProgress: 0,
     playGoal: this.state.opt3,
+    calmGoalProgress: 0,
     calmGoal: this.state.opt4
   }).then(() => {
     this.props.navigation.navigate('Home', {
