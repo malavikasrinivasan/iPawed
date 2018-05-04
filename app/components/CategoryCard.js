@@ -11,8 +11,7 @@ export default class CategoryCard extends Component {
 	render() {
         const item = this.props.item
         const userID = this.props.userID
-        console.log(item)
-        console.log("Image",this.props.item.imageurl)
+
 		return (
                     <TouchableOpacity
                         style={{ justifyContent: 'center', alignItems:'center'}} onPress={() => this.props.navigation.navigate('ActivityCategory', {item:item, userID:userID})}>

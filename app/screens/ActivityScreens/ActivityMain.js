@@ -122,9 +122,7 @@ componentDidMount() {
     handleMenuToggle: this.toggleControlPanel,
   });
   const user = firebase.auth().currentUser;
-  console.log("user",user)
   const userID = user ? user.uid : null;
-  console.log("uid",userID)
 
   if(userID) {
     this.setState({
@@ -140,7 +138,6 @@ componentDidMount() {
   // console.log("Getting Firebase items");
 
   firebase.database().ref('userDetails/' + userID + '/' + 'recommendedActivities' + '/').on('value', (snap) => {
-      console.log('snap', snap);
 
       var items = [];
       snap.forEach((child) => {
@@ -153,7 +150,6 @@ componentDidMount() {
             imageurl: child.val().imageurl});
       });
 
-      console.log('items', items);
 
       this.setState({
           dataSource: this.state.dataSource.cloneWithRows(items)
@@ -161,7 +157,6 @@ componentDidMount() {
   });
 
   firebase.database().ref('activityCategories/' + '/').on('value', (snap) => {
-    console.log('snap', snap);
 
     var categories = [];
     snap.forEach((child) => {
@@ -169,8 +164,6 @@ componentDidMount() {
           title: child.val().title,
           imageurl: child.val().imageurl});
     });
-
-    console.log('categories', categories);
 
     this.setState({
         dataSourceCat: this.state.dataSourceCat.cloneWithRows(categories)

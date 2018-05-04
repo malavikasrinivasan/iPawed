@@ -5,12 +5,15 @@ import {AppRegistry,
         StyleSheet,
         ListView,
         TouchableOpacity,
-        Image} from 'react-native';
+        Image,
+        ImageBackground} from 'react-native';
+import * as firebase from 'firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ActivityDetail from './ActivityDetail';
 import ActivityRecord from './ActivityRecord';
 import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
+import {WeeklyProgressRing} from './../../components/WeeklyProgressRing';
 
 export default class ActivityPrestart extends Component {
 
@@ -42,7 +45,19 @@ export default class ActivityPrestart extends Component {
   };
 
   state = {
-    menuOpen: false
+    menuOpen: false,
+    eventTitle : '',
+    eventNotes : '',
+    eventLocation : '',
+    eventDate : '',
+    imageUrl : '',
+    image: null,
+    imageUpload: false,
+    behavior1: false,
+    behavior2: false,
+    behavior3: false,
+    behavior4: false,
+    behavior5: false,
   }
 
   toggleControlPanel = () => {
@@ -50,9 +65,65 @@ export default class ActivityPrestart extends Component {
     this.setState({menuOpen: !this.state.menuOpen});
   }
 
+  _activityStart = () => {
+    const {params} = this.props.navigation.state;
+    const recActID = params.item.title.replace(" ","") + new Date().getUTCFullYear() + new Date().getUTCMonth() + new Date().getUTCDate() + new Date().getUTCHours() + new Date().getUTCMinutes() + new Date().getUTCSeconds();
+    startDate = new Date();
+    this.setState({actStartDate: startDate});
+    firebase.database().ref('userDetails/'+ params.userID + '/recentActivities/' + recActID + '/' ).set({
+      title : params.item.title,
+        category : params.item.category,
+        status: "In Progress",
+        behavioralMarker: {Anxious: this.state.behavior1,
+                           Aggressive: this.state.behavior2,
+                           Calm: this.state.behavior3,
+                           Excited: this.state.behavior4,
+                           Affectionate: this.state.behavior5 },
+        duration: 0,
+        activityStartDate: Date.now(),
+        activityCompleteDate: "",
+        image: "",
+        distance: "",
+        journalID: ""
+      // title : params.item.title,
+      // category : params.item.category,
+      // status: "In Progress",
+      // activityStartDate: Date.now(),
+      // activityCompleteDate: "",
+      // journal: {journalID: "",
+      //           eventTitle : this.state.eventTitle,
+      //           eventDate : this.state.eventDate,
+      //           eventLocation: this.state.eventLocation,
+      //           eventNotes: this.state.eventNotes,
+      //           imageURL: this.state.imageUrl,
+      //           anxious: this.state.behavior1,
+      //           aggressive: this.state.behavior2,
+      //           calm: this.state.behavior3,
+      //           excited: this.state.behavior4,
+      //           affectionate: this.state.behavior5}
+    });
+    this.props.navigation.navigate('ActivityRecord', {item:params.item, userID:params.userID, petName:this.state.petName, recActID:recActID, startDate:Date.now()})
+  }
+
   componentDidMount(){
     this.props.navigation.setParams({
       handleMenuToggle: this.toggleControlPanel,
+    });
+    const user = firebase.auth().currentUser;
+    const userID = user ? user.uid : null;
+
+    if(userID) {
+      this.setState({
+        userID: userID,
+      });
+    }
+
+    firebase.database().ref('userDetails/' + userID + '/' + 'petDetails' + '/').once('value')
+    .then((snap) => {
+        // console.log('snap', snap.val().petName);
+        this.setState({
+          petName: snap.val().petName
+        })
     });
   }
 
@@ -83,24 +154,65 @@ export default class ActivityPrestart extends Component {
         })}
         >
       <View style={styles.screenContainer}>
-        <Text style={styles.header}>Your goal is to give Peanut a bath today.</Text>
-        <Text style={styles.subheader}>{"Giving your dog a bath in an essential and excellent way to understand your dog's behavior."}</Text>
+        
+        <View style={styles.descriptionContainer}>
+          <ImageBackground
+            style={styles.image}
+            source={{uri: item.imageurl}}>
+            <View style={{justifyContent:'flex-end'}}>
+              <Text style={styles.activityTitle}>
+                {item.title}
+              </Text>
+            </View>
+          </ImageBackground>
+        </View>
 
-        <Image
-          style={styles.image}
-          source={require('./../../img/bathtime.jpg')}
-        />
+        <Text style={styles.descriptionContainer}>
+          Weekly goals with {this.state.petName}: April 15 - April 21, 2018
+        </Text>
 
-        <TouchableOpacity onPress={this._onPress}>
-          <Text style={styles.textlink}>Review training here.</Text>
-        </TouchableOpacity>
+        <View style={{justifyContent:'center'}}>
+          <Text style={styles.subheader}>Weekly activity progress:</Text>
+          </View>
+          <View style = {styles.weeklyProgressContainer}>
+            <WeeklyProgressRing 
+              completed = { 4 }
+              total = { 10 }
+              completedColor = { '#e54747' }
+              blankColor = { '#f7e1e1' }
+              activityName = { 'Train' }
+            />
+            <WeeklyProgressRing 
+              completed = { 3 }
+              total = { 5 }
+              completedColor = { '#d5e244' }
+              blankColor = { '#fbfced' }
+              activityName = { 'Care' }
+            />
+            <WeeklyProgressRing 
+              completed = { 1 }
+              total = { 3 }
+              completedColor = { '#7cff8c' }
+              blankColor = { '#edf9ee' }
+              activityName = { 'Play' }
+            />
+            <WeeklyProgressRing 
+              completed = { 7 }
+              total = { 7 }
+              completedColor = { '#8beff4' }
+              blankColor = { '#e8fbfc' }
+              activityName = { 'Calm' }
+            />
+          </View>
+          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
         <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() => this.props.navigation.navigate('ActivityRecord', {item:item, userID:userID})}>
-          <Text style={styles.textButtonStyle}>
-            {"Next"}
-          </Text>
+          style={styles.startbutton}
+          onPress={this._activityStart.bind(this)}>
+          {/* onPress={() => this.props.navigation.navigate('ActivityRecord', {item:item, userID:userID, petName:this.state.petName})}> */}
+          <Text style={styles.startbuttontext}> </Text>
+          <Text style={styles.startbuttontext}>START</Text>
+          <Text style={styles.startbuttontext}> </Text>
         </TouchableOpacity>
 
         <Text style={[styles.subheader, {fontSize:18, textAlign:'center'}]}>
@@ -121,6 +233,13 @@ export default class ActivityPrestart extends Component {
 }
 
 const styles = StyleSheet.create({
+  welcome: {
+    fontSize: 18,
+    textAlign: 'center',
+    margin: 10,
+    color: 'black',
+    fontFamily: "Century Gothic"
+  },
   screenContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -144,8 +263,8 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 380,
-    height: 250,
-    alignSelf: 'center'
+    height: 220,
+    // alignSelf: 'center'
   },
   textlink: {
     color: 'black',
@@ -170,7 +289,49 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     fontFamily: 'Century Gothic'
-  }
+  },
+  descriptionContainer: {
+    alignSelf: 'stretch',
+    backgroundColor: '#FCFCFC',
+    borderColor: '#F0F0F0',
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // flexDirection: 'row'
+  },
+  activityTitle: {
+    textAlign: 'center',
+    color:'black',
+    fontFamily: 'Century Gothic',
+    fontSize: 15,
+    opacity: 1,
+    padding: 5,
+    backgroundColor:'rgba(255,255,255,0.8)',
+  },
+  startbutton: {
+    width: 60,
+    height: 60,
+    alignSelf: 'center',
+    backgroundColor: '#5AC8B0',
+    borderRadius: 100,
+    margin: 5,
+    shadowOffset:{height: 3},
+    shadowColor: 'grey',
+    shadowOpacity: 1.0
+  },
+  startbuttontext: {
+    textAlign: 'center',
+    color: 'white',
+    flexDirection: 'column',
+    flex: 1,
+    fontSize: 16,
+    fontFamily: 'Century Gothic'
+  },
+  weeklyProgressContainer: {
+    // flex: 1,
+    flexDirection: 'row',
+    marginHorizontal: 30,
+  },
 });
 
 AppRegistry.registerComponent('ActivityPrestart', () => ActivityPrestart);
