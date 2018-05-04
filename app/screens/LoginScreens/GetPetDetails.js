@@ -193,6 +193,10 @@ export default class GetPetDetails extends Component {
     return (
       <View style={styles.screenContainer}>
 
+        <Text style={styles.welcomeText}>
+          {"Let's build your pet's profile."}
+        </Text>
+
         <View style = {styles.uploadContainer}>
           <View style={{flex:0.5, justifyContent: 'center', alignSelf:'center'}}>
             <TouchableOpacity onPress={this._onCamPress}>
@@ -435,9 +439,10 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     color: 'black',
-    fontSize: 30,
+    fontSize: 23,
     margin: 15,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily:'Century Gothic'
   },
   formContainer: {
     flex: 0.5,

@@ -68,7 +68,7 @@ export default class OnboardingQ5 extends Component {
   firebase.database().ref('userDetails/'+ this.state.userID + '/ownerInfo/').update({
     notificationTime : this.state.notificationTime,
   }).then(() => {
-    this.props.navigation.navigate('Home', {
+    this.props.navigation.navigate('OnboardingGoals', {
     userID: this.state.userID,
     userName: this.state.userName
   });
@@ -171,6 +171,7 @@ export default class OnboardingQ5 extends Component {
               <View style={styles.dot}/>
               <View style={styles.dot}/>
               <View style={[styles.dot, {backgroundColor:'#D74456'}]}/>
+              <View style={styles.dot}/>
             </View>
             <TouchableOpacity
               style={styles.nextContainer}
