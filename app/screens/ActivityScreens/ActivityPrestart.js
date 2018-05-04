@@ -27,9 +27,10 @@ export default class ActivityPrestart extends Component {
         fontFamily: 'Century Gothic'
       },
       headerTitleStyle: {
-        fontFamily: 'SignPainter',
-        fontSize: 28,
-        color: 'black'
+        fontFamily: 'Century Gothic',
+        fontSize: 22,
+        color: 'black',
+        fontWeight: 'normal'
       },
       headerRight:
         <TouchableOpacity onPress={() => params.handleMenuToggle()}>
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   textButtonStyle: {
     margin: 8,
     textAlign: 'center',
-    fontSize: 13,
+    fontSize: 16,
     color: 'white',
     fontFamily: 'Century Gothic'
   }

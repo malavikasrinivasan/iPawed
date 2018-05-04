@@ -27,9 +27,10 @@ export default class AddEventScreen extends Component {
           fontFamily: 'Century Gothic'
         },
         headerTitleStyle: {
-          fontFamily: 'SignPainter',
-          fontSize: 28,
-          color: 'black'
+          fontFamily: 'Century Gothic',
+          fontSize: 22,
+          color: 'black',
+          fontWeight: 'normal'
         },
         headerRight:
           <TouchableOpacity onPress={() => params.handleMenuToggle()}>
@@ -177,7 +178,7 @@ export default class AddEventScreen extends Component {
     const data = this.state.image.data;
     console.log(data);
 
-    Blob.build(data, 
+    Blob.build(data,
       { type: `${mime};BASE64` }).then((blob) => {
         uploadBlob = blob
         return imageRef.put(blob, { contentType: mime })
@@ -316,6 +317,10 @@ export default class AddEventScreen extends Component {
               dateText: {
                 color: 'black',
                 fontFamily: 'Century Gothic'
+              },
+              placeholderText: {
+                color: 'lightgrey',
+                fontFamily: 'Century Gothic'
               }
 
             }}
@@ -327,6 +332,7 @@ export default class AddEventScreen extends Component {
           <Text style={styles.label}>Location</Text>
           <GooglePlacesAutocomplete
             placeholder='Search'
+            placeholderTextColor='lightgrey'
             minLength={2} // minimum length of text to search
             autoFocus={false}
             returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
@@ -348,7 +354,7 @@ export default class AddEventScreen extends Component {
               language: 'en', // language of the results
               types: '(regions)' // default: 'geocode'
             }}
-            
+
             value={this.state.eventLocation}
 
             styles={{
@@ -382,38 +388,37 @@ export default class AddEventScreen extends Component {
           <Text style={styles.subheader}>Behavior tags:</Text>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <View style={{margin:10}}>
+             <TouchableOpacity onPress={this.toggleB3}>
+               <View style={[styles.behavior, {backgroundColor:'#8FBAEC'}, this.state.behavior3 && styles.bSelect]}/>
+             </TouchableOpacity>
+             <Text style={styles.tagtext}>Content</Text>
+            </View>
+            <View style={{margin:10}}>
              <TouchableOpacity onPress={this.toggleB1}>
-               <View style={[styles.behavior, {backgroundColor:'#D3B69B'}, this.state.behavior1 && styles.bSelect]}/>
+               <View style={[styles.behavior, {backgroundColor:'gold'}, this.state.behavior1 && styles.bSelect]}/>
              </TouchableOpacity>
              <Text style={styles.tagtext}>Anxious</Text>
             </View>
 
             <View style={{margin:10}}>
+             <TouchableOpacity onPress={this.toggleB5}>
+               <View style={[styles.behavior, {backgroundColor:'plum'}, this.state.behavior5 && styles.bSelect]}/>
+             </TouchableOpacity>
+             <Text style={styles.tagtext}>Affectionate</Text>
+            </View>
+
+            <View style={{margin:10}}>
              <TouchableOpacity onPress={this.toggleB2}>
-               <View style={[styles.behavior, {backgroundColor:'#163250'}, this.state.behavior2 && styles.bSelect]}/>
+               <View style={[styles.behavior, {backgroundColor:'indianred'}, this.state.behavior2 && styles.bSelect]}/>
              </TouchableOpacity>
              <Text style={styles.tagtext}>Aggressive</Text>
             </View>
 
             <View style={{margin:10}}>
-             <TouchableOpacity onPress={this.toggleB3}>
-               <View style={[styles.behavior, {backgroundColor:'#F7C68F'}, this.state.behavior3 && styles.bSelect]}/>
-             </TouchableOpacity>
-             <Text style={styles.tagtext}>Calm</Text>
-            </View>
-
-            <View style={{margin:10}}>
              <TouchableOpacity onPress={this.toggleB4}>
-               <View style={[styles.behavior, {backgroundColor:'#CC2539'}, this.state.behavior4 && styles.bSelect]}/>
+               <View style={[styles.behavior, {backgroundColor:'#B8E986'}, this.state.behavior4 && styles.bSelect]}/>
              </TouchableOpacity>
              <Text style={styles.tagtext}>Excited</Text>
-            </View>
-
-            <View style={{margin:10}}>
-             <TouchableOpacity onPress={this.toggleB5}>
-               <View style={[styles.behavior, {backgroundColor:'#F9D64B'}, this.state.behavior5 && styles.bSelect]}/>
-             </TouchableOpacity>
-             <Text style={styles.tagtext}>Affectionate</Text>
             </View>
           </View>
          </View>
@@ -463,9 +468,8 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     color: 'black',
-    fontSize: 30,
-    fontWeight: 'bold',
-    fontFamily: 'SignPainter',
+    fontSize: 26,
+    fontFamily: 'Century Gothic',
     textAlign: 'center',
     margin: 10
   },
