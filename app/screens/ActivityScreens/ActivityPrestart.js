@@ -154,57 +154,55 @@ export default class ActivityPrestart extends Component {
         })}
         >
       <View style={styles.screenContainer}>
-        
+
         <View style={styles.descriptionContainer}>
           <ImageBackground
             style={styles.image}
             source={{uri: item.imageurl}}>
-            <View style={{justifyContent:'flex-end'}}>
+            <View style={{justifyContent:'flex-end', flex: 1}}>
               <Text style={styles.activityTitle}>
                 {item.title}
               </Text>
             </View>
           </ImageBackground>
         </View>
+        <View style={{borderColor: 'lightgrey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
-        <Text style={styles.descriptionContainer}>
-          Weekly goals with {this.state.petName}: April 15 - April 21, 2018
-        </Text>
-
-        <View style={{justifyContent:'center'}}>
-          <Text style={styles.subheader}>Weekly activity progress:</Text>
-          </View>
+        <View style = {{ alignSelf: 'center', marginHorizontal: 5, marginTop: 10, marginBottom: 6 }}>
+          <Text style = {styles.weeklyGoalsTitle}> Weekly Goals with {this.state.petName} </Text>
+          <Text style = {[styles.weeklyGoalsTitle, {fontSize:14, marginTop:-5, marginBottom:5}]}> {"April 15 - April 21, 2018"} </Text>
+        </View>
           <View style = {styles.weeklyProgressContainer}>
-            <WeeklyProgressRing 
+            <WeeklyProgressRing
               completed = { 4 }
               total = { 10 }
-              completedColor = { '#e54747' }
-              blankColor = { '#f7e1e1' }
+              completedColor = { 'rgb(214,154,56,1)' }
+              blankColor = { 'rgb(214,154,56,0.3)' }
               activityName = { 'Train' }
             />
-            <WeeklyProgressRing 
+            <WeeklyProgressRing
               completed = { 3 }
               total = { 5 }
-              completedColor = { '#d5e244' }
-              blankColor = { '#fbfced' }
+              completedColor = { 'rgb(87,193,170,1)' }
+              blankColor = { 'rgb(87,193,170,0.3)' }
               activityName = { 'Care' }
             />
-            <WeeklyProgressRing 
+            <WeeklyProgressRing
               completed = { 1 }
               total = { 3 }
-              completedColor = { '#7cff8c' }
-              blankColor = { '#edf9ee' }
+              completedColor = { 'rgb(207,65,83,1)' }
+              blankColor = { 'rgb(207,65,83,0.3)' }
               activityName = { 'Play' }
             />
-            <WeeklyProgressRing 
+            <WeeklyProgressRing
               completed = { 7 }
               total = { 7 }
-              completedColor = { '#8beff4' }
-              blankColor = { '#e8fbfc' }
+              completedColor = { 'rgb(91,13,107,0.9)' }
+              blankColor = { 'rgb(91,13,107,0.3)' }
               activityName = { 'Calm' }
             />
           </View>
-          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
+          <View style={{borderColor: 'lightgrey', borderWidth: 0.5, alignSelf:'stretch', marginTop:15, marginBottom: 15}}/>
 
         <TouchableOpacity
           style={styles.startbutton}
@@ -294,9 +292,9 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     backgroundColor: '#FCFCFC',
     borderColor: '#F0F0F0',
-    borderWidth: 1.5,
     justifyContent: 'center',
     alignItems: 'center',
+    fontFamily: 'Century Gothic'
     // flexDirection: 'row'
   },
   activityTitle: {
@@ -331,6 +329,13 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: 'row',
     marginHorizontal: 30,
+  },
+  weeklyGoalsTitle:{
+    textAlign: 'center',
+    color:'black',
+    fontFamily: 'Century Gothic',
+    fontSize: 24,
+    padding: 5,
   },
 });
 

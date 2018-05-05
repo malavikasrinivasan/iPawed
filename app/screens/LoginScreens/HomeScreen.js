@@ -130,7 +130,7 @@ export default class WelcomeScreen extends Component {
 
           <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
-          <View style = {{ alignSelf: 'flex-start', marginHorizontal: 5, marginTop: 15, marginBottom: 5 }}>
+          <View style = {{ alignSelf: 'center', marginHorizontal: 5, marginTop: 15, marginBottom: 5 }}>
             <Text style = {styles.weeklyGoalsTitle}> Weekly Goals </Text>
           </View>
 
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 30,
   },
-    imageContainer: {
+  imageContainer: {
     alignSelf: 'stretch',
     backgroundColor: '#FCFCFC',
     borderColor: '#F0F0F0',
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     backgroundColor:'rgba(255,255,255,0.8)',
   },
   weeklyGoalsTitle:{
-    textAlign: 'left',
+    textAlign: 'center',
     color:'black',
     fontFamily: 'Century Gothic',
     fontSize: 24,

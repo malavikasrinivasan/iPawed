@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ScrollView, AppRegistry, Button, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, AppRegistry, Button, Image, ActivityIndicator, TouchableOpacity, ImageBackground } from 'react-native';
 
 import Header from './../../components/Header';
 import { Avatar } from 'react-native-elements';
@@ -191,37 +191,52 @@ export default class TimelineScreen extends Component {
     var desc = null
     // Checking which behaviors are on.
     var behaviors_on = []
-    if(rowData.calm == true) {
-      behaviors_on.push({name : "Content", color: "#8FBAEC"})
-    }
     if(rowData.anxious == true) {
-      behaviors_on.push({name : "Anxious", color: "#e6b800"})
-    }
-    if(rowData.affectionate == true) {
-      behaviors_on.push({name : "Affectionate", color: "plum"})
+      behaviors_on.push({name : "Anxious", color: "#78037c"})
     }
     if(rowData.aggressive == true) {
-      behaviors_on.push({name : "Aggressive", color: "indianred"})
+      behaviors_on.push({name : "Aggressive", color: "#CC2539"})
+    }
+    if(rowData.calm == true) {
+      behaviors_on.push({name : "Content", color: "#6592CC"})
     }
     if(rowData.excited == true) {
-      behaviors_on.push({name : "Excited", color: "#B8E986"})
+      behaviors_on.push({name : "Excited", color: "#5AC8B0"})
+    }
+    if(rowData.affectionate == true) {
+      behaviors_on.push({name : "Affectionate", color: "#fca903"})
     }
     // console.log(behaviors_on);
     if(rowData.title && rowData.imageUrl)
       desc = (
-        <View style={{borderColor:'#ddd', borderRadius: 10, borderWidth:1, padding:5,  shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 1.0}}>
-          <Text style={[styles.time, {flex: 1, alignSelf: 'flex-start'}]}>{rowData.time}</Text>
-          <View style={styles.descriptionContainer}>
-            <Image source={{uri: rowData.imageUrl}} style={styles.image} resizeMode="contain"/>
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={[styles.title]}>{rowData.title}</Text>
-              {rowData.location ? this.renderLocation(rowData.location) : null}
-              <Text style={styles.descriptionText}>"{rowData.description}"</Text>
-              <View style={{flex : 0.5, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-              {behaviors_on ? this.renderBehaviors(behaviors_on) : null}
-              </View>
+        <View style={{borderColor:'lightgrey', borderRadius: 10, borderWidth:1,  shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 0.0, overflow:'hidden', backgroundColor:'#FCFCFC'}}>
+          <View style={{flexDirection: 'row', flex:1}}>
+            <View style={{flex:0.5, alignItems: 'stretch'}}>
+              <ImageBackground source={{uri: rowData.imageUrl}} style={{width:150,height:150, alignSelf:'stretch'}}>
+
+                <View style={{justifyContent:'flex-end', flex: 1}}>
+                  <Text style={styles.imageTitle}>
+                    {rowData.time}
+                  </Text>
+                </View>
+              </ImageBackground>
             </View>
+
+            <View style={{flex:0.5, justifyContent: 'center', margin: 10, alignItems: 'center'}}>
+
+                  <Text style={[styles.title]}>{rowData.title}</Text>
+                  {rowData.location ? this.renderLocation(rowData.location) : null}
+                  <Text style={styles.descriptionText}>"{rowData.description}"</Text>
+                  <View style={{flex : 0.5, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+                  {behaviors_on ? this.renderBehaviors(behaviors_on) : null}
+                  </View>
+            </View>
+
           </View>
+
+
+
+
         </View>
       )
 
@@ -271,7 +286,7 @@ export default class TimelineScreen extends Component {
               <TouchableOpacity>
                 <Icon
                   name="ios-add-circle" size = {50} color = "#5AC8B0"
-                  style={{justifyContent:'center', shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 1.0}}
+                  style={{justifyContent:'center', shadowOffset:{height: 3}, shadowColor: '#ccc', shadowOpacity: 0.0}}
                   onPress={() => this.props.navigation.navigate('AddEvent', {userID: this.state.userID, onNavigateBack: this.memoryUpdate})}/>
               </TouchableOpacity>
               <View style={{ flex:1 }}>
@@ -310,20 +325,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: 'white'
   },
   time: {
-    fontSize:15,
-    color:'white',
-    backgroundColor: '#5AC8B0',
-    opacity: 0.8,
-    borderColor: '#5AC8B0',
-    borderWidth: 5,
+    fontSize:16,
+    color:'#163250',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     fontFamily:'Century Gothic',
     fontWeight: 'bold',
-    shadowOffset:{height: 2},
-    shadowColor: '#bbb',
-    shadowOpacity: 1.0,
-
+    margin: 5,
+    marginLeft:20,
+    marginBottom: 0
   },
   title: {
     fontSize: 17,
@@ -335,7 +347,7 @@ const styles = StyleSheet.create({
   },
   descriptionContainer:{
     flexDirection: 'row',
-    marginLeft: 10,
+    marginLeft: 10
   },
   textDescription: {
     flex: 1,
@@ -370,13 +382,12 @@ const styles = StyleSheet.create({
     color: '#777',
     fontSize: 13,
     marginTop: 5,
-    marginLeft: 20
+    textAlign: 'left'
   },
   image: {
-    flex: 1,
-    width: 120,
-    height: 120,
-    marginTop: 10,
+    width: 150,
+    height: 150,
+    marginTop: -10,
     marginLeft: 0,
   },
   locationText: {
@@ -386,12 +397,12 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   behaviorCircle: {
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
     alignSelf: 'center',
     borderColor: 'black',
     borderRadius: 100,
-    borderWidth: 0,
+    borderWidth: 1,
     margin: 5,
     opacity: 0.8
   },
@@ -401,6 +412,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Century Gothic',
     textAlign: 'center',
     fontStyle: 'italic'
-  }
+  },
+  imageTitle: {
+    textAlign: 'center',
+    color:'black',
+    fontFamily: 'Century Gothic',
+    fontSize: 15,
+    opacity: 1,
+    padding: 5,
+    backgroundColor:'rgba(255,255,255,0.8)',
+  },
 
 });

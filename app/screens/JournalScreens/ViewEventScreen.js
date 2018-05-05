@@ -85,20 +85,20 @@ export default class ViewEventScreen extends Component {
     console.log(params);
 
     var behaviors_on = []
-    if(params.eventData.calm == true) {
-      behaviors_on.push({name : "Content", color: "#8FBAEC"})
-    }
     if(params.eventData.anxious == true) {
-      behaviors_on.push({name : "Anxious", color: "#e6b800"})
-    }
-    if(params.eventData.affectionate == true) {
-      behaviors_on.push({name : "Affectionate", color: "plum"})
+      behaviors_on.push({name : "Anxious", color: "#78037c"})
     }
     if(params.eventData.aggressive == true) {
-      behaviors_on.push({name : "Aggressive", color: "indianred"})
+      behaviors_on.push({name : "Aggressive", color: "#CC2539"})
+    }
+    if(params.eventData.calm == true) {
+      behaviors_on.push({name : "Content", color: "#6592CC"})
     }
     if(params.eventData.excited == true) {
-      behaviors_on.push({name : "Excited", color: "#B8E986"})
+      behaviors_on.push({name : "Excited", color: "#5AC8B0"})
+    }
+    if(params.eventData.affectionate == true) {
+      behaviors_on.push({name : "Affectionate", color: "#fca903"})
     }
 
     return (
@@ -134,14 +134,14 @@ export default class ViewEventScreen extends Component {
         </View>
          <View style={styles.box}>
            <View style={styles.commentbox}>
-              <Text style={styles.subheader}>Notes</Text>
+              <Text style={styles.subheader}>Your notes:</Text>
               <Text style={styles.commenttext}>
                 {params.eventData.description}
               </Text>
           </View>
         </View>
         <View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', margin:10}}>
              {behaviors_on ? this.renderBehaviors(behaviors_on) : null}
           </View>
          </View>
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'Century Gothic',
     paddingBottom: 5,
+    marginTop: 7,
     textAlign: 'center'
   },
   label: {
@@ -236,21 +237,23 @@ const styles = StyleSheet.create({
     fontStyle: 'italic'
   },
   commentbox: {
-    height: 90,
+    height: 80,
     alignSelf: 'stretch',
     margin: 8,
     marginTop: 2
   },
   commenttext: {
     color: 'black',
+    opacity: 0.8,
     fontSize: 14,
     margin: 4,
-    fontFamily: 'Century Gothic'
+    fontFamily: 'Century Gothic',
+    textAlign: 'center'
   },
   image: {
     width: 250,
     height: 250,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   behaviorCircle: {
     width: 30,
@@ -258,13 +261,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderColor: 'black',
     borderRadius: 100,
-    borderWidth: 0,
-    margin: 5,
+    borderWidth: 1,
+    marginBottom: 5,
     opacity: 0.8
   },
   tagtext: {
     color: 'black',
-    fontSize: 10,
+    fontSize: 13,
     fontFamily: 'Century Gothic',
     textAlign: 'center',
     fontStyle: 'italic'

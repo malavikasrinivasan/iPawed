@@ -241,7 +241,7 @@ export default class AddEventScreen extends Component {
         </Text>
         <TextInput
           multiline = {false}
-          style = {styles.commenttext}
+          style = {styles.label}
           placeholder="Title"
           placeholderTextColor="grey"
           onChangeText={eventTitle => this.setState({ eventTitle })}
@@ -387,38 +387,39 @@ export default class AddEventScreen extends Component {
         <View>
           <Text style={styles.subheader}>Behavior tags:</Text>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <View style={{margin:10}}>
-             <TouchableOpacity onPress={this.toggleB3}>
-               <View style={[styles.behavior, {backgroundColor:'#8FBAEC'}, this.state.behavior3 && styles.bSelect]}/>
-             </TouchableOpacity>
-             <Text style={styles.tagtext}>Content</Text>
-            </View>
-            <View style={{margin:10}}>
+            <View style={{margin:10, marginTop:0}}>
              <TouchableOpacity onPress={this.toggleB1}>
-               <View style={[styles.behavior, {backgroundColor:'#e6b800'}, this.state.behavior1 && styles.bSelect]}/>
+               <View style={[styles.behavior, {backgroundColor:'#78037c'}, this.state.behavior1 && styles.bSelect]}/>
              </TouchableOpacity>
              <Text style={styles.tagtext}>Anxious</Text>
             </View>
 
-            <View style={{margin:10}}>
-             <TouchableOpacity onPress={this.toggleB5}>
-               <View style={[styles.behavior, {backgroundColor:'plum'}, this.state.behavior5 && styles.bSelect]}/>
-             </TouchableOpacity>
-             <Text style={styles.tagtext}>Affectionate</Text>
-            </View>
-
-            <View style={{margin:10}}>
+            <View style={{margin:10, marginTop:0}}>
              <TouchableOpacity onPress={this.toggleB2}>
-               <View style={[styles.behavior, {backgroundColor:'indianred'}, this.state.behavior2 && styles.bSelect]}/>
+               <View style={[styles.behavior, {backgroundColor:'#CC2539'}, this.state.behavior2 && styles.bSelect]}/>
              </TouchableOpacity>
              <Text style={styles.tagtext}>Aggressive</Text>
             </View>
 
-            <View style={{margin:10}}>
+            <View style={{margin:10, marginTop:0}}>
+             <TouchableOpacity onPress={this.toggleB3}>
+               <View style={[styles.behavior, {backgroundColor:'#6592CC'}, this.state.behavior3 && styles.bSelect]}/>
+             </TouchableOpacity>
+             <Text style={styles.tagtext}>Content</Text>
+            </View>
+
+            <View style={{margin:10, marginTop:0}}>
              <TouchableOpacity onPress={this.toggleB4}>
-               <View style={[styles.behavior, {backgroundColor:'#B8E986'}, this.state.behavior4 && styles.bSelect]}/>
+               <View style={[styles.behavior, {backgroundColor:'#5AC8B0'}, this.state.behavior4 && styles.bSelect]}/>
              </TouchableOpacity>
              <Text style={styles.tagtext}>Excited</Text>
+            </View>
+
+            <View style={{margin:10, marginTop:0}}>
+             <TouchableOpacity onPress={this.toggleB5}>
+               <View style={[styles.behavior, {backgroundColor:'#fca903'}, this.state.behavior5 && styles.bSelect]}/>
+             </TouchableOpacity>
+             <Text style={styles.tagtext}>Affectionate</Text>
             </View>
           </View>
          </View>

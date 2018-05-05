@@ -216,7 +216,7 @@ export default class ActivityRecord extends Component{
 
   render(){
     const {params} = this.props.navigation.state;
-    
+
         return(
         <Drawer
           ref={(ref) => this._drawer = ref}
@@ -237,7 +237,7 @@ export default class ActivityRecord extends Component{
 
           <View style={{margin:5}}>
             <Text style={styles.addbuttontext}>
-              Take {params.petName}'s photo!
+              {"Take "}{params.petName}{"'s photo!"}
             </Text>
             <Text style={styles.addbuttontext}>
             </Text>
@@ -287,7 +287,7 @@ export default class ActivityRecord extends Component{
                   width: '100%',
                   backgroundColor: 'rgba(0,0,0,0)',
                   borderTopWidth: 0,
-                  borderBottomWidth:0
+                  borderBottomWidth:0,
                 },
                 description: {
                   fontWeight: 'bold'
@@ -295,7 +295,9 @@ export default class ActivityRecord extends Component{
                 textInput: {
                   color: 'black',
                   fontSize: 14,
-                  fontFamily:'Century Gothic'
+                  fontFamily:'Century Gothic',
+                  borderColor: '#E0E0E0',
+                  borderWidth: 1,
                 },
                 predefinedPlacesDescription: {
                   color: '#1faadb'
@@ -304,7 +306,7 @@ export default class ActivityRecord extends Component{
 
               currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
             />
-            
+
             {/* <Text style={styles.label}>Date</Text> */}
             <DatePicker
             date={this.state.eventDate}
@@ -339,50 +341,17 @@ export default class ActivityRecord extends Component{
             />
 
         </View>
-        
+
         <View style={styles.screenContainer}>
 
-          <View style={{justifyContent:'center'}}>
-          <Text style={styles.subheader}>Weekly activity progress:</Text>
-          </View>
-            <View style = {styles.weeklyProgressContainer}>
-              <WeeklyProgressRing 
-                completed = { 4 }
-                total = { 10 }
-                completedColor = { '#e54747' }
-                blankColor = { '#f7e1e1' }
-                activityName = { 'Train' }
-              />
-              <WeeklyProgressRing 
-                completed = { 3 }
-                total = { 5 }
-                completedColor = { '#d5e244' }
-                blankColor = { '#fbfced' }
-                activityName = { 'Care' }
-              />
-              <WeeklyProgressRing 
-                completed = { 1 }
-                total = { 3 }
-                completedColor = { '#7cff8c' }
-                blankColor = { '#edf9ee' }
-                activityName = { 'Play' }
-              />
-              <WeeklyProgressRing 
-                completed = { 7 }
-                total = { 7 }
-                completedColor = { '#8beff4' }
-                blankColor = { '#e8fbfc' }
-                activityName = { 'Calm' }
-              />
-            </View>
-          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
+
 
           <View style={{height: 75}}>
             <Text style={styles.subheader}>Behavior tags:</Text>
             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <View style={{margin:10, marginTop:0}}>
                <TouchableOpacity onPress={this.toggleB1}>
-                 <View style={[styles.behavior, {backgroundColor:'#4E0250'}, this.state.behavior1 && styles.bSelect]}/>
+                 <View style={[styles.behavior, {backgroundColor:'#78037c'}, this.state.behavior1 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Anxious</Text>
               </View>
@@ -398,7 +367,7 @@ export default class ActivityRecord extends Component{
                <TouchableOpacity onPress={this.toggleB3}>
                  <View style={[styles.behavior, {backgroundColor:'#6592CC'}, this.state.behavior3 && styles.bSelect]}/>
                </TouchableOpacity>
-               <Text style={styles.tagtext}>Calm</Text>
+               <Text style={styles.tagtext}>Content</Text>
               </View>
 
               <View style={{margin:10, marginTop:0}}>
@@ -410,13 +379,12 @@ export default class ActivityRecord extends Component{
 
               <View style={{margin:10, marginTop:0}}>
                <TouchableOpacity onPress={this.toggleB5}>
-                 <View style={[styles.behavior, {backgroundColor:'#C58502'}, this.state.behavior5 && styles.bSelect]}/>
+                 <View style={[styles.behavior, {backgroundColor:'#fca903'}, this.state.behavior5 && styles.bSelect]}/>
                </TouchableOpacity>
                <Text style={styles.tagtext}>Affectionate</Text>
               </View>
             </View>
            </View>
-          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
           <View style={styles.commentbox}>
             <TextInput
@@ -427,7 +395,6 @@ export default class ActivityRecord extends Component{
               placeholderTextColor="grey"
             />
           </View>
-          <View style={{borderColor: 'grey', borderWidth: 0.5, alignSelf:'stretch'}}/>
 
           <View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -462,7 +429,7 @@ const styles = StyleSheet.create({
   commentbox: {
     backgroundColor: '#F0F0F0',
     // width: 200,
-    height: 50,
+    height: 120,
     // margin: 10,
     borderColor: 'lightgrey',
     borderWidth: 0.5,
@@ -470,8 +437,9 @@ const styles = StyleSheet.create({
   },
   commenttext: {
     color: 'black',
-    fontSize: 12,
-    margin: 4,
+    fontSize: 14,
+    margin: 10,
+    marginTop: 5,
     fontFamily: 'Century Gothic'
   },
   header: {
@@ -527,12 +495,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Century Gothic'
   },
   addimg: {
-    // width: 350,
     height: 180,
     alignSelf: 'stretch',
     backgroundColor: '#F0F0F0',
     justifyContent: 'center',
-    // margin:10,
     borderColor: 'lightgrey',
     borderWidth: 0.5
   },
@@ -607,8 +573,6 @@ const styles = StyleSheet.create({
     height: 150,
     alignItems: 'stretch',
     backgroundColor: '#F6F6F6',
-    borderColor: '#E0E0E0',
-    borderWidth: 1.5,
     justifyContent: 'center',
   },
   uploadContainer: {
@@ -619,7 +583,9 @@ const styles = StyleSheet.create({
     flex : 0,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    borderColor: '#E0E0E0',
+    borderWidth: 1.5,
     height: 40
    },
    weeklyProgressContainer: {
