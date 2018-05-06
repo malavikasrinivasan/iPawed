@@ -35,8 +35,6 @@ export default class AboutScreen extends Component {
   render() {
     return (
       <View style={styles.screenContainer}>
-        <Text style={styles.header}>About</Text>
-
         <Text style={styles.subheader}>
           {"UC Berkeley School of Information\nMIMS Final Project, 2018"}
         </Text>

@@ -8,11 +8,18 @@ import {
   AppRegistry
 } from 'react-native';
 import AboutScreen from './../screens/LoginScreens/AboutScreen';
+import * as firebase from 'firebase';
 
 export default class ControlPanel extends Component {
 
   constructor(props){
     super(props);
+  }
+
+  logout(){
+    firebase.auth().signOut().then(this.props.navigation.navigate('UserLogin'))
+    .catch(function(error) {
+    });
   }
 
   render() {
@@ -39,7 +46,7 @@ export default class ControlPanel extends Component {
         <TouchableOpacity onPress={() => this.props.navigation.navigate('AboutScreen')}>
           <Text style={styles.links}>About</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => this.logout()}>
           <Text style={styles.links}>Log Out</Text>
         </TouchableOpacity>
       </ScrollView>

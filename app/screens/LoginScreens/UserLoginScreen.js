@@ -42,11 +42,11 @@ export default class UserLoginScreen extends Component {
       authenticating: false,
       user,
       error: '',
-    })
-    this.props.navigation.navigate('Home', {
-      userID: user.uid,
-      userName: user.displayName
-    });
+      })
+      this.props.navigation.navigate('Home', {
+        userID: user.uid,
+        userName: user.displayName
+      });
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -105,6 +105,7 @@ export default class UserLoginScreen extends Component {
     headerBackTitleStyle: {
       fontFamily: 'Century Gothic'
     },
+    headerLeft: null,
     headerTitleStyle: {
       fontFamily: 'Century Gothic',
       fontSize: 22,
