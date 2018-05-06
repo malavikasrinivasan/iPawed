@@ -60,7 +60,6 @@ export default class WelcomeScreen extends Component {
     .catch((error) => {
       alert("Error")
     })
-
   }
 
   componentDidMount(){
