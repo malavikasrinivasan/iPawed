@@ -86,11 +86,11 @@ export default class GetPetDetails extends Component {
 
   _onCamPress() {
     ImagePicker.openCamera({
-      width: 300,
-      height: 300,
+      width: 380,
+      height: 220,
       includeBase64: true,
       cropping: true,
-      compressImageQuality: 0.25
+      // compressImageQuality: 0.25
     }).then(image => {
       // console.log(image);
       this.setState ({
@@ -102,11 +102,11 @@ export default class GetPetDetails extends Component {
 
   _onLibPress() {
     ImagePicker.openPicker({
-      // width: 100,
-      // height: 100,
+      width: 380,
+      height: 220,
       includeBase64: true,
-      // cropping: true,
-      compressImageQuality: 0.25
+      cropping: true,
+      // compressImageQuality: 0.25
     }).then(image => {
       // console.log(image);
       this.setState ({
@@ -185,7 +185,7 @@ export default class GetPetDetails extends Component {
   }
 
   renderImage(image) {
-    return <Image style={{width: 100, height: 100, resizeMode: 'contain'}} source={image} />
+    return <Image style={{width: 120, height: 69.47, resizeMode: 'contain', borderColor: 'lightgrey', borderWidth:1}} source={image} />
   }
 
   render() {

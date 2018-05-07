@@ -125,7 +125,7 @@ export default class TimelineScreen extends Component {
 
 
     // getting data from firebase for the timeline
-    firebase.database().ref('userDetails/'+ firebaseUserID + '/journalDetails').once("value").then((snapshot) => {
+    firebase.database().ref('userDetails/'+ firebaseUserID + '/journalDetails').orderByChild("sortDate").once("value").then((snapshot) => {
       snapshot.forEach( function(child) {
         // console.log(child.val());
         memory = child.val();
@@ -296,6 +296,7 @@ export default class TimelineScreen extends Component {
         </View>
         <ScrollView style={styles.timelineContainer} >
           <Timeline
+            removeClippedSubviews={false}
             data = {this.state.timelineData}
             circleSize={15}
             circleColor= '#5AC8B0'
