@@ -105,6 +105,7 @@ componentDidMount() {
                 // style={styles.listView}
                 dataSource={this.state.dataSource}
                 renderRow={this._renderItem.bind(this)}
+                removeClippedSubviews={false}
             />
         </View>
       </ScrollView>

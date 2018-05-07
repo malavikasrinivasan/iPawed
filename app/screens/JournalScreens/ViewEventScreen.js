@@ -141,11 +141,10 @@ export default class ViewEventScreen extends Component {
           </View>
         </View>
         <View>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', margin:10}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around', margin:10}}>
              {behaviors_on ? this.renderBehaviors(behaviors_on) : null}
           </View>
-         </View>
-
+        </View>
       </View>
     </Drawer>
     );
@@ -254,6 +253,8 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     alignSelf: 'center',
+    borderColor: 'lightgrey',
+    borderWidth:1
   },
   behaviorCircle: {
     width: 30,

@@ -125,8 +125,8 @@ export default class AddEventScreen extends Component {
 
   _onLibPress() {
     ImagePicker.openPicker({
-      width: 100,
-      height: 100,
+      width: 300,
+      height: 300,
       includeBase64: true,
       cropping: true
     }).then(image => {
@@ -190,9 +190,12 @@ export default class AddEventScreen extends Component {
           imageUrl: url
         })
       }). then(() => {
+        var sortDate = new Date(this.state.eventDate);
+        sortDate = -1 * sortDate.getTime();
         firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
           eventTitle : this.state.eventTitle,
           eventDate : this.state.eventDate,
+          sortDate : sortDate,
           eventLocation: this.state.eventLocation,
           eventNotes: this.state.eventNotes,
           imageURL: this.state.imageUrl,
@@ -213,7 +216,7 @@ export default class AddEventScreen extends Component {
   }
 
   renderImage(image) {
-    return <Image style={{width: 100, height: 100, resizeMode: 'contain'}} source={image} />
+    return <Image style={{width: 100, height: 100, resizeMode: 'contain', borderColor: 'lightgrey', borderWidth:1}} source={image} />
   }
 
 
