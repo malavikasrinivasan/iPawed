@@ -11,6 +11,7 @@ export default class ActivityCard extends Component {
 	render() {
         const item = this.props.item
         const userID = this.props.userID
+        console.log(userID)
 
 		return (
 			<TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail', {item:item, userID:userID})}>

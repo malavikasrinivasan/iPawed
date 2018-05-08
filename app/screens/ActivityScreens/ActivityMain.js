@@ -68,6 +68,9 @@ export default class ActivityMain extends Component {
         dataSourceCat: new ListView.DataSource({
           rowHasChanged: (row1, row2) => row1 !== row2
         }),
+        dataSourceRecent: new ListView.DataSource({
+          rowHasChanged: (row1, row2) => row1 !== row2
+        }),
         userID:'',
         userDetails: null,
         recommendedActivities: null,
@@ -349,6 +352,37 @@ componentDidMount() {
         dataSourceCat: this.state.dataSourceCat.cloneWithRows(categories)
     });
   });
+
+  firebase.database().ref('userDetails/' + userID + '/recentActivities/').orderByChild('order').on('value', (snap) => {
+    var recent = [];
+    var recentTitle = [];
+    var limit = 10;
+    // if (snap.val() === null){
+    //   recent.push({
+    //     title: "Start activities with your dog",
+    //     imageurl: "https://firebasestorage.googleapis.com/v0/b/ipawedmims18.appspot.com/o/images%2Factivity.jpg?alt=media&token=64198a6e-af5f-4499-8d9f-2c7abc2108d0"
+    //   })
+    // }
+    snap.forEach((child) => {
+      if(snap.val() !== null){
+        if (recentTitle.indexOf(child.val().item.title) == -1 && limit > 0){
+          limit -= 1;
+          recentTitle.push(child.val().title);
+          recent.push({
+            title: child.val().item.title,
+                category: child.val().item.category,
+                desc: child.val().item.desc,
+                steps: child.val().item.steps,
+                video: child.val().item.video,
+                imageurl: child.val().item.imageurl});
+        }
+      }
+    });
+    this.setState({
+        dataSourceRecent: this.state.dataSourceRecent.cloneWithRows(recent)
+    });
+    console.log(this.state.dataSourceRecent.getRowCount());
+  });
 }
 
   render() {
@@ -357,119 +391,155 @@ componentDidMount() {
         <ActivityIndicator size='large' />
         );
     }
+    if(this.state.dataSourceRecent.getRowCount() > 0){
+      return (
+        <Drawer
+          ref={(ref) => this._drawer = ref}
+          type="overlay"
+          side='right'
+          content={<ControlPanel navigation={this.props.navigation}/>}
+          captureGestures={true}
+          acceptTap={true}
+          tapToClose={true}
+          openDrawerOffset={0.3} // 20% gap on the right side of drawer
+          panCloseMask={0.3}
+          negotiatePan={true}
+          tweenHandler={(ratio) => ({
+            main: { opacity:(2-ratio)/2 }
+          })}
+          >
+        <ScrollView style={{flex: 1, backgroundColor: '#F8F8F8'}}>
 
-    return (
-      <Drawer
-        ref={(ref) => this._drawer = ref}
-        type="overlay"
-        side='right'
-        content={<ControlPanel navigation={this.props.navigation}/>}
-        captureGestures={true}
-        acceptTap={true}
-        tapToClose={true}
-        openDrawerOffset={0.3} // 20% gap on the right side of drawer
-        panCloseMask={0.3}
-        negotiatePan={true}
-        tweenHandler={(ratio) => ({
-          main: { opacity:(2-ratio)/2 }
-        })}
-        >
-      <ScrollView style={{flex: 1, backgroundColor: '#F8F8F8'}}>
+          <Text style={styles.screenTitle}>
+            {"Explore Activities"}
+          </Text>
 
-        <Text style={styles.screenTitle}>
-          {"Explore Activities"}
-        </Text>
+          <Text style={styles.subheader}>
+            {"Keep your routine strong or try something new. As long as you're hanging out with Peanut, you're making memories."}
+          </Text>
 
-        <Text style={styles.subheader}>
-          {"Keep your routine strong or try something new. As long as you're hanging out with Peanut, you're making memories."}
-        </Text>
+          <Text style={styles.sectionTitle}>
+            {"Recommended for you:"}
+          </Text>
 
-        <Text style={styles.sectionTitle}>
-          {"Recommended for you:"}
-        </Text>
-
-        <ScrollView horizontal={true}>
-            <ListView
-                horizontal={true}
-                // style={styles.listView}
-                dataSource={this.state.dataSource}
-                renderRow={this._renderItem.bind(this)}
-            />
-      </ScrollView>
-
-      <Text style={styles.sectionTitle}>
-        {"Your most recent:"}
-      </Text>
-
-      <ScrollView horizontal={true}>
-          <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
-            <Card containerStyle={styles.cardStyle}>
-                  <ImageBackground
-                      style={styles.thumbnail}
-                      source={require('../../img/vet.png')}/>
-                  <Text style={styles.activityTitle}>
-                    {"Vet Visit"}
-                  </Text>
-            </Card>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
-            <Card containerStyle={styles.cardStyle}>
-                  <ImageBackground
-                      style={styles.thumbnail}
-                      source={require('../../img/walking.jpeg')}/>
-                  <Text style={styles.activityTitle}>
-                    {"Walk"}
-                  </Text>
-            </Card>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
-            <Card containerStyle={styles.cardStyle}>
-                  <ImageBackground
-                      style={styles.thumbnail}
-                      source={require('../../img/treatpuzzle.jpeg')}/>
-                  <Text style={styles.activityTitle}>
-                    {"Puzzle"}
-                  </Text>
-            </Card>
-          </TouchableOpacity>
-          <TouchableOpacity style={{flex:0.25}}  onPress={() => this.props.navigation.navigate('ActivityDetail')}>
-            <Card containerStyle={styles.cardStyle}>
-                  <ImageBackground
-                      style={styles.thumbnail}
-                      source={require('../../img/hurdles.jpeg')}/>
-                  <Text style={styles.activityTitle}>
-                    {"Obstacles"}
-                  </Text>
-            </Card>
-          </TouchableOpacity>
+          <ScrollView horizontal={true}>
+              <ListView
+                  horizontal={true}
+                  // style={styles.listView}
+                  dataSource={this.state.dataSource}
+                  renderRow={this._renderItem.bind(this)}
+              />
         </ScrollView>
 
         <Text style={styles.sectionTitle}>
-          {"Categories:"}
+          {"Your most recent:"}
         </Text>
 
-        <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', marginTop:10}}>
-          <ListView
-                contentContainerStyle={{flexDirection: 'row',
-                flexWrap: 'wrap'}}
-                dataSource={this.state.dataSourceCat}
-                renderRow={this._renderItemFL.bind(this)}
-            />
-        </View>
+        <ScrollView horizontal={true}>
+              <ListView
+                  horizontal={true}
+                  // style={styles.listView}
+                  dataSource={this.state.dataSourceRecent}
+                  renderRow={this._renderItemRecent.bind(this)}
+              />
+        </ScrollView>
 
+          <Text style={styles.sectionTitle}>
+            {"Categories:"}
+          </Text>
 
+          <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', marginTop:10}}>
+            <ListView
+                  contentContainerStyle={{flexDirection: 'row',
+                  flexWrap: 'wrap'}}
+                  dataSource={this.state.dataSourceCat}
+                  renderRow={this._renderItemFL.bind(this)}
+              />
+          </View>
 
-    </ScrollView>
-    </Drawer>
-    );
+      </ScrollView>
+      </Drawer>
+      );
+    }
+    else{
+      return (
+        <Drawer
+          ref={(ref) => this._drawer = ref}
+          type="overlay"
+          side='right'
+          content={<ControlPanel navigation={this.props.navigation}/>}
+          captureGestures={true}
+          acceptTap={true}
+          tapToClose={true}
+          openDrawerOffset={0.3} // 20% gap on the right side of drawer
+          panCloseMask={0.3}
+          negotiatePan={true}
+          tweenHandler={(ratio) => ({
+            main: { opacity:(2-ratio)/2 }
+          })}
+          >
+        <ScrollView style={{flex: 1, backgroundColor: '#F8F8F8'}}>
+
+          <Text style={styles.screenTitle}>
+            {"Explore Activities"}
+          </Text>
+
+          <Text style={styles.subheader}>
+            {"Keep your routine strong or try something new. As long as you're hanging out with Peanut, you're making memories."}
+          </Text>
+
+          <Text style={styles.sectionTitle}>
+            {"Recommended for you:"}
+          </Text>
+
+          <ScrollView horizontal={true}>
+              <ListView
+                  horizontal={true}
+                  // style={styles.listView}
+                  dataSource={this.state.dataSource}
+                  renderRow={this._renderItem.bind(this)}
+              />
+        </ScrollView>
+
+        <Text style={styles.sectionTitle}>
+          {"Your most recent:"}
+        </Text>
+        <Text style={styles.subheader}>Get started with your pet to fill this section</Text>
+
+          <Text style={styles.sectionTitle}>
+            {"Categories:"}
+          </Text>
+
+          <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', marginTop:10}}>
+            <ListView
+                  contentContainerStyle={{flexDirection: 'row',
+                  flexWrap: 'wrap'}}
+                  dataSource={this.state.dataSourceCat}
+                  renderRow={this._renderItemFL.bind(this)}
+              />
+          </View>
+
+      </ScrollView>
+      </Drawer>
+      );
+    }
   }
 
   _renderItem(item) {
     return (
       <ActivityCard navigation={this.props.navigation} item={item} userID = {this.state.userID} />
     );
+  }
+
+  _renderItemRecent(item) {
+    if(this.state.dataSourceRecent.getRowCount() > 0){
+      return (
+        <ActivityCard navigation={this.props.navigation} item={item} userID = {this.state.userID} />
+      );
+    }
+    else{
+      <Text style={styles.subheader}>Start activities with your pet to fill this section</Text>
+    }
   }
 
   _renderItemFL(item) {
