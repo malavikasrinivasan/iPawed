@@ -10,44 +10,39 @@ const Dimensions = require('Dimensions');
 
 class LineChartComp extends React.PureComponent {
 
+    constructor(props) {
+        super(props);
+        // this.state = {
+        //     data = this.props.data
+        // }
+    }
+
     render() {        
-        const data = [
-            {
-                value: 100,
-                date: dateFns.setHours(new Date(2018, 1, 2), 0),
-            },
-            {
-                value: 20,
-                date: dateFns.setHours(new Date(2018, 1, 3), 0),
-            },
-            {
-                value: 100,
-                date: dateFns.setHours(new Date(2018, 1, 4), 0),
-            },
-            {
-                value: 10,
-                date: dateFns.setHours(new Date(2018, 1, 5), 0),
-            },
-            {
-                value: 40,
-                date: dateFns.setHours(new Date(2018, 1, 6), 0),
-            },
-            {
-                value: 110,
-                date: dateFns.setHours(new Date(2018, 1, 7), 0),
-            },
-        ]
+        // console.log(this.props.data)
+        if (!this.props.data){
+            return(false);
+        }
+        const data = this.props.data
+        const colorLine = this.props.colorLine
+        const colorFill = this.props.colorFill
+
+        if (data.length < 2){
+            return(
+                <View style={{ height: 150, width: Dimensions.get('window').width, paddingHorizontal: 20, paddingBottom: 5, flex:1}}> 
+                    <Text style = {styles.graphTitle}> Waiting for Behavioral Data </Text>
+                </View>
+            )
+        }
 
         const Line = ({ line }) => (
             <Path
                 key={'line'}
                 d={line}
-                stroke={'#e9bfff'}
+                stroke={colorLine}
                 fill={'none'}
             />
         )
 
-        // console.log(data)
         return (
             <View style={{ height: 150, width: Dimensions.get('window').width, paddingHorizontal: 20, paddingBottom: 5, flex:1}}>                
                 <AreaChart
@@ -57,8 +52,7 @@ class LineChartComp extends React.PureComponent {
                     xAccessor={ ({ item }) => item.date }
                     xScale={ scale.scaleTime }
                     contentInset={{ top: 10, bottom: 10 }}
-                    svg={{ fill: '#f9edff' }}
-                    // curve={ shape.curveNatural }
+                    svg={{ fill: colorFill }}
                 >  
                    <Line/>                   
                 </AreaChart>
@@ -67,13 +61,13 @@ class LineChartComp extends React.PureComponent {
                     svg={{
                         fill: 'black',
                         fontSize: 10,
-                        rotation: 10,
+                        rotation: 0,
                         originY: 30,
                         y: 5,
                     }}
                     xAccessor={ ({ item }) => item.date}
                     scale={ scale.scaleTime }
-                    numberOfTicks={ 7 }
+                    numberOfTicks={ 6 }
                     style={{ marginHorizontal: -15, height: 20 }}
                     contentInset={{ left: 10, right: 25 }}
                     formatLabel={ (value) => dateFns.format(value, 'MMMD')  }                        
@@ -85,7 +79,6 @@ class LineChartComp extends React.PureComponent {
 
 const styles = StyleSheet.create({
   graphTitle:{
-    // textAlign: 'left',
     color:'black',
     fontFamily: 'Century Gothic',
     fontSize: 10,

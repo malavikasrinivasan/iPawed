@@ -7,7 +7,11 @@ import ControlPanel from './../../components/ControlPanel';
 import * as firebase from 'firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+
 // console.disableYellowBox = true;
+var parse = require('date-fns/parse')
+var dateFns = require('date-fns')
+var compareAsc = require('date-fns/compare_asc');
 
 export default class WelcomeScreen extends Component {
 
@@ -20,7 +24,12 @@ export default class WelcomeScreen extends Component {
         ),
       title: 'Home',
       headerBackTitle: 'back',
-      headerLeft: null,
+      headerLeft: 
+        <TouchableOpacity onPress={() => params.refreshPage()}>
+          <Image
+            source={require("../../icon/refresh.png")}
+            style={{height:30, width:30, justifyContent:'center', margin:13}}/>
+        </TouchableOpacity>,
       headerTitleStyle: {
         fontFamily: 'Century Gothic',
         fontSize: 22,
@@ -40,7 +49,12 @@ export default class WelcomeScreen extends Component {
     userName:'',
     userDetails: null,
     imageUrl: null,
-    menuOpen: false
+    menuOpen: false,
+    dataAffectionate: null,
+    dataAggressive: null,
+    dataAnxious: null,
+    dataCalm: null,
+    dataExcited: null
   }
 
   toggleControlPanel = () => {
@@ -48,6 +62,9 @@ export default class WelcomeScreen extends Component {
     this.setState({menuOpen: !this.state.menuOpen});
   }
 
+  refreshScreen = () => {
+    this.componentDidMount()
+  }
 
   getUserData(userID){
     firebase.database().ref('userDetails/' + userID + '/').once('value')
@@ -56,15 +73,119 @@ export default class WelcomeScreen extends Component {
         userDetails: snapshot.val()
       });
       // console.log(snapshot.val())
+      this.getBehaviouralData(snapshot.val().journalDetails)
     })
     .catch((error) => {
+      console.log(error)
       alert("Error")
+    })
+  }
+
+  getBehaviouralData(journalDetails){
+    var dailyBehaviors = {}; 
+
+    for (var key in journalDetails) {
+      detail = journalDetails[key]
+      journalDate = new Date(detail.eventDate)
+
+      if(Object.keys(dailyBehaviors).includes(journalDate)) {
+        existingDate = dailyBehaviors[journalDate]
+        existingDate.affectionate_count = existingDate.affectionate_count + (detail.affectionate ? 1 : 0) ;
+        existingDate.aggressive_count = existingDate.aggressive_count + (detail.aggressive ? 1 : 0);
+        existingDate.anxious_count = existingDate.anxious_count + (detail.anxious ? 1 : 0) ;
+        existingDate.calm_count = existingDate.calm_count + (detail.calm ? 1 : 0) ;
+        existingDate.excited_count = existingDate.excited_count + (detail.excited ? 1 : 0) ;
+      }
+      else{
+        dailyBehaviors[journalDate] = {
+          affectionate_count: detail.affectionate ? 1 : 0,
+          aggressive_count: detail.aggressive ? 1 : 0,
+          anxious_count: detail.anxious ? 1 : 0,
+          calm_count: detail.calm ? 1 : 0,
+          excited_count: detail.excited ? 1 : 0 
+        }
+      }
+    }
+    all_days = Object.keys(dailyBehaviors)
+    all_days = all_days.sort(compareAsc);
+    // console.log(all_days)
+    // console.log(dateFns.format(all_days[0], 'YYYY-MM-DD'))
+
+    behavioralTrend = {}
+    running_affectionate_count = 0
+    running_aggressive_count = 0
+    running_anxious_count = 0
+    running_calm_count = 0
+    running_excited_count = 0
+
+    for (var i = 0; i < all_days.length; i++) {
+      dailyData = dailyBehaviors[all_days[i]]
+      // console.log(dailyData)
+      running_affectionate_count = Math.max(running_affectionate_count + (dailyData.affectionate_count == 0 ? -1 : dailyData.affectionate_count), 0)
+      running_aggressive_count = Math.max(running_aggressive_count + (dailyData.aggressive_count == 0 ? -1 : dailyData.aggressive_count), 0)
+      running_anxious_count = Math.max(running_anxious_count + (dailyData.anxious_count == 0 ? -1 : dailyData.anxious_count), 0)
+      running_calm_count = Math.max(running_calm_count + (dailyData.calm_count == 0 ? -1 : dailyData.calm_count), 0)
+      running_excited_count = Math.max(running_excited_count + (dailyData.excited_count == 0 ? -1 : dailyData.excited_count), 0)
+      
+      behavioralTrend[all_days[i]] = {
+          affectionate_count: running_affectionate_count,
+          aggressive_count: running_aggressive_count,
+          anxious_count: running_anxious_count,
+          calm_count: running_calm_count,
+          excited_count: running_excited_count
+        }
+    }
+    // console.log(behavioralTrend)
+
+    this.parseBehavioralTrend(behavioralTrend)
+  }
+
+  parseBehavioralTrend(behavioralTrend){
+    data_affectionate = []
+    data_aggressive = []
+    data_anxious = []
+    data_calm = []
+    data_excited = []
+
+    for (var key in behavioralTrend) {
+      data_affectionate.push({
+        value: behavioralTrend[key].affectionate_count,
+        date: new Date(key)
+      })
+
+      data_aggressive.push({
+        value: behavioralTrend[key].aggressive_count,
+        date: new Date(key)
+      })
+
+      data_anxious.push({
+        value: behavioralTrend[key].anxious_count,
+        date: new Date(key)
+      })
+
+      data_calm.push({
+        value: behavioralTrend[key].calm_count,
+        date: new Date(key)
+      })
+
+      data_excited.push({
+        value: behavioralTrend[key].excited_count,
+        date: new Date(key)
+      })
+    }
+    this.setState({
+      dataAffectionate: data_affectionate,
+      dataAggressive: data_aggressive,
+      dataAnxious: data_anxious,
+      dataCalm: data_calm,
+      dataExcited: data_excited
     })
   }
 
   componentDidMount(){
     this.props.navigation.setParams({
       handleMenuToggle: this.toggleControlPanel,
+      refreshPage: this.refreshScreen
     });
     const firebaseConfig = {
       apiKey: "AIzaSyALmeSOsC45vPnU3UmqEAzIhs_WgVX6NY8",
@@ -77,14 +198,14 @@ export default class WelcomeScreen extends Component {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
-
-    const { params } = this.props.navigation.state;
-    const userID = params ? params.userID : null;
-    const userName = params ? params.userName : null;
+    
+    var user = firebase.auth().currentUser;
+    const userID = user ? user.uid : null;
+    const userName = user ? user.displayName : null;    
     if(userID) {
       this.setState({
-        userID: params.userID,
-        userName: params.userName
+        userID: user.uid,
+        userName: user.displayName
       });
       this.getUserData(userID)
     }
@@ -92,12 +213,13 @@ export default class WelcomeScreen extends Component {
   }
 
   render() {
-    console.log(this.state.userDetails)
+    // console.log(this.state.userDetails)
     if (!this.state.userDetails) {
       return (
         <ActivityIndicator size='large' />
         );
     }
+    
     return (
       <Drawer
       ref={(ref) => this._drawer = ref}
@@ -172,16 +294,57 @@ export default class WelcomeScreen extends Component {
 
               <View>
                 <View style={{ flex: 0.3 }}>
-                  <Text style = {styles.graphTitle}> Behavioral Trend: Anxious </Text>
+                  <Text style = {styles.graphTitle}> Behavioral Trend: Affectionate </Text>
                 </View>
-                <LineChartComp />
+                <LineChartComp 
+                  data = {this.state.dataAffectionate}
+                  colorLine = '#fca903'
+                  colorFill = '#ffeecc'
+                />
               </View>
 
               <View>
                 <View style={{ flex: 0.3 }}>
                   <Text style = {styles.graphTitle}> Behavioral Trend: Aggressive </Text>
                 </View>
-                <LineChartComp />
+                <LineChartComp 
+                  data = {this.state.dataAggressive}
+                  colorLine = '#CC2539'
+                  colorFill = '#f7c0c7'
+                />
+              </View>
+
+              <View>
+                <View style={{ flex: 0.3 }}>
+                  <Text style = {styles.graphTitle}> Behavioral Trend: Anxious </Text>
+                </View>
+                <LineChartComp 
+                  data = {this.state.dataAnxious}
+                  colorLine = '#78037c'
+                  colorFill = '#f6cff7'
+                />
+              </View>
+
+              <View>
+                <View style={{ flex: 0.3 }}>
+                  <Text style = {styles.graphTitle}> Behavioral Trend: Content </Text>
+                </View>
+                <LineChartComp 
+                  data = {this.state.dataCalm}
+                  colorLine = '#6592CC'
+                  colorFill = '#dbe9fc'
+                />
+              </View>
+
+              <View>
+                <View style={{ flex: 0.3 }}>
+                  <Text style = {styles.graphTitle}> Behavioral Trend: Excited </Text>
+                </View>
+                <LineChartComp 
+                  data = {this.state.dataExcited}
+                  colorLine = '#5AC8B0'
+                  colorFill = '#d6f9f2'
+                />
               </View>
 
             </ScrollView>
