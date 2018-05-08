@@ -9,10 +9,11 @@ import { Card,
 
 export default class SpecificCategoryCard extends Component {
 	render() {
-        const item = this.props.item
+        const item = this.props.item;
+        const userID = this.props.userID;
 
 		return (
-			<TouchableOpacity style={{ justifyContent: 'center', alignItems:'center', margin: 18}} onPress={() => this.props.navigation.navigate('ActivityDetail', {item})}>
+			<TouchableOpacity style={{ justifyContent: 'center', alignItems:'center', margin: 18}} onPress={() => this.props.navigation.navigate('ActivityDetail', {item:item, userID:userID})}>
               <Card containerStyle={styles.cardStyle}>
                     <ImageBackground
                         style={styles.thumbnail}

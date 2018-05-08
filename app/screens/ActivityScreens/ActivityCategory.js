@@ -65,7 +65,13 @@ export default class ActivityCategory extends Component {
 componentDidMount() {
 
   const {params} = this.props.navigation.state
-  console.log(params.item)
+  const userID = params.userID;
+
+  if(userID) {
+    this.setState({
+      userID: userID,
+    });
+  }
 
   firebase.database().ref('activityCategories/' + params.item.title + '/' + 'Activities' + '/').once('value')
   .then( (snap) => {
@@ -81,8 +87,6 @@ componentDidMount() {
             imageurl: child.val().imageurl});
       });
 
-      console.log('items', items);
-
       this.setState({
           dataSource: this.state.dataSource.cloneWithRows(items)
       });
@@ -90,8 +94,9 @@ componentDidMount() {
 }
 
   render() {
-    const {params} = this.props.navigation.state
-    const item = params.item
+    const {params} = this.props.navigation.state;
+    const item = params.item;
+    
     return (
       <ScrollView style={{flex: 1, backgroundColor: '#F8F8F8'}}>
 
@@ -115,7 +120,7 @@ componentDidMount() {
     _renderItem(item) {
 
       return (
-        <SpecificCategoryCard navigation={this.props.navigation} item={item} />
+        <SpecificCategoryCard navigation={this.props.navigation} item={item} userID={this.state.userID} />
       );
     }
   }

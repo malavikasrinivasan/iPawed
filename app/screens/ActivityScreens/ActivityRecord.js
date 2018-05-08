@@ -108,7 +108,6 @@ export default class ActivityRecord extends Component{
     firebase.database().ref('userDetails/'+ params.userID + '/' + 'recentActivities/' + params.recActID + '/').once('value')
   .then((snapshot) => {
     if (snapshot.val() !== null){
-      console.log(params.startDate)
       firebase.database().ref('userDetails/'+ params.userID + '/recentActivities/' + params.recActID + '/' ).set({
         title : params.item.title,
         category : params.item.category,
@@ -118,12 +117,80 @@ export default class ActivityRecord extends Component{
                            Calm: this.state.behavior3,
                            Excited: this.state.behavior4,
                            Affectionate: this.state.behavior5 },
-        duration: 0,
         activityStartDate: params.startDate,
-        activityCompleteDate: CompleteDate,
+        activityCompleteDate: Date.now(),
         image: "",
-        distance: "",
-        journalID: ""
+        journalID: "",
+        item: {title: params.item.title,
+               category: params.item.category,
+               desc: params.item.desc,
+               steps: params.item.steps,
+               imageurl: params.item.imageurl,
+               video: params.item.video},
+        order: (1-Number(Date.now()))
+      });
+    }
+  });
+
+  firebase.database().ref('userDetails/'+ params.userID + '/' + 'weeklyGoals/' ).on('value',(snapshot) => {
+    calmG = snapshot.val().calmGoal
+    calmGP = snapshot.val().calmGoalProgress
+    careG = snapshot.val().careGoal
+    careGP = snapshot.val().careGoalProgress
+    playG = snapshot.val().playGoal
+    playGP = snapshot.val().playGoalProgress
+    trainG = snapshot.val().trainGoal
+    trainGP = snapshot.val().trainGoalProgress
+    if (params.item.category === "Calm") {
+      calm = calmGP + 1
+      firebase.database().ref('userDetails/'+ params.userID + 'weeklyGoals/' ).set({
+        calmGoal: calmG,
+        calmGoalProgress: calm,
+        careGoal: careG,
+        careGoalProgress: careGP,
+        playGoal: playG,
+        playGoalProgress: playGP,
+        trainGoal: trainG,
+        trainGoalProgress: trainGP
+      });
+    }
+    if (params.item.category === "Play") {
+      play = playGP + 1
+      firebase.database().ref('userDetails/'+ params.userID + 'weeklyGoals/' ).set({
+        calmGoal: calmG,
+        calmGoalProgress: calmGP,
+        careGoal: careG,
+        careGoalProgress: careGP,
+        playGoal: playG,
+        playGoalProgress: play,
+        trainGoal: trainG,
+        trainGoalProgress: trainGP
+      });
+    }
+    if (params.item.category === "Care") {
+      care = careGP + 1
+      firebase.database().ref('userDetails/'+ params.userID + 'weeklyGoals/' ).set({
+        calmGoal: calmG,
+        calmGoalProgress: calmGP,
+        careGoal: careG,
+        careGoalProgress: care,
+        playGoal: playG,
+        playGoalProgress: playGP,
+        trainGoal: trainG,
+        trainGoalProgress: trainGP
+      });
+    }
+    if (params.item.category === "Train") {
+      train = trainGP + 1
+      firebase.database().ref('userDetails/'+ params.userID + 'weeklyGoals/' ).set({
+        calmGoal: calmG,
+        calmGoalProgress: calmGP,
+        careGoal: careG,
+        careGoalProgress: careGP,
+        playGoal: playG,
+        playGoalProgress: playGP,
+        trainGoal: trainG,
+        trainGoalProgress: train
       });
     }
   });
@@ -168,6 +235,10 @@ export default class ActivityRecord extends Component{
       cropping: true
     }).then(image => {
       console.log(image);
+      this.setState ({
+        image: {uri: image.path, width: image.width, height: image.height, data: image.data},
+        imageUpload: true
+      })
     });
   };
 
@@ -183,6 +254,92 @@ export default class ActivityRecord extends Component{
   _onFinish() {
     this.props.navigation.navigate('ActivitySummary');
   };
+
+  validateInput = () => {
+    const {params} = this.props.navigation.state
+
+    emptyvals = []
+    
+    this.setState({
+      eventTitle: params.item.title,
+      eventDate: this.state.eventDate
+    })
+    if(!this.state.imageUpload)
+    {
+      this.setState({
+        imageUpload: true,
+        imageUrl: params.item.imageurl
+      })
+    }
+
+    if(this.state.behavior1 == false && this.state.behavior2 == false  && this.state.behavior3 == false  && this.state.behavior4 == false  && this.state.behavior5 == false) {
+      emptyvals.push('Behaviors')
+    }
+    if(emptyvals.length == 0) {
+      this.uploadMemory()
+    }
+    else {
+      Alert.alert("Please enter " + emptyvals.join(", "))
+    }
+
+  }
+
+  uploadMemory = () => {
+
+    var memoryID = this.state.userID+"-"+Date.now();
+
+    const Blob = RNFetchBlob.polyfill.Blob
+    const fs = RNFetchBlob.fs
+    window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+    window.Blob = Blob;
+
+    let uploadBlob = null;
+    const imageRef = firebase.storage().ref('images/'+this.state.userID+'/journalImages/').child(Date.now()+".jpeg")
+    let mime = 'image/jpeg';
+
+    const data = this.state.image.data;
+    console.log(data);
+
+    Blob.build(data,
+      { type: `${mime};BASE64` }).then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType: mime })
+      }).then(() => {
+        uploadBlob.close()
+        return imageRef.getDownloadURL()
+      }).then((url) => {
+        this.setState({
+          imageUrl: url
+        })
+      }). then(() => {
+        var sortDate = new Date(this.state.eventDate);
+        sortDate = -1 * sortDate.getTime();
+        firebase.database().ref('userDetails/'+ this.state.userID + '/journalDetails/'+ memoryID).set({
+          eventTitle : this.state.eventTitle,
+          eventDate : this.state.eventDate,
+          sortDate : sortDate,
+          eventLocation: this.state.eventLocation,
+          eventNotes: this.state.eventNotes,
+          imageURL: this.state.imageUrl,
+          anxious: this.state.behavior1,
+          aggressive: this.state.behavior2,
+          calm: this.state.behavior3,
+          excited: this.state.behavior4,
+          affectionate: this.state.behavior5,
+        }).then(() => {
+          // this.props.navigation.state.params.onNavigateBack(this.state.memoryUpdate);
+          this.props.navigation.navigate('Timeline');
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+  }
+
+  renderImage(image) {
+    return <Image style={{width: 80, height: 80, resizeMode: 'contain', borderColor: 'lightgrey', borderWidth:1}} source={image} />
+  }
 
   componentDidMount(){
     this.props.navigation.setParams({
@@ -253,6 +410,11 @@ export default class ActivityRecord extends Component{
                 </TouchableOpacity>
               </View>
             </View>
+            <View style={{flex:0.5}}>
+            <View style={{justifyContent:'center', alignItems:'center'}}>
+              {this.state.image ? this.renderImage(this.state.image) : null}
+            </View>
+          </View>
           </View>
         </View>
 
@@ -393,6 +555,8 @@ export default class ActivityRecord extends Component{
               style = {styles.commenttext}
               placeholder="Notes:"
               placeholderTextColor="grey"
+              onChangeText={eventNotes => this.setState({ eventNotes })}
+              value={this.state.eventNotes}
             />
           </View>
 
