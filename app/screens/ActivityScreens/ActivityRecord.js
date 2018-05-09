@@ -22,6 +22,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import {WeeklyProgressRing} from './../../components/WeeklyProgressRing';
 import RNFetchBlob from 'react-native-fetch-blob';
 import * as firebase from 'firebase';
+import Moment from 'moment';
 
 // import { RNCamera } from 'react-native-camera';
 import ProgressCircle from 'react-native-progress-circle';
@@ -80,7 +81,7 @@ export default class ActivityRecord extends Component{
       eventTitle : '',
       eventNotes : '',
       eventLocation : '',
-      eventDate : new Date(),
+      eventDate : Moment(new Date()).format('MMMM D, YYYY'),
       behavior1: false,
       behavior2: false,
       behavior3: false,
@@ -106,7 +107,7 @@ export default class ActivityRecord extends Component{
   toggleStopwatch() {
     
     const {params} = this.props.navigation.state
-
+    
     this.setState({
       eventTitle: params.item.title,
       eventDate: this.state.eventDate
@@ -153,7 +154,12 @@ export default class ActivityRecord extends Component{
     trainG = snapshot.val().trainGoal
     trainGP = snapshot.val().trainGoalProgress
     if (params.item.category === "Calm") {
-      calm = calmGP + 1
+      if(calmGP < calmG){
+        calm = calmGP + 1
+      }
+      else{
+        calm = calmGP - calmG + 1
+      }
       firebase.database().ref('userDetails/'+ params.userID + '/weeklyGoals/' ).set({
         calmGoal: calmG,
         calmGoalProgress: calm,
@@ -166,7 +172,13 @@ export default class ActivityRecord extends Component{
       });
     }
     if (params.item.category === "Play") {
-      play = playGP + 1
+      if(playGP < playG){
+        play = playGP + 1
+      }
+      else{
+        play = playGP - playG + 1
+      }
+      
       firebase.database().ref('userDetails/'+ params.userID + '/weeklyGoals/' ).set({
         calmGoal: calmG,
         calmGoalProgress: calmGP,
@@ -179,7 +191,13 @@ export default class ActivityRecord extends Component{
       });
     }
     if (params.item.category === "Care") {
-      care = careGP + 1
+      if(careGP < careG){
+        care = careGP + 1
+      }
+      else{
+        care = careGP - careG + 1
+      }
+      
       firebase.database().ref('userDetails/'+ params.userID + '/weeklyGoals/' ).set({
         calmGoal: calmG,
         calmGoalProgress: calmGP,
@@ -192,7 +210,13 @@ export default class ActivityRecord extends Component{
       });
     }
     if (params.item.category === "Train") {
-      train = trainGP + 1
+      if(trainGP < trainG){
+        train = trainGP + 1
+      }
+      else{
+        train = trainGP - trainG + 1
+      }
+      
       firebase.database().ref('userDetails/'+ params.userID + '/weeklyGoals/' ).set({
         calmGoal: calmG,
         calmGoalProgress: calmGP,
@@ -246,7 +270,7 @@ export default class ActivityRecord extends Component{
       includeBase64: true,
       cropping: true
     }).then(image => {
-      console.log(image);
+      // console.log(image);
       this.setState ({
         image: {uri: image.path, width: image.width, height: image.height, data: image.data},
         imageUpload: true
@@ -300,7 +324,7 @@ export default class ActivityRecord extends Component{
     let mime = 'image/jpeg';
 
     const data = this.state.image.data;
-    console.log(data);
+    // console.log(data);
 
     Blob.build(data,
       { type: `${mime};BASE64` }).then((blob) => {
@@ -347,10 +371,10 @@ export default class ActivityRecord extends Component{
     this.props.navigation.setParams({
       handleMenuToggle: this.toggleControlPanel,
     });
-
+    
     const user = firebase.auth().currentUser;
     const userID = user ? user.uid : null;
-    console.log("uid",userID)
+    
 
     if(userID) {
       this.setState({
@@ -431,7 +455,7 @@ export default class ActivityRecord extends Component{
               fetchDetails={true}
               renderDescription={row => row.description} // custom description render
               onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-                console.log(data, details);
+                // console.log(data, details);
               }}
 
               getDefaultValue={() => ''}
@@ -476,7 +500,7 @@ export default class ActivityRecord extends Component{
             date={this.state.eventDate}
             mode="date"
             placeholder="Date"
-            format="YYYY-MM-DD"
+            format="MMMM D, YYYY"
             minDate="1990-01-01"
             maxDate={today}
             confirmBtnText="Confirm"
