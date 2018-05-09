@@ -8,7 +8,8 @@ import {
   CameraRoll,
   ScrollView,
   Image,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -19,7 +20,7 @@ import Drawer from 'react-native-drawer';
 import ControlPanel from './../../components/ControlPanel';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import {WeeklyProgressRing} from './../../components/WeeklyProgressRing';
-
+import RNFetchBlob from 'react-native-fetch-blob';
 import * as firebase from 'firebase';
 
 // import { RNCamera } from 'react-native-camera';
@@ -103,7 +104,16 @@ export default class ActivityRecord extends Component{
   }
 
   toggleStopwatch() {
+    
     const {params} = this.props.navigation.state
+
+    this.setState({
+      eventTitle: params.item.title,
+      eventDate: this.state.eventDate
+    })
+
+    this.validateInput();
+
     CompleteDate = new Date()
     firebase.database().ref('userDetails/'+ params.userID + '/' + 'recentActivities/' + params.recActID + '/').once('value')
   .then((snapshot) => {
@@ -132,7 +142,8 @@ export default class ActivityRecord extends Component{
     }
   });
 
-  firebase.database().ref('userDetails/'+ params.userID + '/' + 'weeklyGoals/' ).on('value',(snapshot) => {
+  firebase.database().ref('userDetails/'+ params.userID + '/' + 'weeklyGoals/' ).once('value')
+  .then((snapshot) => {
     calmG = snapshot.val().calmGoal
     calmGP = snapshot.val().calmGoalProgress
     careG = snapshot.val().careGoal
@@ -143,7 +154,7 @@ export default class ActivityRecord extends Component{
     trainGP = snapshot.val().trainGoalProgress
     if (params.item.category === "Calm") {
       calm = calmGP + 1
-      firebase.database().ref('userDetails/'+ params.userID + 'weeklyGoals/' ).set({
+      firebase.database().ref('userDetails/'+ params.userID + '/weeklyGoals/' ).set({
         calmGoal: calmG,
         calmGoalProgress: calm,
         careGoal: careG,
@@ -156,7 +167,7 @@ export default class ActivityRecord extends Component{
     }
     if (params.item.category === "Play") {
       play = playGP + 1
-      firebase.database().ref('userDetails/'+ params.userID + 'weeklyGoals/' ).set({
+      firebase.database().ref('userDetails/'+ params.userID + '/weeklyGoals/' ).set({
         calmGoal: calmG,
         calmGoalProgress: calmGP,
         careGoal: careG,
@@ -169,7 +180,7 @@ export default class ActivityRecord extends Component{
     }
     if (params.item.category === "Care") {
       care = careGP + 1
-      firebase.database().ref('userDetails/'+ params.userID + 'weeklyGoals/' ).set({
+      firebase.database().ref('userDetails/'+ params.userID + '/weeklyGoals/' ).set({
         calmGoal: calmG,
         calmGoalProgress: calmGP,
         careGoal: careG,
@@ -182,7 +193,7 @@ export default class ActivityRecord extends Component{
     }
     if (params.item.category === "Train") {
       train = trainGP + 1
-      firebase.database().ref('userDetails/'+ params.userID + 'weeklyGoals/' ).set({
+      firebase.database().ref('userDetails/'+ params.userID + '/weeklyGoals/' ).set({
         calmGoal: calmG,
         calmGoalProgress: calmGP,
         careGoal: careG,
@@ -232,6 +243,7 @@ export default class ActivityRecord extends Component{
     ImagePicker.openPicker({
       width: 300,
       height: 300,
+      includeBase64: true,
       cropping: true
     }).then(image => {
       console.log(image);
@@ -256,20 +268,11 @@ export default class ActivityRecord extends Component{
   };
 
   validateInput = () => {
-    const {params} = this.props.navigation.state
-
     emptyvals = []
     
-    this.setState({
-      eventTitle: params.item.title,
-      eventDate: this.state.eventDate
-    })
     if(!this.state.imageUpload)
     {
-      this.setState({
-        imageUpload: true,
-        imageUrl: params.item.imageurl
-      })
+      emptyvals.push('Photo')
     }
 
     if(this.state.behavior1 == false && this.state.behavior2 == false  && this.state.behavior3 == false  && this.state.behavior4 == false  && this.state.behavior5 == false) {
@@ -281,7 +284,6 @@ export default class ActivityRecord extends Component{
     else {
       Alert.alert("Please enter " + emptyvals.join(", "))
     }
-
   }
 
   uploadMemory = () => {
