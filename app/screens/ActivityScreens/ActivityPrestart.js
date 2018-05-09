@@ -123,11 +123,18 @@ export default class ActivityPrestart extends Component {
       });
     }
 
-    firebase.database().ref('userDetails/' + userID + '/' + 'petDetails' + '/').once('value')
-    .then((snap) => {
+    firebase.database().ref('userDetails/' + userID + '/').on('value', (snap) => {
         // console.log('snap', snap.val().petName);
         this.setState({
-          petName: snap.val().petName
+          petName: snap.val().petDetails.petName,
+          trainGoal: snap.val().weeklyGoals.trainGoal,
+          trainGoalProgress: snap.val().weeklyGoals.trainGoalProgress,
+          careGoal: snap.val().weeklyGoals.careGoal,
+          careGoalProgress: snap.val().weeklyGoals.careGoalProgress,
+          playGoal: snap.val().weeklyGoals.playGoal,
+          playGoalProgress: snap.val().weeklyGoals.playGoalProgress,
+          calmGoal: snap.val().weeklyGoals.calmGoal,
+          calmGoalProgress: snap.val().weeklyGoals.calmGoalProgress
         })
     });
   }
@@ -179,29 +186,29 @@ export default class ActivityPrestart extends Component {
         </View>
           <View style = {styles.weeklyProgressContainer}>
             <WeeklyProgressRing
-              completed = { 4 }
-              total = { 10 }
+              completed = { this.state.trainGoalProgress }
+              total = { this.state.trainGoal }
               completedColor = { 'rgb(214,154,56,1)' }
               blankColor = { 'rgb(214,154,56,0.3)' }
               activityName = { 'Train' }
             />
             <WeeklyProgressRing
-              completed = { 3 }
-              total = { 5 }
+              completed = { this.state.careGoalProgress }
+              total = { this.state.careGoal }
               completedColor = { 'rgb(87,193,170,1)' }
               blankColor = { 'rgb(87,193,170,0.3)' }
               activityName = { 'Care' }
             />
             <WeeklyProgressRing
-              completed = { 1 }
-              total = { 3 }
+              completed = { this.state.playGoalProgress }
+              total = { this.state.playGoal }
               completedColor = { 'rgb(207,65,83,1)' }
               blankColor = { 'rgb(207,65,83,0.3)' }
               activityName = { 'Play' }
             />
             <WeeklyProgressRing
-              completed = { 7 }
-              total = { 7 }
+              completed = { this.state.calmGoalProgress }
+              total = { this.state.calmGoal }
               completedColor = { 'rgb(91,13,107,0.9)' }
               blankColor = { 'rgb(91,13,107,0.3)' }
               activityName = { 'Calm' }
