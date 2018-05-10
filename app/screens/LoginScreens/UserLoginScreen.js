@@ -7,8 +7,8 @@ import Header from './../../components/Header';
 export default class UserLoginScreen extends Component {
 
   state = {
-    email: '',
-    password: '',
+    email: 'admin@ipawed.com',
+    password: 'abc1234',
     authenticating: false,
     user: null,
     error: '',
@@ -185,7 +185,7 @@ export default class UserLoginScreen extends Component {
             </Text>
           </Text>
 
-          <Text style={styles.descriptionText}>
+        {/*  <Text style={styles.descriptionText}>
             <Text >
               {"Developer? Skip "}
             </Text>
@@ -196,6 +196,7 @@ export default class UserLoginScreen extends Component {
              {"here"}
             </Text>
           </Text>
+        */}
         </View>
       </View>
     );

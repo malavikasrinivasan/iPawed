@@ -28,10 +28,10 @@ export default class OnboardingGoals extends Component {
   constructor(props){
     super(props);
     this.state = {
-      opt1: 2,
-      opt2: 1,
-      opt3: 3,
-      opt4: 3,
+      opt1: 7,
+      opt2: 3,
+      opt3: 4,
+      opt4: 5,
     };
     this.opt1sub = this.opt1sub.bind(this);
     this.opt1add = this.opt1add.bind(this);

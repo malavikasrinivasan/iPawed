@@ -7,12 +7,12 @@ import Header from './../../components/Header';
 export default class UserLoginScreen extends Component {
 
   state = {
-    email: '',
-    password: '',
+    email: 'dalmia.nihar@gmail.com',
+    password: 'abc1234',
     authenticating: false,
     user: null,
     error: '',
-    name: ''
+    name: 'Nihar Dalmia'
   }
 
   componentDidMount(){
