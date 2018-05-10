@@ -97,213 +97,227 @@ getUserData(userID){
 
 
 setRecommendedActivities(userID){
-  firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/').remove();
+  if (userID == 'NpJqSfyM2uh12LxYLlHEltcO7nj1') {
+    console.log("Test user");
+    firebase.database().ref('userDetails/' + userID + '/').once('value')
+    .then((snapshot) => {
+      const userDetails = snapshot.val();
+      this.setState({
+        userDetails: snapshot.val()
+      })
+    }).catch((error) => {
+      console.log(error)
+    })
+  } 
+  else {
+    firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/').remove();
 
-  const totalTrain = 10;
-  const totalPlay = 7;
-  const totalCalm = 8;
-  const totalCare = 6;
-  firebase.database().ref('userDetails/' + userID + '/').once('value')
-  .then((snapshot) => {
-    const userDetails = snapshot.val();
-    this.setState({
-      userDetails: snapshot.val()
-    });
+    const totalTrain = 10;
+    const totalPlay = 7;
+    const totalCalm = 8;
+    const totalCare = 6;
+    firebase.database().ref('userDetails/' + userID + '/').once('value')
+    .then((snapshot) => {
+      const userDetails = snapshot.val();
+      this.setState({
+        userDetails: snapshot.val()
+      });
 
-    // =========================================================================
-    // use profile information to adjust number of each activity:
-    // =========================================================================
-    var numberTrain = 1;
-    var numberCare = 1;
-    var numberPlay = 1;
-    var numberCalm = 1;
+      // =========================================================================
+      // use profile information to adjust number of each activity:
+      // =========================================================================
+      var numberTrain = 1;
+      var numberCare = 1;
+      var numberPlay = 1;
+      var numberCalm = 1;
 
-    // using pet age/recency:
-    // -------------------------------
-    var adoptdate = new Date(userDetails.petDetails.petAdoptionDate);
-    var birthdate = new Date(userDetails.petDetails.petBirthDay);
-    var curdate = new Date();
-    var yearNorm = 60*60*24*30*1000*12;
-    var adoptAge = (curdate - adoptdate)/yearNorm;   // (in years)
-    var petAge = (curdate - birthdate)/yearNorm      // (in years)
-    // if recently adopted (< 6 months), train
-    if (adoptAge < 0.5){
-      numberTrain += 1;
-    }
-    // if young (< 1 year), play [NOTE: removed additional train b/c redundant?]
-    if (petAge < 1){
-      numberPlay += 1;
-    }
-    // if old (> 10 years), calm
-    if (petAge > 10){
-      numberCalm += 1;
-    }
-
-    // user-described experience level:
-    // -------------------------------
-    var experienceStr = userDetails.ownerInfo.experience
-    if (experienceStr == 'no'){
-      numberTrain += 1;
-    }
-    else if (experienceStr == 'a lot'){
-      numberTrain -= 1;
-    }
-
-    // - recent activities? (not now... but in the future) -
-    // -------------------------------
-    // using user goals and progress:
-    // -------------------------------
-    var trainCompleted = Boolean(userDetails.weeklyGoals.trainGoal <= userDetails.weeklyGoals.trainGoalProgress);
-    var playCompleted = Boolean(userDetails.weeklyGoals.playGoal <= userDetails.weeklyGoals.playGoalProgress);
-    var calmCompleted = Boolean(userDetails.weeklyGoals.calmGoal <= userDetails.weeklyGoals.calmGoalProgress);
-    var careCompleted = Boolean(userDetails.weeklyGoals.careGoal <= userDetails.weeklyGoals.careGoalProgress);
-    if (!(trainCompleted && playCompleted && calmCompleted && careCompleted)){
-      if (trainCompleted){
-        numberTrain = 0;
+      // using pet age/recency:
+      // -------------------------------
+      var adoptdate = new Date(userDetails.petDetails.petAdoptionDate);
+      var birthdate = new Date(userDetails.petDetails.petBirthDay);
+      var curdate = new Date();
+      var yearNorm = 60*60*24*30*1000*12;
+      var adoptAge = (curdate - adoptdate)/yearNorm;   // (in years)
+      var petAge = (curdate - birthdate)/yearNorm      // (in years)
+      // if recently adopted (< 6 months), train
+      if (adoptAge < 0.5){
+        numberTrain += 1;
       }
-      if (playCompleted){
-        numberPlay = 0;
+      // if young (< 1 year), play [NOTE: removed additional train b/c redundant?]
+      if (petAge < 1){
+        numberPlay += 1;
       }
-      if (careCompleted){
-        numberCare = 0;
+      // if old (> 10 years), calm
+      if (petAge > 10){
+        numberCalm += 1;
       }
-      if (calmCompleted){
-        numberCalm = 0;
-      }
-    }
 
-    // =========================================================================
-    // now get a list of activities in each category to select randomly from:
-    // =========================================================================
-    if (numberTrain != 0){
-      var t;
-      for (t=0; t<numberTrain; t++){
-        var idx = Math.floor(Math.random()*totalTrain);
-        console.log(idx);
-        firebase.database().ref('activityCategories/Train/Activities/').orderByKey().limitToFirst(idx).once('value')
-        .then((snapshot) => {
-          snapshot.forEach((childSnapshot) => {
-            var key = childSnapshot.key;
-            var childData = childSnapshot.val();
-            this.setState({
-              title:key,
-              steps:childData.Steps,
-              category:childData.Category,
-              desc:childData.desc,
-              imageurl:childData.imageurl,
-              video:childData.Video
+      // user-described experience level:
+      // -------------------------------
+      var experienceStr = userDetails.ownerInfo.experience
+      if (experienceStr == 'no'){
+        numberTrain += 1;
+      }
+      else if (experienceStr == 'a lot'){
+        numberTrain -= 1;
+      }
+
+      // - recent activities? (not now... but in the future) -
+      // -------------------------------
+      // using user goals and progress:
+      // -------------------------------
+      var trainCompleted = Boolean(userDetails.weeklyGoals.trainGoal <= userDetails.weeklyGoals.trainGoalProgress);
+      var playCompleted = Boolean(userDetails.weeklyGoals.playGoal <= userDetails.weeklyGoals.playGoalProgress);
+      var calmCompleted = Boolean(userDetails.weeklyGoals.calmGoal <= userDetails.weeklyGoals.calmGoalProgress);
+      var careCompleted = Boolean(userDetails.weeklyGoals.careGoal <= userDetails.weeklyGoals.careGoalProgress);
+      if (!(trainCompleted && playCompleted && calmCompleted && careCompleted)){
+        if (trainCompleted){
+          numberTrain = 0;
+        }
+        if (playCompleted){
+          numberPlay = 0;
+        }
+        if (careCompleted){
+          numberCare = 0;
+        }
+        if (calmCompleted){
+          numberCalm = 0;
+        }
+      }
+
+      // =========================================================================
+      // now get a list of activities in each category to select randomly from:
+      // =========================================================================
+      if (numberTrain != 0){
+        var t;
+        for (t=0; t<numberTrain; t++){
+          var idx = Math.floor(Math.random()*totalTrain);
+          console.log(idx);
+          firebase.database().ref('activityCategories/Train/Activities/').orderByKey().limitToFirst(idx).once('value')
+          .then((snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+              var key = childSnapshot.key;
+              var childData = childSnapshot.val();
+              this.setState({
+                title:key,
+                steps:childData.Steps,
+                category:childData.Category,
+                desc:childData.desc,
+                imageurl:childData.imageurl,
+                video:childData.Video
+              });
+            });
+            firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
+              title: this.state.title,
+              steps: this.state.steps,
+              video: this.state.video,
+              desc: this.state.desc,
+              imageurl: this.state.imageurl,
+              category: this.state.category
+            }).catch((error) => {
+              alert(error)
             });
           });
-          firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
-            title: this.state.title,
-            steps: this.state.steps,
-            video: this.state.video,
-            desc: this.state.desc,
-            imageurl: this.state.imageurl,
-            category: this.state.category
-          }).catch((error) => {
-            alert(error)
-          });
-        });
+        }
       }
-    }
-    if (numberPlay != 0){
-      var p;
-      for (p=0; p<numberPlay; p++){
-        var idx = Math.floor(Math.random()*totalPlay);
-        console.log(idx);
-        firebase.database().ref('activityCategories/Play/Activities/').orderByKey().limitToFirst(idx).once('value')
-        .then((snapshot) => {
-          snapshot.forEach((childSnapshot) => {
-            var key = childSnapshot.key;
-            var childData = childSnapshot.val();
-            this.setState({
-              title:key,
-              steps:childData.Steps,
-              category:childData.Category,
-              desc:childData.desc,
-              imageurl:childData.imageurl,
-              video:childData.Video
+      if (numberPlay != 0){
+        var p;
+        for (p=0; p<numberPlay; p++){
+          var idx = Math.floor(Math.random()*totalPlay);
+          console.log(idx);
+          firebase.database().ref('activityCategories/Play/Activities/').orderByKey().limitToFirst(idx).once('value')
+          .then((snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+              var key = childSnapshot.key;
+              var childData = childSnapshot.val();
+              this.setState({
+                title:key,
+                steps:childData.Steps,
+                category:childData.Category,
+                desc:childData.desc,
+                imageurl:childData.imageurl,
+                video:childData.Video
+              });
+            });
+            firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
+              title: this.state.title,
+              steps: this.state.steps,
+              video: this.state.video,
+              desc: this.state.desc,
+              imageurl: this.state.imageurl,
+              category: this.state.category
+            }).catch((error) => {
+              alert(error)
             });
           });
-          firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
-            title: this.state.title,
-            steps: this.state.steps,
-            video: this.state.video,
-            desc: this.state.desc,
-            imageurl: this.state.imageurl,
-            category: this.state.category
-          }).catch((error) => {
-            alert(error)
-          });
-        });
+        }
       }
-    }
-    if(numberCare != 0){
-      var r;
-      for (r=0; r<numberCare; r++){
-        var idx = Math.floor(Math.random()*totalCare);
-        console.log(idx);
-        firebase.database().ref('activityCategories/Care/Activities/').orderByKey().limitToFirst(idx).once('value')
-        .then((snapshot) => {
-          snapshot.forEach((childSnapshot) => {
-            var key = childSnapshot.key;
-            var childData = childSnapshot.val();
-            this.setState({
-              title:key,
-              steps:childData.Steps,
-              category:childData.Category,
-              desc:childData.desc,
-              imageurl:childData.imageurl,
-              video:childData.Video
+      if(numberCare != 0){
+        var r;
+        for (r=0; r<numberCare; r++){
+          var idx = Math.floor(Math.random()*totalCare);
+          console.log(idx);
+          firebase.database().ref('activityCategories/Care/Activities/').orderByKey().limitToFirst(idx).once('value')
+          .then((snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+              var key = childSnapshot.key;
+              var childData = childSnapshot.val();
+              this.setState({
+                title:key,
+                steps:childData.Steps,
+                category:childData.Category,
+                desc:childData.desc,
+                imageurl:childData.imageurl,
+                video:childData.Video
+              });
+            });
+            firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
+              title: this.state.title,
+              steps: this.state.steps,
+              video: this.state.video,
+              desc: this.state.desc,
+              imageurl: this.state.imageurl,
+              category: this.state.category
+            }).catch((error) => {
+              alert(error)
             });
           });
-          firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
-            title: this.state.title,
-            steps: this.state.steps,
-            video: this.state.video,
-            desc: this.state.desc,
-            imageurl: this.state.imageurl,
-            category: this.state.category
-          }).catch((error) => {
-            alert(error)
-          });
-        });
+        }
       }
-    }
-    if (numberCalm != 0){
-      var m;
-      for (m=0; m<numberCalm; m++){
-        var idx = Math.floor(Math.random()*totalCalm);
-        console.log(idx);
-        firebase.database().ref('activityCategories/Calm/Activities/').orderByKey().limitToFirst(idx).once('value')
-        .then((snapshot) => {
-          snapshot.forEach((childSnapshot) => {
-            var key = childSnapshot.key;
-            var childData = childSnapshot.val();
-            this.setState({
-              title:key,
-              steps:childData.Steps,
-              category:childData.Category,
-              desc:childData.desc,
-              imageurl:childData.imageurl,
-              video:childData.Video
+      if (numberCalm != 0){
+        var m;
+        for (m=0; m<numberCalm; m++){
+          var idx = Math.floor(Math.random()*totalCalm);
+          console.log(idx);
+          firebase.database().ref('activityCategories/Calm/Activities/').orderByKey().limitToFirst(idx).once('value')
+          .then((snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+              var key = childSnapshot.key;
+              var childData = childSnapshot.val();
+              this.setState({
+                title:key,
+                steps:childData.Steps,
+                category:childData.Category,
+                desc:childData.desc,
+                imageurl:childData.imageurl,
+                video:childData.Video
+              });
+            });
+            firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
+              title: this.state.title,
+              steps: this.state.steps,
+              video: this.state.video,
+              desc: this.state.desc,
+              imageurl: this.state.imageurl,
+              category: this.state.category
+            }).catch((error) => {
+              alert(error)
             });
           });
-          firebase.database().ref('userDetails/'+ userID + '/' + 'recommendedActivities/' + this.state.title +"/" ).set({
-            title: this.state.title,
-            steps: this.state.steps,
-            video: this.state.video,
-            desc: this.state.desc,
-            imageurl: this.state.imageurl,
-            category: this.state.category
-          }).catch((error) => {
-            alert(error)
-          });
-        });
+        }
       }
-    }
-  })
+    })
+  }
 }
 
 getRef() {

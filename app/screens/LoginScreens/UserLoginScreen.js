@@ -7,7 +7,7 @@ import Header from './../../components/Header';
 export default class UserLoginScreen extends Component {
 
   state = {
-    email: 'admin@ipawed.com',
+    email: 'nihar_dalmia@berkeley.edu',
     password: 'abc1234',
     authenticating: false,
     user: null,

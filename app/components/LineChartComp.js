@@ -67,7 +67,7 @@ class LineChartComp extends React.PureComponent {
                     }}
                     xAccessor={ ({ item }) => item.date}
                     scale={ scale.scaleTime }
-                    numberOfTicks={ 6 }
+                    numberOfTicks={ 5 }
                     style={{ marginHorizontal: -15, height: 20 }}
                     contentInset={{ left: 10, right: 25 }}
                     formatLabel={ (value) => dateFns.format(value, 'MMMD')  }                        

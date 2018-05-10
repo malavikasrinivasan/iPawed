@@ -182,7 +182,7 @@ export default class ActivityPrestart extends Component {
 
         <View style = {{ alignSelf: 'center', marginHorizontal: 5, marginTop: 10, marginBottom: 6 }}>
           <Text style = {styles.weeklyGoalsTitle}> Weekly Goals with {this.state.petName} </Text>
-          <Text style = {[styles.weeklyGoalsTitle, {fontSize:14, marginTop:-5, marginBottom:5}]}> {"April 15 - April 21, 2018"} </Text>
+          {/*<Text style = {[styles.weeklyGoalsTitle, {fontSize:14, marginTop:-5, marginBottom:5}]}> {"April 15 - April 21, 2018"} </Text>*/}
         </View>
           <View style = {styles.weeklyProgressContainer}>
             <WeeklyProgressRing
