@@ -328,8 +328,8 @@ export default class GetPetDetails extends Component {
             <DatePicker
               date={this.state.petAdoptionDate}
               mode="date"
-              placeholder="yyyy-mm-dd"
-              format="YYYY-MM-DD"
+              placeholder="pick date"
+              format="MMMM D, YYYY"
               minDate="2010-01-01"
               maxDate="2020-12-31"
               confirmBtnText="Confirm"
@@ -380,8 +380,8 @@ export default class GetPetDetails extends Component {
               <DatePicker
                 date={this.state.petBirthDay}
                 mode="date"
-                placeholder="yyyy-mm-dd"
-                format="YYYY-MM-DD"
+                placeholder="pick date"
+                format="MMMM D, YYYY"
                 minDate="2010-01-01"
                 maxDate="2020-12-31"
                 confirmBtnText="Confirm"
